@@ -65,7 +65,7 @@
         /* --- LOGIN & LOGO --- */
         #login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: 0.5s; padding: 20px; }
         #login-screen.hidden { opacity: 0; pointer-events: none; }
-        .login-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: 40px; border-radius: 24px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); text-align: center; animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); border: 1px solid rgba(255,255,255,0.8); }
+        .login-card { background: rgba(255,255,255, 0.95); backdrop-filter: blur(20px); padding: 40px; border-radius: 24px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); text-align: center; animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); border:1px solid rgba(255,255,255,0.8); }
         @keyframes floatUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
         .logo-img { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid white; box-shadow: var(--shadow-sm); }
@@ -73,6 +73,7 @@
         
         .form-input { width: 100%; padding: 14px 16px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: var(--radius); font-size: 0.95rem; transition: var(--transition); color: var(--text-main); }
         .form-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
+        .form-input:disabled { background: #f1f5f9; color: var(--text-muted); }
         
         .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; font-weight: 600; font-size: 1rem; border-radius: var(--radius); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: flex; justify-content: center; align-items: center; gap: 10px; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); }
@@ -87,6 +88,9 @@
         .nav-item:hover { background: #f0f9ff; color: var(--primary-dark); }
         .nav-item:hover i { color: var(--primary-dark); }
         .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; padding-left: 12px; }
+        .nav-item.help-item { margin-top: auto; color: var(--secondary); }
+        .nav-item.help-item i { color: var(--secondary); }
+        .nav-item.help-item:hover { background: #f0fdfa; color: var(--secondary-dark); }
         .sidebar-footer { padding: 16px; border-top: 1px solid #f1f5f9; }
         .user-pill { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 12px; background: #f8fafc; cursor: pointer; border: 1px solid transparent; transition: var(--transition); }
         .user-pill:hover { border-color: var(--border-light); background: white; }
@@ -312,18 +316,65 @@
         .live-summary h5 { font-size: 0.75rem; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 8px; letter-spacing: 0.05em; }
         .live-summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
 
-        .org-tree { list-style: none; padding-left: 15px; font-size: 0.85rem; }
-        .org-tree li { margin: 6px 0; position: relative; }
-        .org-tree li::before { content: ''; position: absolute; top: 18px; left: -15px; border-top: 2px solid #cbd5e1; width: 15px; }
-        .org-tree li::after { content: ''; position: absolute; top: 0; left: -15px; height: 100%; border-left: 2px solid #cbd5e1; }
-        .org-tree li:last-child::after { height: 18px; }
-        .org-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
+        /* IMPROVED ORG CHART */
+        .org-tree-container { padding: 10px 0; }
+        .org-tree { list-style: none; padding-left: 20px; font-size: 0.9rem; position: relative; }
+        .org-tree li { margin: 15px 0; position: relative; padding-left: 25px; }
+        /* Connecting Lines */
+        .org-tree li::before { 
+            content: ''; position: absolute; top: 22px; left: 0; 
+            border-left: 2px dashed #cbd5e1; height: 100%; 
+        }
+        .org-tree li::after { 
+            content: ''; position: absolute; top: 22px; left: 0; 
+            border-top: 2px dashed #cbd5e1; width: 25px; 
+        }
+        .org-tree li:last-child::before { height: 22px; }
+        
+        .org-item { 
+            display: flex; align-items: center; gap: 12px; 
+            padding: 10px 14px; 
+            background: white; 
+            border: 1px solid var(--border-light); 
+            border-radius: 10px; 
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .org-item:hover { 
+            border-color: var(--primary); 
+            transform: translateX(5px); 
+            box-shadow: var(--shadow-md);
+        }
+        .org-item-avatar { 
+            width: 32px; height: 32px; 
+            border-radius: 50%; 
+            background: var(--primary-light); 
+            color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+        }
 
         .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
         .slot-btn { padding: 10px; text-align: center; border: 2px solid #e2e8f0; border-radius: 12px; background: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 70px; transition: 0.2s; }
         .slot-btn:hover:not(.booked):not(.blocked) { border-color: var(--primary); color: var(--primary); }
         .slot-btn.blocked { border-color: #fca5a5; color: #ef4444; background: #fee2e2; }
         .slot-btn.booked { border-color: var(--primary); background: var(--info-bg); color: var(--primary-dark); cursor: not-allowed; }
+
+        /* SUPPORT MODAL STYLES */
+        .support-options { display: flex; gap: 15px; margin-bottom: 20px; }
+        .support-card { 
+            flex: 1; 
+            border: 2px solid var(--border-light); 
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: var(--transition);
+        }
+        .support-card:hover, .support-card.active { border-color: var(--primary); background: var(--primary-light); }
+        .support-card i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .support-form-group { margin-bottom: 15px; display: none; }
+        .support-form-group.active { display: block; animation: fadeIn 0.3s; }
 
         /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
@@ -368,6 +419,7 @@
             .table-header { flex-direction: column; align-items: flex-start; }
             .table-header-actions { flex-direction: column; align-items: stretch; width: 100%; }
             .search-container { max-width: 100%; }
+            .support-options { flex-direction: column; }
         }
     </style>
 </head>
@@ -409,10 +461,11 @@
             <li class="nav-item" onclick="navigateTo('booking')"><i class="fa-solid fa-calendar-plus"></i> New Booking</li>
             <li class="nav-item" onclick="navigateTo('billing')"><i class="fa-solid fa-file-invoice-dollar"></i> Patient Billing</li>
             <li class="nav-item" onclick="navigateTo('reports')"><i class="fa-solid fa-chart-line"></i> Reports</li>
-            <li class="nav-item" onclick="navigateTo('staff')"><i class="fa-solid fa-users-cog"></i> Staff Mgmt</li>
+            <li class="nav-item" onclick="navigateTo('staff')"><i class="fa-solid fa-users-cog"></i> Staff Management</li>
             <li class="nav-item" onclick="navigateTo('patients')"><i class="fa-solid fa-user-doctor"></i> Patients</li>
             <li class="nav-item" onclick="navigateTo('services')"><i class="fa-solid fa-notes-medical"></i> Services</li>
-            <li class="nav-item" onclick="navigateTo('slots')"><i class="fa-regular fa-clock"></i> Slot Mgmt</li>
+            <li class="nav-item" onclick="navigateTo('slots')"><i class="fa-regular fa-clock"></i> Slot Management</li>
+            <li class="nav-item help-item" onclick="openSupport()"><i class="fa-solid fa-circle-question"></i> Need Help?</li>
         </ul>
         <div class="sidebar-footer">
             <div class="user-pill" onclick="openProfile()">
@@ -495,7 +548,8 @@
                             <input type="text" class="search-input" placeholder="Search history..." oninput="handleSearch('history', this.value)">
                         </div>
                     </div>
-                    <div class="table-responsive"><table id="history-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Service</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+                    <!-- Added Status Column here -->
+                    <div class="table-responsive"><table id="history-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
                 <div class="section-card" style="border-left: 4px solid var(--danger);">
                     <div class="table-header">
@@ -745,27 +799,62 @@
                                         <div class="live-summary-row"><span>Service:</span> <span class="live-summary-val" id="summary-service">-</span></div>
                                     </div>
 
-                                    <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Patient Details</h4>
-                                    <div style="margin-bottom:12px;">
-                                        <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Full Name</label>
-                                        <input type="text" id="bk-name" class="form-input" placeholder="Full Name" required>
+                                    <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Patient Selection</h4>
+                                    
+                                    <!-- Patient Toggle -->
+                                    <div style="display:flex; gap: 20px; margin-bottom: 15px; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+                                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600; color: var(--primary);">
+                                            <input type="radio" name="patType" value="new" onchange="togglePatientType()"> New Patient
+                                        </label>
+                                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600; color: var(--primary);">
+                                            <input type="radio" name="patType" value="old" checked onchange="togglePatientType()"> Existing Patient
+                                        </label>
                                     </div>
-                                    <div style="margin-bottom:12px;">
-                                        <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Phone Number</label>
-                                        <input type="tel" id="bk-phone" class="form-input" placeholder="012-3456789" required>
+
+                                    <!-- Mode: New Patient -->
+                                    <div id="new-pat-inputs" style="display:none;">
+                                        <div style="margin-bottom:12px;">
+                                            <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Full Name</label>
+                                            <input type="text" id="bk-name" class="form-input" placeholder="Full Name" required>
+                                        </div>
+                                        <div style="margin-bottom:12px;">
+                                            <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Phone Number</label>
+                                            <input type="tel" id="bk-phone" class="form-input" placeholder="012-3456789" required>
+                                        </div>
+                                        <div style="margin-bottom:12px;">
+                                            <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">IC Number</label>
+                                            <input type="text" id="bk-ic" class="form-input" placeholder="Optional">
+                                        </div>
                                     </div>
-                                    <div style="margin-bottom:12px;">
-                                        <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">IC Number</label>
-                                        <input type="text" id="bk-ic" class="form-input" placeholder="Optional">
+
+                                    <!-- Mode: Existing Patient (Default) -->
+                                    <div id="old-pat-inputs">
+                                        <div style="margin-bottom:12px;">
+                                            <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Select Patient</label>
+                                            <select id="bk-pat-select" class="form-input" onchange="onExistingPatientSelect()">
+                                                <option value="">-- Choose Patient --</option>
+                                            </select>
+                                        </div>
+                                        <!-- Read-only review fields for existing patient -->
+                                        <div style="margin-bottom:12px;">
+                                            <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Phone (Review)</label>
+                                            <input type="text" id="bk-review-phone" class="form-input" disabled placeholder="Auto-filled">
+                                        </div>
+                                        <div style="margin-bottom:12px;">
+                                            <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">IC (Review)</label>
+                                            <input type="text" id="bk-review-ic" class="form-input" disabled placeholder="Auto-filled">
+                                        </div>
                                     </div>
 
                                     <h4 style="margin:20px 0 15px; color:var(--primary); font-size:1rem;">Service</h4>
                                     <div style="margin-bottom:15px;">
-                                        <select id="bk-service" class="form-input"></select>
+                                        <select id="bk-service" class="form-input">
+                                            <option value="" disabled selected>-- Choose Service --</option>
+                                        </select>
                                     </div>
 
                                     <div style="margin-top:15px;">
-                                        <button type="submit" class="btn-primary" id="confirm-booking-btn" disabled>Confirm Booking</button>
+                                        <button type="submit" class="btn-primary" id="confirm-booking-btn" disabled>Add New Appointment</button>
                                     </div>
                                 </div>
                             </div>
@@ -778,9 +867,9 @@
             <section id="view-staff" class="view-section">
                 <div class="section-card">
                     <div class="table-header">
-                        <h3><i class="fa-solid fa-users-cog" style="color:var(--primary); margin-right:8px;"></i> Staff Directory</h3>
+                        <h3><i class="fa-solid fa-users-cog" style="color:var(--primary); margin-right:8px;"></i> Staff Management</h3>
                         <div class="table-header-actions">
-                            <button class="btn-sm" onclick="openEditStaff()"><i class="fa-solid fa-user-plus"></i> Add Staff</button>
+                            <button class="btn-sm" onclick="openEditStaff(null)"><i class="fa-solid fa-user-plus"></i> Add Staff</button>
                             <div class="search-container">
                                 <i class="fa-solid fa-search search-icon"></i>
                                 <input type="text" class="search-input" placeholder="Search staff..." oninput="handleSearch('staff', this.value)">
@@ -796,9 +885,12 @@
                 <div class="section-card">
                     <div class="table-header">
                         <h3>Patient Directory</h3>
-                        <div class="search-container">
-                            <i class="fa-solid fa-search search-icon"></i>
-                            <input type="text" class="search-input" placeholder="Search name, phone, IC..." oninput="handleSearch('patients', this.value)">
+                        <div class="table-header-actions">
+                            <button class="btn-sm" onclick="openEditPatient(null)"><i class="fa-solid fa-user-plus"></i> Add Patient</button>
+                            <div class="search-container">
+                                <i class="fa-solid fa-search search-icon"></i>
+                                <input type="text" class="search-input" placeholder="Search name, phone, IC..." oninput="handleSearch('patients', this.value)">
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="patients-table"><thead><tr><th>Name</th><th>Phone</th><th>IC No.</th><th>Visits</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
@@ -808,7 +900,12 @@
             <!-- SERVICES -->
             <section id="view-services" class="view-section">
                 <div class="section-card">
-                    <div class="table-header"><h3>Clinic Services & Pricing</h3></div>
+                    <div class="table-header">
+                        <h3>Clinic Services & Pricing</h3>
+                        <div class="table-header-actions">
+                            <button class="btn-sm" onclick="openEditService(null)"><i class="fa-solid fa-plus"></i> Add Service</button>
+                        </div>
+                    </div>
                     <div class="table-responsive"><table id="services-table"><thead><tr><th>Service</th><th>Price</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
             </section>
@@ -875,7 +972,7 @@
     <!-- 3. Edit Service Modal -->
     <div class="modal-overlay" id="editServiceModal">
         <div class="modal-content">
-            <div class="modal-header"><h3>Edit Service</h3><button onclick="closeModal('editServiceModal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-header"><h3 id="service-modal-title">Add Service</h3><button onclick="closeModal('editServiceModal')"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="modal-body">
                 <input type="hidden" id="edit-service-id">
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Service Name</label><input type="text" id="edit-service-name" class="form-input"></div>
@@ -883,7 +980,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-sm" onclick="closeModal('editServiceModal')">Cancel</button>
-                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="saveServiceEdit()">Update</button>
+                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="saveServiceEdit()">Save</button>
             </div>
         </div>
     </div>
@@ -926,7 +1023,7 @@
         </div>
     </div>
 
-    <!-- 6. PROFILE & ORG CHART MODAL -->
+    <!-- 6. PROFILE & ORG CHART MODAL (IMPROVED) -->
     <div class="modal-overlay" id="profileModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -945,16 +1042,33 @@
                 </div>
                 <div>
                     <h5 style="margin-bottom: 10px; color: var(--primary);">Organization</h5>
-                    <ul class="org-tree">
-                        <li>
-                            <div class="org-item"><i class="fa-solid fa-hospital"></i> Klinik Pergigian Azam</div>
-                            <ul class="org-tree">
-                                <li>
-                                    <div class="org-item"><i class="fa-solid fa-user-shield"></i> Dr. Amalina (Admin)</div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <div class="org-tree-container">
+                        <ul class="org-tree">
+                            <li>
+                                <div class="org-item"><i class="fa-solid fa-hospital" style="color:var(--primary);"></i> <strong>Klinik Pergigian Azam</strong></div>
+                                <ul class="org-tree">
+                                    <li>
+                                        <div class="org-item">
+                                            <div class="org-item-avatar"><i class="fa-solid fa-user-shield"></i></div>
+                                            <div><strong>Dr. Amalina</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Admin</span></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="org-item">
+                                            <div class="org-item-avatar"><i class="fa-solid fa-user-doctor"></i></div>
+                                            <div><strong>Dr. Ahmad</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Dentist</span></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="org-item">
+                                            <div class="org-item-avatar"><i class="fa-solid fa-user-nurse"></i></div>
+                                            <div><strong>Staff Team</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Nurses & Assistants</span></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1006,7 +1120,7 @@
     <!-- 8. EDIT PATIENT MODAL -->
     <div class="modal-overlay" id="editPatientModal">
         <div class="modal-content">
-            <div class="modal-header"><h3>Edit Patient</h3><button onclick="closeModal('editPatientModal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-header"><h3 id="patient-modal-title">Add Patient</h3><button onclick="closeModal('editPatientModal')"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="modal-body">
                 <input type="hidden" id="edit-patient-id">
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Full Name</label><input type="text" id="edit-patient-name" class="form-input"></div>
@@ -1015,7 +1129,82 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-sm" onclick="closeModal('editPatientModal')">Cancel</button>
-                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="savePatientEdit()">Update</button>
+                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="savePatientEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. CONFIRM CANCEL MODAL (New) -->
+    <div class="modal-overlay" id="confirmCancelModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 style="color: var(--danger);">Cancel Appointment?</h3>
+                <button onclick="closeModal('confirmCancelModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px;">Are you sure you want to cancel this appointment? This action cannot be undone.</p>
+                <input type="hidden" id="cancel-appt-id">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" onclick="closeModal('confirmCancelModal')">No, Keep It</button>
+                <button class="btn-sm btn-delete" onclick="executeCancel()">Yes, Cancel It</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. SUPPORT / HELP MODAL (New) -->
+    <div class="modal-overlay" id="supportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Need Help?</h3>
+                <button onclick="closeModal('supportModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="support-options">
+                    <div class="support-card active" onclick="toggleSupportTab('ticket')">
+                        <i class="fa-solid fa-ticket"></i>
+                        <h4>Submit Ticket</h4>
+                    </div>
+                    <div class="support-card" onclick="toggleSupportTab('wa')">
+                        <i class="fa-brands fa-whatsapp" style="color: var(--wa-color);"></i>
+                        <h4>Contact IT</h4>
+                    </div>
+                </div>
+
+                <!-- Ticket Form -->
+                <div id="support-ticket" class="support-form-group active">
+                    <form action="https://formsubmit.co/contact@ddnet.my" method="POST">
+                        <input type="hidden" name="_subject" value="New Support Ticket from Klinik Azam Portal">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="User" id="support-user-name">
+                        
+                        <div style="margin-bottom:15px;">
+                            <label style="font-size:0.8rem; font-weight:700;">Issue Type</label>
+                            <select name="Issue Type" class="form-input" required>
+                                <option value="Login Problem">Login Problem</option>
+                                <option value="Appointment Error">Appointment Error</option>
+                                <option value="Billing Issue">Billing Issue</option>
+                                <option value="Feature Request">Feature Request</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <label style="font-size:0.8rem; font-weight:700;">Description</label>
+                            <textarea name="Message" class="form-input" rows="4" required placeholder="Describe your issue..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Ticket</button>
+                    </form>
+                </div>
+
+                <!-- WhatsApp Contact -->
+                <div id="support-wa" class="support-form-group" style="text-align: center;">
+                    <p style="margin-bottom: 20px; color: var(--text-muted);">Chat directly with DDNetwork IT Support for immediate assistance.</p>
+                    <a href="https://wa.me/60123456789" target="_blank" class="btn-sm" style="background: var(--wa-color); color: white; font-size: 1.1rem; padding: 15px 30px; display: inline-flex;">
+                        <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem; margin-right: 10px;"></i> Chat on WhatsApp
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -1066,6 +1255,8 @@
             document.getElementById('profile-name').innerText = user.name;
             document.getElementById('profile-role').innerText = user.role;
             document.getElementById('profile-u').innerText = user.u;
+            // Pre-fill support form user
+            document.getElementById('support-user-name').value = `${user.name} (${user.role})`;
         }
 
         function logout() {
@@ -1198,7 +1389,7 @@
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewId).classList.add('active');
             
-            const titles = { 'dashboard':'Dashboard', 'appointments':'Appointments', 'booking':'New Booking', 'billing':'Patient Billing', 'reports':'Sales Reports', 'staff':'Staff Mgmt', 'patients':'Patients', 'services':'Services', 'slots':'Slot Mgmt', 'bill-detail':'Bill Details' };
+            const titles = { 'dashboard':'Dashboard', 'appointments':'Appointments', 'booking':'New Booking', 'billing':'Patient Billing', 'reports':'Sales Reports', 'staff':'Staff Management', 'patients':'Patients', 'services':'Services', 'slots':'Slot Management', 'bill-detail':'Bill Details' };
             document.getElementById('pageTitle').innerText = titles[viewId] || 'Clinic Portal';
 
             if(viewId === 'dashboard') renderDashboard();
@@ -1341,12 +1532,55 @@
             checkBookingFormComplete();
         }
 
+        // --- PATIENT TOGGLE LOGIC ---
+        function togglePatientType() {
+            const isNew = document.querySelector('input[name="patType"]:checked').value === 'new';
+            const newInputs = document.getElementById('new-pat-inputs');
+            const oldInputs = document.getElementById('old-pat-inputs');
+            
+            if(isNew) {
+                newInputs.style.display = 'block';
+                oldInputs.style.display = 'none';
+            } else {
+                newInputs.style.display = 'none';
+                oldInputs.style.display = 'block';
+            }
+            checkBookingFormComplete();
+        }
+
+        function onExistingPatientSelect() {
+            const select = document.getElementById('bk-pat-select');
+            const pid = parseInt(select.value);
+            if(!pid) {
+                document.getElementById('bk-review-phone').value = '';
+                document.getElementById('bk-review-ic').value = '';
+                return;
+            }
+            const patient = patients.find(p => p.id === pid);
+            if(patient) {
+                document.getElementById('bk-review-phone').value = patient.phone;
+                document.getElementById('bk-review-ic').value = patient.ic || '-';
+            }
+            checkBookingFormComplete();
+        }
+
+        // --- VALIDATION FIX (Item 3) ---
         function checkBookingFormComplete() {
-            const name = document.getElementById('bk-name').value;
-            const phone = document.getElementById('bk-phone').value;
+            const isNew = document.querySelector('input[name="patType"]:checked').value === 'new';
+            let isPatientValid = false;
+
+            if(isNew) {
+                const name = document.getElementById('bk-name').value;
+                const phone = document.getElementById('bk-phone').value;
+                isPatientValid = name.length > 0 && phone.length > 0;
+            } else {
+                const pid = parseInt(document.getElementById('bk-pat-select').value);
+                isPatientValid = !isNaN(pid);
+            }
+
             const service = document.getElementById('bk-service').value;
             const btn = document.getElementById('confirm-booking-btn');
-            if(selectedBookingDate && selectedBookingTime && name && phone && service) {
+            if(selectedBookingDate && selectedBookingTime && isPatientValid && service) {
                 btn.disabled = false;
             } else {
                 btn.disabled = true;
@@ -1358,6 +1592,16 @@
             selectedBookingTime = null;
             currentCalDate = new Date();
             document.getElementById('newBookingForm').reset();
+            
+            // Reset Toggle
+            document.querySelector('input[name="patType"][value="old"]').checked = true;
+            togglePatientType();
+
+            // Reset Dropdown
+            const patSelect = document.getElementById('bk-pat-select');
+            patSelect.innerHTML = '<option value="">-- Choose Patient --</option>';
+            patients.forEach(p => patSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+
             document.getElementById('confirm-booking-btn').disabled = true;
             document.getElementById('slot-date-display').innerText = "Select a Date";
             document.getElementById('slot-sub-display').innerText = "Available times will appear here";
@@ -1372,19 +1616,51 @@
             let cleanPhone = phone.replace(/[^0-9]/g, '');
             if(cleanPhone.startsWith('0')) cleanPhone = '60' + cleanPhone.substring(1);
             const displayDate = formatDateDisplay(date);
-            const message = `Assalamualaikum ${name}, Reminder for your appointment at Klinik Azam on ${displayDate} at ${time}. Please reply to confirm.`;
+            
+            const message = `Assalamualaikum dan Salam Sejahtera ✨🦷
+
+Kami dari Azam Dental SP Saujana ingin mengingatkan ${name} mengenai temujanji anda:
+
+📅 Tarikh & Masa: ${displayDate} pada ${time}
+
+Sila hadir 5–10 minit lebih awal untuk memastikan rawatan berjalan lancar dan tidak mengganggu pesakit seterusnya.
+
+Sekiranya terdapat sebarang perubahan atau pembatalan, sila maklumkan sekurang-kurangnya 30 minit sebelum temujanji.
+
+Sila sahkan kehadiran temujanji ini dengan membalas mesej ini.
+
+Terima kasih.
+> Azam Dental SP Saujana`;
+
             const encodedMsg = encodeURIComponent(message);
             const url = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
             window.open(url, '_blank');
         }
 
-        function cancelAppointment(id) {
-            if(!confirm("Are you sure you want to cancel this appointment?")) return;
+        function updateApptStatus(id, status) {
+            const idx = appointments.findIndex(a => a.id === id);
+            if (idx > -1) {
+                appointments[idx].status = status;
+                renderAppointments();
+                renderDashboard();
+                showToast("Status Updated");
+            }
+        }
+
+        // --- CANCEL APPOINTMENT LOGIC (Item 2) ---
+        function openCancelConfirm(id) {
+            document.getElementById('cancel-appt-id').value = id;
+            showModal('confirmCancelModal');
+        }
+
+        function executeCancel() {
+            const id = parseInt(document.getElementById('cancel-appt-id').value);
             const idx = appointments.findIndex(a => a.id === id);
             if(idx > -1) {
                 appointments[idx].status = 'Cancelled';
                 renderAppointments();
                 renderDashboard();
+                closeModal('confirmCancelModal');
                 showToast("Appointment Cancelled");
             }
         }
@@ -1643,8 +1919,10 @@
         function initDateLimits() {
             populateServiceDropdowns();
             initSessionListeners();
+            // Bind inputs for validation check immediately
             document.getElementById('bk-name').addEventListener('input', checkBookingFormComplete);
             document.getElementById('bk-phone').addEventListener('input', checkBookingFormComplete);
+            document.getElementById('bk-pat-select').addEventListener('change', onExistingPatientSelect); // onExistingPatientSelect calls checkBookingFormComplete
             document.getElementById('bk-service').addEventListener('change', function() {
                 const sid = this.value;
                 const srv = services.find(s => s.id == sid);
@@ -1658,7 +1936,7 @@
             sSelects.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
-                    el.innerHTML = '';
+                    el.innerHTML = '<option value="" disabled selected>-- Choose Service --</option>';
                     services.forEach(s => el.innerHTML += `<option value="${s.id}">${s.name} (RM ${s.price})</option>`);
                 }
             });
@@ -1666,41 +1944,54 @@
 
         function saveNewBooking(e) {
             e.preventDefault();
-            const name = document.getElementById('bk-name').value;
-            const phone = document.getElementById('bk-phone').value;
-            const ic = document.getElementById('bk-ic').value;
+            const isNew = document.querySelector('input[name="patType"]:checked').value === 'new';
+            let patient;
+
             if(!selectedBookingDate || !selectedBookingTime) {
                 showToast("Please select Date and Time.");
                 return;
             }
             const sId = parseInt(document.getElementById('bk-service').value);
             const sPrice = services.find(s=>s.id === sId).price;
-            let patient = patients.find(p => p.phone === phone);
-            if(!patient) {
-                patient = { id: Date.now(), name: name, phone: phone, ic: ic || '-' };
-                patients.push(patient);
-                showToast("New Patient Created");
-            } else {
-                if(patient.name !== name || (ic && patient.ic !== ic)) {
-                    patient.name = name;
-                    if(ic) patient.ic = ic;
+
+            if(isNew) {
+                const name = document.getElementById('bk-name').value;
+                const phone = document.getElementById('bk-phone').value;
+                const ic = document.getElementById('bk-ic').value;
+
+                let existing = patients.find(p => p.phone === phone);
+                if(!existing) {
+                    patient = { id: Date.now(), name: name, phone: phone, ic: ic || '-' };
+                    patients.push(patient);
+                    showToast("New Patient Created");
+                } else {
+                    showToast("Patient exists. Updated details.");
+                    existing.name = name;
+                    existing.ic = ic || existing.ic;
+                    patient = existing;
                 }
+            } else {
+                const pid = parseInt(document.getElementById('bk-pat-select').value);
+                patient = patients.find(p => p.id === pid);
             }
-            appointments.push({
-                id: Date.now(),
-                patientId: patient.id,
-                date: selectedBookingDate,
-                time: selectedBookingTime,
-                items: [{ id: sId, qty:1, price: sPrice }],
-                status: 'Confirmed',
-                paymentMethod: 'CASH',
-                invoiceId: null
-            });
-            showToast("Booking Confirmed");
-            renderAppointments();
-            renderDashboard();
-            renderPatients();
-            resetBookingForm();
+
+            if(patient) {
+                appointments.push({
+                    id: Date.now(),
+                    patientId: patient.id,
+                    date: selectedBookingDate,
+                    time: selectedBookingTime,
+                    items: [{ id: sId, qty:1, price: sPrice }],
+                    status: 'Pending',
+                    paymentMethod: 'CASH',
+                    invoiceId: null
+                });
+                showToast("Booking Confirmed");
+                renderAppointments();
+                renderDashboard();
+                renderPatients();
+                resetBookingForm();
+            }
         }
 
         function renderDashboard() {
@@ -1755,6 +2046,8 @@
                 const pName = p ? p.name : 'Unknown';
                 const pPhone = p ? p.phone : '-';
                 const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
+                
+                // Item 2: Remove Dropdown, Add Cancel Button
                 tBody.innerHTML += `
                 <tr>
                     <td>${formatDateDisplay(a.date)}</td>
@@ -1766,9 +2059,8 @@
                     <td>
                         <a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${pPhone}')"><i class="fa-brands fa-whatsapp"></i></a>
                         <button class="btn-sm" onclick="openEditAppt(${a.id})"><i class="fa-solid fa-pen"></i></button> 
-                        <button class="btn-sm btn-bill" onclick="createCashbill(${a.id})"><i class="fa-solid fa-file-invoice-dollar"></i> Create Cashbill</button>
-                        <button class="btn-sm btn-delete" onclick="cancelAppointment(${a.id})" title="Cancel Appointment"><i class="fa-solid fa-ban"></i></button>
-                        <button class="btn-sm btn-delete" onclick="requestDelete('appointment', ${a.id})"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn-sm btn-bill" onclick="createCashbill(${a.id})"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>
+                        <button class="btn-sm btn-delete" onclick="openCancelConfirm(${a.id})"><i class="fa-solid fa-ban"></i> Cancel</button>
                     </td>
                 </tr>`;
             });
@@ -1793,12 +2085,14 @@
                 const pName = p ? p.name : 'Unknown';
                 const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
                 const invDisplay = a.invoiceId || `INV-${a.id}`;
+                // Item 1: Added Status Column here explicitly
                 hBody.innerHTML += `
                 <tr>
                     <td>${formatDateDisplay(a.date)}</td>
                     <td style="font-weight:600;">${a.time}</td>
                     <td>${pName}</td>
                     <td>${sName}</td>
+                    <td><span class="badge badge-completed">Completed</span></td>
                     <td>
                         <span class="invoice-link" onclick="viewBillDetail(${a.id})">[${invDisplay}]</span>
                     </td>
@@ -1821,7 +2115,6 @@
             if (idx > -1) {
                 appointments[idx].status = 'Completed';
                 appointments[idx].paymentMethod = 'CASH';
-                // Generate Receipt Number
                 appointments[idx].invoiceId = generateReceiptNumber(appointments[idx].date);
                 showToast("Cashbill Created Successfully");
                 renderAppointments();
@@ -1924,27 +2217,47 @@
         }
 
         function openEditPatient(id) {
-            const p = patients.find(x => x.id === id);
-            document.getElementById('edit-patient-id').value = id;
-            document.getElementById('edit-patient-name').value = p.name;
-            document.getElementById('edit-patient-phone').value = p.phone;
-            document.getElementById('edit-patient-ic').value = p.ic;
+            if(!id) {
+                document.getElementById('patient-modal-title').innerText = "Add Patient";
+                document.getElementById('edit-patient-id').value = '';
+                document.getElementById('edit-patient-name').value = '';
+                document.getElementById('edit-patient-phone').value = '';
+                document.getElementById('edit-patient-ic').value = '';
+            } else {
+                const p = patients.find(x => x.id === id);
+                document.getElementById('patient-modal-title').innerText = "Edit Patient";
+                document.getElementById('edit-patient-id').value = id;
+                document.getElementById('edit-patient-name').value = p.name;
+                document.getElementById('edit-patient-phone').value = p.phone;
+                document.getElementById('edit-patient-ic').value = p.ic;
+            }
             showModal('editPatientModal');
         }
 
         function savePatientEdit() {
-            const id = parseInt(document.getElementById('edit-patient-id').value);
-            const idx = patients.findIndex(p => p.id === id);
-            if(idx > -1) {
-                patients[idx].name = document.getElementById('edit-patient-name').value;
-                patients[idx].phone = document.getElementById('edit-patient-phone').value;
-                patients[idx].ic = document.getElementById('edit-patient-ic').value;
-                renderPatients();
-                renderDashboard();
-                renderAppointments();
-                closeModal('editPatientModal');
-                showToast("Patient Updated");
+            const idInput = document.getElementById('edit-patient-id').value;
+            const id = idInput ? parseInt(idInput) : null;
+            const name = document.getElementById('edit-patient-name').value;
+            const phone = document.getElementById('edit-patient-phone').value;
+            const ic = document.getElementById('edit-patient-ic').value;
+
+            if(id) {
+                const idx = patients.findIndex(p => p.id === id);
+                if(idx > -1) {
+                    patients[idx].name = name;
+                    patients[idx].phone = phone;
+                    patients[idx].ic = ic;
+                    showToast("Patient Updated");
+                }
+            } else {
+                patients.push({ id: Date.now(), name: name, phone: phone, ic: ic || '-' });
+                showToast("Patient Added");
             }
+
+            renderPatients();
+            renderDashboard();
+            renderAppointments();
+            closeModal('editPatientModal');
         }
 
         function openHistory(id) {
@@ -1969,6 +2282,43 @@
             services.forEach(s => {
                 tbody.innerHTML += `<tr><td>${s.name}</td><td style="font-weight:700;">RM ${s.price}</td><td><button class="btn-sm" onclick="openEditService(${s.id})"><i class="fa-solid fa-pen"></i></button> <button class="btn-sm btn-delete" onclick="requestDelete('service', ${s.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             });
+        }
+
+        function openEditService(id) {
+            if(!id) {
+                document.getElementById('service-modal-title').innerText = "Add Service";
+                document.getElementById('edit-service-id').value = '';
+                document.getElementById('edit-service-name').value = '';
+                document.getElementById('edit-service-price').value = '';
+            } else {
+                const s = services.find(x => x.id === id);
+                document.getElementById('service-modal-title').innerText = "Edit Service";
+                document.getElementById('edit-service-id').value = id;
+                document.getElementById('edit-service-name').value = s.name;
+                document.getElementById('edit-service-price').value = s.price;
+            }
+            showModal('editServiceModal');
+        }
+
+        function saveServiceEdit() {
+            const idInput = document.getElementById('edit-service-id').value;
+            const id = idInput ? parseInt(idInput) : null;
+            const name = document.getElementById('edit-service-name').value;
+            const price = parseFloat(document.getElementById('edit-service-price').value);
+
+            if(id) {
+                const idx = services.findIndex(s => s.id === id);
+                if(idx > -1) {
+                    services[idx].name = name;
+                    services[idx].price = price;
+                    showToast("Service Updated");
+                }
+            } else {
+                services.push({ id: Date.now(), name: name, price: price });
+                showToast("Service Added");
+            }
+            renderServices();
+            closeModal('editServiceModal');
         }
 
         function renderStaff() {
@@ -2079,7 +2429,7 @@
                 appointments[idx].time = timeVal;
                 const sId = parseInt(document.getElementById('edit-appt-service').value);
                 const sPrice = services.find(s=>s.id === sId).price;
-                appointments[idx].items = [{id: sId, qty: 1, price: sPrice}];
+                appointments[idx].items = [{id: sId, qty:1, price: sPrice}];
                 renderAppointments();
                 renderDashboard();
                 closeModal('editApptModal');
@@ -2087,45 +2437,35 @@
             }
         }
 
-        function openEditService(id) {
-            const s = services.find(x => x.id === id);
-            document.getElementById('edit-service-id').value = id;
-            document.getElementById('edit-service-name').value = s.name;
-            document.getElementById('edit-service-price').value = s.price;
-            showModal('editServiceModal');
-        }
-
-        function saveServiceEdit() {
-            const id = parseInt(document.getElementById('edit-service-id').value);
-            const idx = services.findIndex(s => s.id === id);
-            if(idx > -1) {
-                services[idx].name = document.getElementById('edit-service-name').value;
-                services[idx].price = parseFloat(document.getElementById('edit-service-price').value);
-                renderServices();
-                closeModal('editServiceModal');
-                showToast("Service Updated");
-            }
-        }
-
         function openEditStaff(id) {
-            const s = staff.find(x => x.id === id);
-            document.getElementById('edit-staff-id').value = id;
-            document.getElementById('edit-staff-name').value = s.name;
-            document.getElementById('edit-staff-role').value = s.role;
-            document.getElementById('edit-staff-u').value = s.u;
+            if(!id) {
+                document.getElementById('edit-staff-id').value = '';
+                document.getElementById('edit-staff-name').value = '';
+                document.getElementById('edit-staff-role').value = 'Dentist';
+                document.getElementById('edit-staff-u').value = '';
+            } else {
+                const s = staff.find(x => x.id === id);
+                document.getElementById('edit-staff-id').value = id;
+                document.getElementById('edit-staff-name').value = s.name;
+                document.getElementById('edit-staff-role').value = s.role;
+                document.getElementById('edit-staff-u').value = s.u;
+            }
             showModal('editStaffModal');
         }
 
         function saveStaffEdit() {
             const id = parseInt(document.getElementById('edit-staff-id').value);
+            const name = document.getElementById('edit-staff-name').value;
+            const role = document.getElementById('edit-staff-role').value;
+            const u = document.getElementById('edit-staff-u').value;
             if(id) {
                 const idx = staff.findIndex(s => s.id === id);
-                staff[idx].name = document.getElementById('edit-staff-name').value;
-                staff[idx].role = document.getElementById('edit-staff-role').value;
-                staff[idx].u = document.getElementById('edit-staff-u').value;
+                staff[idx].name = name;
+                staff[idx].role = role;
+                staff[idx].u = u;
             } else {
-                staff.push({ id: Date.now(), name: document.getElementById('edit-staff-name').value, role: document.getElementById('edit-staff-role').value, u: document.getElementById('edit-staff-u').value, initials: document.getElementById('edit-staff-name').value.substring(0,2).toUpperCase() });
-                users.push({ u: document.getElementById('edit-staff-u').value, p: '1234', name: document.getElementById('edit-staff-name').value, role: document.getElementById('edit-staff-role').value, initials: document.getElementById('edit-staff-name').value.substring(0,2).toUpperCase() });
+                staff.push({ id: Date.now(), name: name, role: role, u: u, initials: name.substring(0,2).toUpperCase() });
+                users.push({ u: u, p: '1234', name: name, role: role, initials: name.substring(0,2).toUpperCase() });
             }
             renderStaff();
             closeModal('editStaffModal');
@@ -2253,6 +2593,28 @@
                 t.classList.remove('show');
                 t.classList.add('hide');
             }, 3000);
+        }
+
+        // --- SUPPORT MODAL LOGIC (Item 4) ---
+        function openSupport() {
+            toggleMobileMenu(); // close sidebar if open
+            showModal('supportModal');
+        }
+
+        function toggleSupportTab(tab) {
+            const cards = document.querySelectorAll('.support-card');
+            const groups = document.querySelectorAll('.support-form-group');
+            
+            cards.forEach(c => c.classList.remove('active'));
+            groups.forEach(g => g.classList.remove('active'));
+
+            if(tab === 'ticket') {
+                cards[0].classList.add('active');
+                document.getElementById('support-ticket').classList.add('active');
+            } else {
+                cards[1].classList.add('active');
+                document.getElementById('support-wa').classList.add('active');
+            }
         }
 
         initSessionListeners();
