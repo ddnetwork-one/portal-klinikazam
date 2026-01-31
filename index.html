@@ -71,12 +71,14 @@
 
         .header-title { display: flex; flex-direction: column; justify-content: center; }
         .header-title h2 { font-size: 1.1rem; line-height: 1.2; }
-        .header-title p { font-size: 0.75rem; color: var(--text-muted); display: none; } /* Hidden on mobile by default */
+        .header-title p { font-size: 0.75rem; color: var(--text-muted); display: none; }
 
+        /* Updated Header Center to accommodate Date & Time */
         .header-center { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .live-clock-container { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); }
-        .live-time { font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.95rem; color: var(--primary); }
-        
+        .live-clock-container { display: flex; align-items: center; gap: 10px; background: white; padding: 8px 16px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); }
+        .live-time { font-family: 'Plus Jakarta Sans', sans-serif; font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.1rem; color: var(--primary); line-height: 1; }
+        .live-date-header { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
         .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
 
         /* --- CONTENT AREA --- */
@@ -92,7 +94,7 @@
         
         /* Responsive Tables */
         .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-light); width: 100%; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 600px; } /* Min width ensures scroll on mobile */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 600px; }
         th { text-align: left; padding: 12px 16px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); background: #f8fafc; font-weight: 700; white-space: nowrap; }
         td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; color: var(--text-main); vertical-align: middle; white-space: nowrap; }
         tr:last-child td { border-bottom: none; }
@@ -134,7 +136,6 @@
             display: grid;
             gap: 15px;
             height: auto;
-            /* Default Desktop */
             grid-template-columns: 300px 260px 1fr;
         }
         
@@ -234,27 +235,12 @@
         /* Mobile Landscape & Portrait */
         @media (max-width: 768px) {
             :root { --header-height: 60px; }
-            
             body { position: relative; }
-            
-            /* Mobile Sidebar Logic */
-            .sidebar { 
-                position: fixed; 
-                top: 0; left: 0; bottom: 0; 
-                width: 280px; 
-                transform: translateX(-100%); 
-                z-index: 1050; 
-                box-shadow: 5px 0 20px rgba(0,0,0,0.1); 
-            }
+            .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; transform: translateX(-100%); z-index: 1050; box-shadow: 5px 0 20px rgba(0,0,0,0.1); }
             .sidebar.mobile-open { transform: translateX(0); }
-            
-            /* Backdrop */
-            .sidebar-backdrop {
-                position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1040;
-                opacity: 0; pointer-events: none; transition: 0.3s;
-            }
+            .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1040; opacity: 0; pointer-events: none; transition: 0.3s; }
             .sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
-
+            
             /* Header Adaptation */
             .mobile-menu-btn { display: block; }
             .header-center { display: none; } /* Hide big clock */
@@ -262,26 +248,18 @@
             header { padding: 0 15px; grid-template-columns: auto 1fr auto; }
             
             .content-area { padding: 15px; }
-
-            /* Dashboard Cards */
             .dashboard-stats { grid-template-columns: 1fr 1fr; }
             .stat-card { flex-direction: row; padding: 15px; }
             .stat-card h3 { font-size: 1.4rem; }
             
-            /* Booking Interface - Stack Vertically */
             .booking-container { grid-template-columns: 1fr; height: auto; display: flex; flex-direction: column; }
             .booking-panel { height: auto; max-height: none; }
-            
-            .booking-panel:nth-child(1) { /* Calendar */ height: 350px; }
-            .booking-panel:nth-child(2) { /* Slots */ height: 250px; }
-            .booking-panel:nth-child(3) { /* Form */ }
+            .booking-panel:nth-child(1) { height: 350px; }
+            .booking-panel:nth-child(2) { height: 250px; }
 
-            /* Modals */
             .modal-content { max-width: 100%; height: 100%; border-radius: 0; max-height: 100vh; }
             .modal-header, .modal-footer { padding: 15px; }
             .modal-body { padding: 15px; }
-
-            /* Form Inputs on Mobile */
             .btn-primary { padding: 12px; }
         }
 
@@ -351,20 +329,23 @@
 
     <!-- MAIN CONTENT -->
     <div class="main-wrapper">
-        <!-- UPDATED RESPONSIVE HEADER -->
+        <!-- UPDATED HEADER LAYOUT WITH DATE & 12H TIME -->
         <header>
             <div style="display:flex; align-items:center; gap:12px;">
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
                 <div class="header-title">
                     <h2 id="pageTitle">Dashboard</h2>
-                    <p style="color:var(--text-muted); font-weight:500;" id="currentFullDate">Saturday, Jan 31</p>
+                    <p style="color:var(--text-muted); font-weight:500;" id="currentFullDate">Loading...</p>
                 </div>
             </div>
             
             <div class="header-center">
                 <div class="live-clock-container">
-                    <i class="fa-regular fa-clock" style="color: var(--primary); font-size:0.9rem;"></i>
-                    <span id="liveClock" class="live-time">00:00:00</span>
+                    <i class="fa-regular fa-clock" style="color: var(--primary); font-size:1.1rem;"></i>
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <span id="liveClock" class="live-time">00:00:00</span>
+                        <span id="liveDate" class="live-date-header">Loading Date</span>
+                    </div>
                 </div>
             </div>
 
@@ -919,16 +900,32 @@
             }
         }
 
+        // --- UPDATED CLOCK LOGIC (12H FORMAT + DATE) ---
         function startLiveClock() {
             setInterval(() => {
                 const now = new Date();
-                const h = String(now.getHours()).padStart(2, '0');
-                const m = String(now.getMinutes()).padStart(2, '0');
-                const s = String(now.getSeconds()).padStart(2, '0');
-                document.getElementById('liveClock').innerText = `${h}:${m}:${s}`;
-                
-                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                document.getElementById('currentFullDate').innerText = now.toLocaleDateString('en-US', options);
+
+                // --- 12-Hour Format Logic ---
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+                const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+
+                // --- Update Clock Element ---
+                document.getElementById('liveClock').innerText = timeString;
+
+                // --- Date Logic ---
+                // Full date for Header Center (Desktop)
+                const optionsFull = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; // e.g., Saturday, January 31, 2026
+                const fullDateStr = now.toLocaleDateString('en-US', optionsFull);
+                document.getElementById('liveDate').innerText = fullDateStr;
+
+                // Shorter date for Mobile Title Subtext
+                const optionsShort = { weekday: 'short', month: 'short', day: 'numeric' }; // e.g., Sat, Jan 31
+                document.getElementById('currentFullDate').innerText = now.toLocaleDateString('en-US', optionsShort);
             }, 1000);
         }
 
