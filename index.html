@@ -62,6 +62,52 @@
         .search-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; }
 
+        /* --- CUSTOM PATIENT SEARCH COMPONENT --- */
+        .custom-select-wrapper { position: relative; width: 100%; }
+        .custom-select-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            color: var(--text-main);
+            cursor: text;
+        }
+        .custom-select-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
+        
+        .options-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 5px;
+            display: none;
+            list-style: none;
+        }
+        .options-list.show { display: block; }
+        
+        .options-list li {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.1s;
+        }
+        .options-list li:last-child { border-bottom: none; }
+        .options-list li:hover { background-color: var(--primary-light); color: var(--primary-dark); }
+        .options-list li .sub-text { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .no-option { padding: 12px; text-align: center; color: var(--text-muted); font-style: italic; font-size: 0.85rem; }
+
         /* --- LOGIN & LOGO --- */
         #login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: 0.5s; padding: 20px; }
         #login-screen.hidden { opacity: 0; pointer-events: none; }
@@ -1053,9 +1099,14 @@
                                     <div id="old-pat-inputs">
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Select Patient</label>
-                                            <select id="bk-pat-select" class="form-input">
-                                                <option value="">-- Choose Patient --</option>
-                                            </select>
+                                            
+                                            <!-- CUSTOM SEARCHABLE DROPDOWN -->
+                                            <div class="custom-select-wrapper">
+                                                <input type="text" id="bk-pat-search" class="custom-select-input" placeholder="Search Patient Name (A-Z)..." autocomplete="off">
+                                                <ul id="bk-pat-list" class="options-list"></ul>
+                                                <!-- Hidden input for value storage -->
+                                                <input type="hidden" id="bk-pat-select">
+                                            </div>
                                         </div>
                                         <!-- Read-only review fields for existing patient -->
                                         <div style="margin-bottom:12px;">
@@ -1374,7 +1425,7 @@
         </div>
     </div>
 
-    <!-- 10. SUPPORT / HELP MODAL (Updated for Background Submission) -->
+    <!-- 10. SUPPORT / HELP MODAL (Updated to WA Only) -->
     <div class="modal-overlay" id="supportModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1394,36 +1445,28 @@
                     </div>
                 </div>
 
-                <!-- Ticket Form -->
+                <!-- Ticket Form (WA Only) -->
                 <div id="support-ticket" class="support-form-group active">
-                    <!-- 
-                        1. Added target="supportIframe" to form 
-                        2. Added hidden iframe below (needed for background submission without reload)
-                    -->
-                    <form id="supportForm" action="https://formsubmit.co/contact@ddnet.my" method="POST" target="supportIframe">
-                        <input type="hidden" name="_subject" value="New Support Ticket from Klinik Azam Portal">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="User" id="support-user-name">
-                        
-                        <div style="margin-bottom:15px;">
-                            <label style="font-size:0.8rem; font-weight:700;">Issue Type</label>
-                            <select name="Issue Type" class="form-input" required>
-                                <option value="Login Problem">Login Problem</option>
-                                <option value="Appointment Error">Appointment Error</option>
-                                <option value="Billing Issue">Billing Issue</option>
-                                <option value="Feature Request">Feature Request</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom:15px;">
-                            <label style="font-size:0.8rem; font-weight:700;">Description</label>
-                            <textarea name="Message" class="form-input" rows="4" required placeholder="Describe your issue..."></textarea>
-                        </div>
-                        <button type="submit" class="btn-primary" id="supportSubmitBtn"><i class="fa-solid fa-paper-plane"></i> Send Ticket</button>
-                    </form>
+                    <div style="margin-bottom:15px;">
+                        <label style="font-size:0.8rem; font-weight:700;">Issue Type</label>
+                        <select id="support-issue-type" class="form-input" required>
+                            <option value="Login Problem">Login Problem</option>
+                            <option value="Appointment Error">Appointment Error</option>
+                            <option value="Billing Issue">Billing Issue</option>
+                            <option value="Feature Request">Feature Request</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom:15px;">
+                        <label style="font-size:0.8rem; font-weight:700;">Description</label>
+                        <textarea id="support-desc" class="form-input" rows="4" required placeholder="Describe your issue..."></textarea>
+                    </div>
+                    <!-- Hidden user info injected by JS -->
+                    <input type="hidden" id="support-user-name">
                     
-                    <!-- Hidden Iframe for background processing -->
-                    <iframe name="supportIframe" style="width: 1px; height: 1px; opacity: 0; position: absolute; top: 0; left: 0; border: none;"></iframe>
+                    <button class="btn-primary" id="supportSubmitBtn" onclick="sendTicketToWA()">
+                        <i class="fa-brands fa-whatsapp"></i> Send via WhatsApp
+                    </button>
                 </div>
 
                 <!-- WhatsApp Contact -->
@@ -1514,7 +1557,8 @@
             { id: 101, name: "Ali bin Ahmad", phone: "012-3456789", ic: "800101-10-5555" },
             { id: 102, name: "Siti Aminah", phone: "019-8765432", ic: "850505-08-4444" },
             { id: 103, name: "Muthu Kumar", phone: "014-5556677", ic: "901212-14-3333" },
-            { id: 104, name: "Jessica Wong", phone: "016-2233445", ic: "920222-08-2222" }
+            { id: 104, name: "Jessica Wong", phone: "016-2233445", ic: "920222-08-2222" },
+            { id: 105, name: "Ahmad Albab", phone: "013-9988776", ic: "950101-01-1234" } // Added extra for sorting test
         ];
 
         let appointments = [
@@ -1759,6 +1803,70 @@
             checkBookingFormComplete();
         }
 
+        // --- CUSTOM PATIENT SEARCH LOGIC (NEW) ---
+        function initCustomPatientSearch() {
+            const searchInput = document.getElementById('bk-pat-search');
+            const list = document.getElementById('bk-pat-list');
+            
+            // Sort Patients Alphabetically
+            const sortedPatients = [...patients].sort((a, b) => a.name.localeCompare(b.name));
+
+            function renderList(filterText = '') {
+                list.innerHTML = '';
+                const lowerFilter = filterText.toLowerCase();
+                
+                const filtered = sortedPatients.filter(p => p.name.toLowerCase().includes(lowerFilter));
+                
+                if (filtered.length === 0) {
+                    list.innerHTML = '<li class="no-option">No patients found</li>';
+                } else {
+                    filtered.forEach(p => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<div>${p.name}</div><span class="sub-text">${p.phone}</span>`;
+                        li.onclick = () => selectPatient(p);
+                        list.appendChild(li);
+                    });
+                }
+            }
+
+            // Show list on focus
+            searchInput.addEventListener('focus', () => {
+                renderList(searchInput.value);
+                list.classList.add('show');
+            });
+
+            // Filter on input
+            searchInput.addEventListener('input', (e) => {
+                renderList(e.target.value);
+                // Clear hidden selection if text changes
+                document.getElementById('bk-pat-select').value = '';
+                document.getElementById('bk-review-phone').value = '';
+                document.getElementById('bk-review-ic').value = '';
+                checkBookingFormComplete();
+            });
+
+            // Click outside to close
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-select-wrapper')) {
+                    list.classList.remove('show');
+                }
+            });
+        }
+
+        function selectPatient(p) {
+            const searchInput = document.getElementById('bk-pat-search');
+            const list = document.getElementById('bk-pat-list');
+            
+            searchInput.value = p.name;
+            document.getElementById('bk-pat-select').value = p.id; // Update hidden ID
+            document.getElementById('bk-review-phone').value = p.phone;
+            document.getElementById('bk-review-ic').value = p.ic || '-';
+            
+            list.classList.remove('show');
+            checkBookingFormComplete();
+        }
+
+
         // --- PATIENT TOGGLE LOGIC ---
         function togglePatientType() {
             const isNew = document.querySelector('input[name="patType"]:checked').value === 'new';
@@ -1776,8 +1884,9 @@
         }
 
         function onExistingPatientSelect() {
-            const select = document.getElementById('bk-pat-select');
-            const pid = parseInt(select.value);
+            // This function is now largely handled by selectPatient() in custom search
+            // But kept for reference if standard select was used elsewhere.
+            const pid = parseInt(document.getElementById('bk-pat-select').value);
             if(!pid) {
                 document.getElementById('bk-review-phone').value = '';
                 document.getElementById('bk-review-ic').value = '';
@@ -1812,9 +1921,8 @@
                 const phone = document.getElementById('bk-phone').value;
                 isPatientValid = (name.length > 0 && phone.length > 0);
             } else {
-                // For existing, check if dropdown has a valid value (not empty string)
+                // For existing, check if hidden input has a valid value (from custom search)
                 const pid = document.getElementById('bk-pat-select').value;
-                // Use explicit checks for safety
                 isPatientValid = (pid !== "" && pid !== null && pid !== undefined);
             }
 
@@ -1832,10 +1940,12 @@
             document.querySelector('input[name="patType"][value="new"]').checked = true;
             togglePatientType();
 
-            // Reset Dropdown
-            const patSelect = document.getElementById('bk-pat-select');
-            patSelect.innerHTML = '<option value="">-- Choose Patient --</option>';
-            patients.forEach(p => patSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+            // Reset Custom Search
+            document.getElementById('bk-pat-search').value = '';
+            document.getElementById('bk-pat-select').value = '';
+            document.getElementById('bk-pat-list').classList.remove('show');
+            document.getElementById('bk-review-phone').value = '';
+            document.getElementById('bk-review-ic').value = '';
 
             document.getElementById('confirm-booking-btn').disabled = true;
             document.getElementById('slot-date-display').innerText = "Select a Date";
@@ -2166,14 +2276,11 @@ Terima kasih.
             // Bind inputs for validation check immediately
             document.getElementById('bk-name').addEventListener('input', checkBookingFormComplete);
             document.getElementById('bk-phone').addEventListener('input', checkBookingFormComplete);
-            
-            // FIX: Explicitly bind select change to validation
-            document.getElementById('bk-pat-select').addEventListener('change', () => {
-                onExistingPatientSelect();
-                checkBookingFormComplete();
-            });
 
-            // FIX: Explicitly bind radio buttons to validation to ensure UI updates immediately
+            // Initialize Custom Patient Search Logic
+            initCustomPatientSearch();
+
+            // FIX: Explicitly bind radio buttons to validation
             document.querySelectorAll('input[name="patType"]').forEach(radio => {
                 radio.addEventListener('change', () => {
                     togglePatientType();
@@ -2230,7 +2337,7 @@ Terima kasih.
                 }
             } else {
                 const pidRaw = document.getElementById('bk-pat-select').value;
-                // FIX: Check if patient is actually selected
+                // Check if patient is actually selected
                 if (!pidRaw || pidRaw === "") {
                     showToast("Please select a patient from list.");
                     return;
@@ -2239,7 +2346,7 @@ Terima kasih.
                 const pid = parseInt(pidRaw);
                 patient = patients.find(p => p.id === pid);
                 
-                // FIX: Double check if patient was found
+                // Double check if patient was found
                 if (!patient) {
                     showToast("Error: Could not find patient data. Please try again.");
                     return;
@@ -2863,7 +2970,7 @@ Terima kasih.
             }, 3000);
         }
 
-        // --- SUPPORT MODAL LOGIC (Item 4) ---
+        // --- SUPPORT MODAL LOGIC (WA Only) ---
         function openSupport() {
             toggleMobileMenu(); // close sidebar if open
             showModal('supportModal');
@@ -2883,6 +2990,35 @@ Terima kasih.
                 cards[1].classList.add('active');
                 document.getElementById('support-wa').classList.add('active');
             }
+        }
+
+        // --- SEND TICKET VIA WHATSAPP ---
+        function sendTicketToWA() {
+            const issueType = document.getElementById('support-issue-type').value;
+            const description = document.getElementById('support-desc').value;
+            const user = document.getElementById('support-user-name').value; // Requested By
+            const phone = "60123456789"; // Support number
+
+            if(!issueType || !description) {
+                showToast("Please select Issue Type and enter Description.");
+                return;
+            }
+
+            const message = `*SUPPORT TICKET*
+---------------------------
+*Requested By:* ${user}
+*Issue Type:* ${issueType}
+*Description:* ${description}
+---------------------------
+_Generated from Klinik Azam Portal_`;
+
+            const encodedMsg = encodeURIComponent(message);
+            const url = `https://wa.me/${phone}?text=${encodedMsg}`;
+            window.open(url, '_blank');
+            
+            // Optional: Close modal after sending
+            // closeModal('supportModal');
+            showToast("Opening WhatsApp...");
         }
 
         initSessionListeners();
