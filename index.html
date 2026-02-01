@@ -158,30 +158,32 @@
         .stat-card p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; opacity: 0.9; }
 
-        /* --- RECEIPT / INVOICE (NEW DESIGN) --- */
+        /* --- PROFESSIONAL RECEIPT DESIGN (ONE PAGE PRINT OPTIMIZED) --- */
         #view-bill-detail {
-            background: #f3f4f6;
+            background: #f1f5f9;
             padding: 20px;
             max-width: 100%;
             overflow-y: auto;
         }
         
+        /* The "Paper" Container */
         .receipt-paper {
-            max-width: 210mm;
+            background: #ffffff;
+            max-width: 900px; /* A4 Landscape width approx */
             margin: 0 auto;
-            background: #fff;
-            padding: 32px;
-            box-shadow: var(--shadow-lg);
-            border-radius: 4px; /* Slightly sharper for paper feel */
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             position: relative;
+            border-top: 8px solid var(--primary); /* Top accent */
         }
 
-        /* Editable Inputs in Receipt */
+        /* Editable Inputs - Hidden until focused */
         .receipt-input {
             background: transparent;
-            border: 1px dashed transparent;
-            padding: 4px 8px;
-            border-radius: 4px;
+            border: none;
+            border-bottom: 1px dashed transparent;
+            padding: 2px 4px;
+            border-radius: 2px;
             font-family: inherit;
             font-size: inherit;
             font-weight: inherit;
@@ -189,78 +191,301 @@
             width: 100%;
             transition: all 0.2s;
         }
-        .receipt-input:hover { border-color: var(--primary-light); background: #f8fafc; }
-        .receipt-input:focus { background: #fff; border-color: var(--primary); outline: none; border-style: solid; }
+        .receipt-input:hover { border-bottom-color: #cbd5e1; background: #f8fafc; }
+        .receipt-input:focus { background: #fff; border-bottom: 2px solid var(--primary); outline: none; }
 
-        .receipt-header {
+        /* --- Header Section --- */
+        .rp-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2px solid var(--primary);
+            margin-bottom: 40px;
             padding-bottom: 20px;
-            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .rp-brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .rp-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .rp-brand-info h1 {
+            color: var(--primary-dark);
+            font-size: 22px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+        
+        .rp-brand-info p {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.5;
+            max-width: 300px;
+        }
+        
+        .rp-title {
+            text-align: right;
+        }
+        
+        .rp-title h2 {
+            font-size: 32px;
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+        }
+        
+        .rp-meta-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .rp-meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .rp-meta-item span:first-child {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        
+        .rp-meta-item span:last-child {
+            font-weight: 600;
+            color: var(--text-main);
         }
 
-        .clinic-brand { display: flex; gap: 16px; align-items: center; }
-        .clinic-logo { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-light); }
-        .clinic-info h1 { margin: 0; font-size: 20px; color: var(--primary); line-height: 1.2; }
-        .clinic-info p { margin: 4px 0; font-size: 13px; color: var(--text-muted); line-height: 1.4; }
-
-        .receipt-meta { text-align: right; }
-        .receipt-meta h2 { margin: 0; font-size: 24px; color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; }
-        .receipt-meta p { margin: 4px 0; font-size: 13px; color: var(--text-muted); }
-
-        .receipt-grid { display: flex; gap: 32px; margin-top: 24px; }
-        .receipt-col { flex: 1; }
-        .receipt-col h3 { font-size: 13px; color: var(--primary); text-transform: uppercase; border-bottom: 1px solid var(--border-light); padding-bottom: 8px; margin-bottom: 12px; letter-spacing: 0.05em; }
-        .receipt-col p { margin: 6px 0; font-size: 14px; color: var(--text-main); display: flex; justify-content: space-between; }
-
-        .receipt-items { margin-top: 32px; }
-        .receipt-table { width: 100%; border-collapse: collapse; }
-        .receipt-table th { text-align: left; padding: 12px 0; font-weight: 600; border-bottom: 2px solid var(--border-light); font-size: 13px; color: var(--text-muted); }
-        .receipt-table td { padding: 16px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; vertical-align: middle; }
-        .receipt-table td:last-child, .receipt-table th:last-child { text-align: right; }
-
-        .receipt-total-section { margin-top: 24px; display: flex; justify-content: flex-end; }
-        .receipt-total-box { width: 280px; }
-        .receipt-total-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; }
-        .receipt-total-row.grand { font-weight: 800; font-size: 18px; border-top: 2px solid var(--border-light); margin-top: 12px; padding-top: 16px; color: var(--primary); }
-
-        .receipt-footer { margin-top: 40px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); border-top: 1px dashed var(--border-light); padding-top: 20px; }
-        .receipt-qr img { width: 90px; height: 90px; border-radius: 8px; }
+        /* --- Grid Info Section --- */
+        .rp-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
         
+        .rp-info-block h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 12px;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+        
+        .rp-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .rp-label { color: var(--text-muted); }
+        .rp-val { font-weight: 600; color: var(--text-main); text-align: right; }
+        
+        /* --- Table Section --- */
+        .rp-table-wrapper {
+            margin-bottom: 30px;
+        }
+        
+        .rp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .rp-table th {
+            text-align: left;
+            padding: 12px 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #64748b;
+            background: #f8fafc;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .rp-table td {
+            padding: 16px 10px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+        
+        /* Align numbers properly */
+        .rp-col-right { text-align: right; }
+        .rp-col-center { text-align: center; }
+        
+        .rp-item-name { font-weight: 500; color: var(--text-main); }
+        .rp-price { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; }
+
+        /* --- Total Section (Floating Card) --- */
+        .rp-summary-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+        
+        .rp-summary-card {
+            width: 320px;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        
+        .rp-sum-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .rp-sum-total {
+            border-top: 2px solid var(--border-light);
+            margin-top: 10px;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .rp-sum-total span:first-child {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        
+        .rp-sum-total span:last-child {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* --- Footer --- */
+        .rp-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-light);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .rp-terms { 
+            width: 70%; /* Give text room */
+            line-height: 1.6; 
+        }
+        
+        .rp-qr-box {
+            text-align: center;
+            width: 140px; /* Fixed width */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        
+        .rp-qr-box img {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        /* --- PAID STAMP EFFECT --- */
+        .paid-stamp {
+            position: absolute;
+            top: 120px;
+            right: 40px;
+            border: 4px solid var(--success);
+            color: var(--success);
+            text-transform: uppercase;
+            padding: 5px 15px;
+            font-weight: 800;
+            font-size: 32px;
+            border-radius: 8px;
+            text-align: center;
+            opacity: 0.15;
+            transform: rotate(-15deg);
+            z-index: 10;
+            pointer-events: none;
+            mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.5"/></svg>');
+            -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.5"/></svg>');
+            mix-blend-mode: multiply;
+        }
+        
+        .paid-stamp.visible {
+            opacity: 0.9;
+        }
+
+        /* --- Actions Bar --- */
         .receipt-actions {
-            margin-top: 30px; 
+            margin-top: 30px;
             padding-bottom: 60px;
-            display: flex; 
-            justify-content: space-between; 
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
 
-        /* --- PRINT STYLES --- */
+        /* --- PRINT STYLES (ONE PAGE OPTIMIZED) --- */
         @media print {
             body {
                 background: white;
                 height: auto;
                 overflow: visible;
                 display: block;
+                margin: 0;
+                padding: 0;
             }
             /* Hide App UI */
             .sidebar, header, .mobile-menu-btn, .no-print, .view-section:not(#view-bill-detail) { display: none !important; }
-            
+            #toast { display: none !important; }
+
             /* Show Content Area but Reset */
             .main-wrapper, .content-area { overflow: visible; height: auto; display: block; padding: 0; margin: 0; }
 
             /* Show Only Bill Detail */
-            #view-bill-detail { display: block !important; padding: 0; background: white; width: 100%; position: absolute; top: 0; left: 0; }
+            #view-bill-detail { display: block !important; padding: 0; background: white; width: 100%; position: static; top: 0; left: 0; overflow: visible; }
 
-            /* Paper Reset */
-            .receipt-paper { box-shadow: none; border: none; margin: 0; padding: 0; max-width: 100%; }
+            /* Paper Reset - ONE PAGE */
+            .receipt-paper { 
+                box-shadow: none; 
+                border: none; 
+                margin: 0; 
+                padding: 30px 40px; /* Safe printing area */
+                max-width: 100%; 
+                width: 100%; 
+                page-break-inside: avoid; /* Prevents splitting content */
+            }
             
-            /* Input Styling */
-            .receipt-input { border: none !important; padding: 0 !important; width: auto; display: inline; }
+            /* Input Styling - Remove all borders */
+            .receipt-input { border: none !important; padding: 0 !important; width: auto; display: inline; background: transparent !important; }
+            
+            /* Paid Stamp fix for print */
+            .paid-stamp { -webkit-print-color-adjust: exact; print-color-adjust: exact; opacity: 0.8; }
 
-            @page { size: A4 portrait; margin: 10mm; }
+            /* FORCE LANDSCAPE & NO MARGINS */
+            @page { size: A4 landscape; margin: 0; }
         }
 
         /* --- UI ELEMENTS --- */
@@ -316,43 +541,16 @@
         .live-summary h5 { font-size: 0.75rem; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 8px; letter-spacing: 0.05em; }
         .live-summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
 
-        /* IMPROVED ORG CHART */
+        /* ORG CHART */
         .org-tree-container { padding: 10px 0; }
         .org-tree { list-style: none; padding-left: 20px; font-size: 0.9rem; position: relative; }
         .org-tree li { margin: 15px 0; position: relative; padding-left: 25px; }
-        /* Connecting Lines */
-        .org-tree li::before { 
-            content: ''; position: absolute; top: 22px; left: 0; 
-            border-left: 2px dashed #cbd5e1; height: 100%; 
-        }
-        .org-tree li::after { 
-            content: ''; position: absolute; top: 22px; left: 0; 
-            border-top: 2px dashed #cbd5e1; width: 25px; 
-        }
+        .org-tree li::before { content: ''; position: absolute; top: 22px; left: 0; border-left: 2px dashed #cbd5e1; height: 100%; }
+        .org-tree li::after { content: ''; position: absolute; top: 22px; left: 0; border-top: 2px dashed #cbd5e1; width: 25px; }
         .org-tree li:last-child::before { height: 22px; }
-        
-        .org-item { 
-            display: flex; align-items: center; gap: 12px; 
-            padding: 10px 14px; 
-            background: white; 
-            border: 1px solid var(--border-light); 
-            border-radius: 10px; 
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-        }
-        .org-item:hover { 
-            border-color: var(--primary); 
-            transform: translateX(5px); 
-            box-shadow: var(--shadow-md);
-        }
-        .org-item-avatar { 
-            width: 32px; height: 32px; 
-            border-radius: 50%; 
-            background: var(--primary-light); 
-            color: var(--primary);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700;
-        }
+        .org-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: white; border:1px solid var(--border-light); border-radius: 10px; box-shadow: var(--shadow-sm); transition: var(--transition); }
+        .org-item:hover { border-color: var(--primary); transform: translateX(5px); box-shadow: var(--shadow-md); }
+        .org-item-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; }
 
         .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
         .slot-btn { padding: 10px; text-align: center; border: 2px solid #e2e8f0; border-radius: 12px; background: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 70px; transition: 0.2s; }
@@ -362,15 +560,7 @@
 
         /* SUPPORT MODAL STYLES */
         .support-options { display: flex; gap: 15px; margin-bottom: 20px; }
-        .support-card { 
-            flex: 1; 
-            border: 2px solid var(--border-light); 
-            border-radius: 12px; 
-            padding: 15px; 
-            text-align: center; 
-            cursor: pointer; 
-            transition: var(--transition);
-        }
+        .support-card { flex: 1; border: 2px solid var(--border-light); border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; transition: var(--transition); }
         .support-card:hover, .support-card.active { border-color: var(--primary); background: var(--primary-light); }
         .support-card i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
         .support-form-group { margin-bottom: 15px; display: none; }
@@ -403,14 +593,19 @@
             .booking-panel:nth-child(2) { height: 250px; }
             .modal-content { max-width: 100%; height: 100%; border-radius: 0; max-height: 100vh; }
             
-            .receipt-paper { padding: 15px; }
-            .receipt-grid { flex-direction: column; gap: 20px; }
-            .receipt-header { flex-direction: column; text-align: center; align-items: center; gap: 15px; }
-            .clinic-brand { flex-direction: column; }
-            .receipt-meta { text-align: center; }
+            /* Responsive Receipt */
+            .receipt-paper { padding: 20px; border-top: none; }
+            .rp-header { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+            .rp-brand-info { text-align: center; }
+            .rp-brand-info p { margin: 0 auto; }
+            .rp-title { text-align: center; margin-bottom: 20px; }
+            .rp-meta-row { justify-content: center; }
+            .rp-info-grid { grid-template-columns: 1fr; gap: 20px; }
+            .rp-summary-row { justify-content: center; }
+            .rp-summary-card { width: 100%; }
+            .rp-footer { flex-direction: column; align-items: center; gap: 20px; text-align: center; }
             .receipt-actions { flex-direction: column; gap: 10px; }
             .receipt-actions button { width: 100%; }
-            .receipt-total-box { width: 100%; }
         }
 
         @media (max-width: 480px) {
@@ -604,7 +799,7 @@
                 </div>
             </section>
 
-            <!-- NEW RECEIPT DESIGN -->
+            <!-- NEW PROFESSIONAL RECEIPT DESIGN -->
             <section id="view-bill-detail" class="view-section">
                 <div class="no-print" style="margin-bottom: 20px;">
                     <button class="btn-sm" onclick="navigateTo('billing')"><i class="fa-solid fa-arrow-left"></i> Back to Billing List</button>
@@ -612,51 +807,79 @@
 
                 <div class="receipt-paper">
                     
+                    <!-- PAID STAMP (Hidden by default, shown via JS) -->
+                    <div id="rp-stamp" class="paid-stamp">PAID</div>
+
                     <!-- HEADER -->
-                    <div class="receipt-header">
-                        <div class="clinic-brand">
-                            <img src="https://raw.githubusercontent.com/ddnetwork-ent/clinic-azam-dental/main/IMG_2260.JPG" alt="Logo" class="clinic-logo">
-                            <div class="clinic-info">
-                                <h1>KLINIK PERGIGIAN AZAM</h1>
-                                <p>21, Jalan PKS (A), Pusat Komersial Saujana</p>
-                                <p>08000 Sungai Petani, Kedah</p>
-                                <p>Tel: 04-123 4567</p>
+                    <header class="rp-header">
+                        <div class="rp-brand">
+                            <img src="https://raw.githubusercontent.com/ddnetwork-ent/clinic-azam-dental/main/IMG_2260.JPG" alt="Clinic Logo" class="rp-logo">
+                            <div class="rp-brand-info">
+                                <h1>Klinik Pergigian Azam</h1>
+                                <p>21, Jalan PKS (A), Pusat Komersial Saujana<br>08000 Sungai Petani, Kedah</p>
+                                <p style="color:var(--primary-dark); font-weight:600; margin-top:4px;">Tel: 04-123 4567</p>
+                            </div>
+                        </div>
+                        <div class="rp-title">
+                            <h2>RECEIPT</h2>
+                            <div class="rp-meta-row">
+                                <div class="rp-meta-item">
+                                    <span>Invoice No</span>
+                                    <span id="receiptNo">KPA-00000000-000</span>
+                                </div>
+                                <div class="rp-meta-item">
+                                    <span>Date</span>
+                                    <span id="receiptDate">--/--/----</span>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- INFO GRID -->
+                    <div class="rp-info-grid">
+                        <div class="rp-info-block">
+                            <h4>Patient Details</h4>
+                            <div class="rp-row">
+                                <span class="rp-label">Name</span>
+                                <span class="rp-val"><input type="text" id="r-patient-name" class="receipt-input" value="Patient Name"></span>
+                            </div>
+                            <div class="rp-row">
+                                <span class="rp-label">Phone</span>
+                                <span class="rp-val"><input type="text" id="r-patient-phone" class="receipt-input" value="012-3456789"></span>
+                            </div>
+                            <div class="rp-row">
+                                <span class="rp-label">IC No.</span>
+                                <span class="rp-val"><input type="text" id="r-patient-ic" class="receipt-input" value="000000-00-0000"></span>
                             </div>
                         </div>
 
-                        <div class="receipt-meta">
-                            <h2>RECEIPT</h2>
-                            <p><strong id="receiptNo">KPA-00000000-000</strong></p>
-                            <p id="receiptDateTime">Date & Time</p>
+                        <div class="rp-info-block">
+                            <h4>Payment Details</h4>
+                            <div class="rp-row">
+                                <span class="rp-label">Appt Time</span>
+                                <span class="rp-val" id="receiptTime">--:--</span>
+                            </div>
+                            <div class="rp-row">
+                                <span class="rp-label">Method</span>
+                                <span class="rp-val" id="r-payment-method">Cash</span>
+                            </div>
+                            <div class="rp-row">
+                                <span class="rp-label">Status</span>
+                                <span class="badge badge-completed">PAID</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- INFO GRID -->
-                    <div class="receipt-grid">
-                        <div class="receipt-col">
-                            <h3>PATIENT DETAILS</h3>
-                            <p><strong>Name:</strong> <input type="text" id="r-patient-name" class="receipt-input" value="Patient Name"></p>
-                            <p><strong>Contact:</strong> <input type="text" id="r-patient-phone" class="receipt-input" value="012-3456789"></p>
-                            <p><strong>IC:</strong> <input type="text" id="r-patient-ic" class="receipt-input" value="000000-00-0000"></p>
-                        </div>
-
-                        <div class="receipt-col">
-                            <h3>PAYMENT SUMMARY</h3>
-                            <p><strong>Method:</strong> <span id="r-payment-method">Cash</span></p>
-                            <p><strong>Status:</strong> <span class="badge badge-completed" style="font-size: 0.7rem;">PAID</span></p>
-                        </div>
-                    </div>
-
-                    <!-- ITEMS -->
-                    <div class="receipt-items">
-                        <table class="receipt-table">
+                    <!-- ITEMS TABLE -->
+                    <div class="rp-table-wrapper">
+                        <table class="rp-table">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Treatment / Service</th>
-                                    <th style="text-align: center;">Qty</th>
-                                    <th style="text-align: right;">Unit Price</th>
-                                    <th style="text-align: right;">Total</th>
+                                    <th style="width: 50px;">#</th>
+                                    <th>Description</th>
+                                    <th class="rp-col-center" style="width: 80px;">Qty</th>
+                                    <th class="rp-col-right" style="width: 120px;">Unit Price</th>
+                                    <th class="rp-col-right" style="width: 120px;">Total</th>
                                 </tr>
                             </thead>
                             <tbody id="r-items-body">
@@ -665,35 +888,35 @@
                         </table>
                     </div>
 
-                    <!-- TOTAL -->
-                    <div class="receipt-total-section">
-                        <div class="receipt-total-box">
-                            <div class="receipt-total-row">
+                    <!-- TOTAL SUMMARY CARD -->
+                    <div class="rp-summary-row">
+                        <div class="rp-summary-card">
+                            <div class="rp-sum-line">
                                 <span>Subtotal</span>
                                 <span id="r-subtotal">RM 0.00</span>
                             </div>
-                            <div class="receipt-total-row">
+                            <div class="rp-sum-line">
                                 <span>Tax (0%)</span>
                                 <span>RM 0.00</span>
                             </div>
-                            <div class="receipt-total-row grand">
-                                <span>TOTAL</span>
+                            <div class="rp-sum-total">
+                                <span>TOTAL PAID</span>
                                 <span id="r-total">RM 0.00</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- FOOTER -->
-                    <div class="receipt-footer">
-                        <div>
-                            <p>This is a computer-generated receipt. No signature required.</p>
-                            <p>Please retain this receipt for medical reference.</p>
+                    <footer class="rp-footer">
+                        <div class="rp-terms">
+                            <p><strong>Terms & Conditions:</strong></p>
+                            <p>1. Please present this receipt for warranty claims.<br>2. Payment is non-refundable once service is rendered.<br>3. This is a computer generated document. No signature required.<br>4. Thank you for choosing Klinik Pergigian Azam!</p>
                         </div>
-                        <div class="receipt-qr" style="text-align: center;">
+                        <div class="rp-qr-box">
                             <img id="r-qr-img" src="" alt="WhatsApp QR">
-                            <p style="margin-top: 5px;">Scan for WhatsApp</p>
+                            <p style="font-size: 11px;">Scan to Contact Us</p>
                         </div>
-                    </div>
+                    </footer>
 
                     <div class="receipt-actions no-print">
                         <button class="btn-sm" style="background: var(--warning); color: white; border: none;" onclick="updatePatientFromReceipt()"><i class="fa-solid fa-pen-to-square"></i> Update Patient Info</button>
@@ -1151,7 +1374,7 @@
         </div>
     </div>
 
-    <!-- 10. SUPPORT / HELP MODAL (New) -->
+    <!-- 10. SUPPORT / HELP MODAL (Updated for Background Submission) -->
     <div class="modal-overlay" id="supportModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1173,7 +1396,11 @@
 
                 <!-- Ticket Form -->
                 <div id="support-ticket" class="support-form-group active">
-                    <form action="https://formsubmit.co/contact@ddnet.my" method="POST">
+                    <!-- 
+                        1. Added target="supportIframe" to form 
+                        2. Added hidden iframe below (needed for background submission without reload)
+                    -->
+                    <form id="supportForm" action="https://formsubmit.co/contact@ddnet.my" method="POST" target="supportIframe">
                         <input type="hidden" name="_subject" value="New Support Ticket from Klinik Azam Portal">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="User" id="support-user-name">
@@ -1192,8 +1419,11 @@
                             <label style="font-size:0.8rem; font-weight:700;">Description</label>
                             <textarea name="Message" class="form-input" rows="4" required placeholder="Describe your issue..."></textarea>
                         </div>
-                        <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Ticket</button>
+                        <button type="submit" class="btn-primary" id="supportSubmitBtn"><i class="fa-solid fa-paper-plane"></i> Send Ticket</button>
                     </form>
+                    
+                    <!-- Hidden Iframe for background processing -->
+                    <iframe name="supportIframe" style="width: 1px; height: 1px; opacity: 0; position: absolute; top: 0; left: 0; border: none;"></iframe>
                 </div>
 
                 <!-- WhatsApp Contact -->
@@ -1395,7 +1625,7 @@
             if(viewId === 'appointments') renderAppointments();
             if(viewId === 'billing') {
                 const now = new Date();
-                const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+                const firstDay = new Date(now.getFullYear(), now.getMonth(),1);
                 const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
                 document.getElementById('billing-start').value = getLocalDateStr(firstDay);
                 document.getElementById('billing-end').value = getLocalDateStr(lastDay);
@@ -1427,7 +1657,7 @@
         function showModal(id) { document.getElementById(id).classList.add('open'); }
         function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-        // --- RECEIPT LOGIC (New) ---
+        // --- RECEIPT LOGIC (New Professional) ---
         function generateReceiptNumber(dateStr) {
             const dateKey = dateStr.replace(/-/g, '');
             let count = localStorage.getItem(dateKey) || 0;
@@ -1810,10 +2040,11 @@ Terima kasih.
             // 2. Update Data
             document.getElementById('receiptNo').innerText = a.invoiceId;
             
-            // Format Date Time
+            // Format Date
             const apptDate = new Date(a.date);
             const dateDisplay = apptDate.toLocaleDateString('en-MY', {day:"2-digit", month:"short", year:"numeric"});
-            document.getElementById('receiptDateTime').innerText = `${dateDisplay} • ${a.time}`;
+            document.getElementById('receiptDate').innerText = dateDisplay;
+            document.getElementById('receiptTime').innerText = a.time;
 
             // Patient Inputs (Editable)
             document.getElementById('r-patient-name').value = p ? p.name : 'Unknown';
@@ -1837,10 +2068,10 @@ Terima kasih.
                 tbody.innerHTML += `
                     <tr>
                         <td style="color:var(--text-muted); font-size: 0.8rem;">${index + 1}</td>
-                        <td>${name}</td>
-                        <td style="text-align:center;">${item.qty}</td>
-                        <td style="text-align:right;">RM ${item.price.toFixed(2)}</td>
-                        <td style="text-align:right; font-weight:600;">RM ${lineTotal.toFixed(2)}</td>
+                        <td><div class="rp-item-name">${name}</div></td>
+                        <td class="rp-col-center">${item.qty}</td>
+                        <td class="rp-col-right"><span class="rp-price">RM ${item.price.toFixed(2)}</span></td>
+                        <td class="rp-col-right"><span class="rp-price">RM ${lineTotal.toFixed(2)}</span></td>
                     </tr>
                 `;
             });
@@ -1854,6 +2085,14 @@ Terima kasih.
             const msg = encodeURIComponent(`Hi Klinik Azam, I have a question regarding receipt ${a.invoiceId}`);
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/${clinicPhone}?text=${msg}`;
             document.getElementById('r-qr-img').src = qrUrl;
+
+            // Paid Stamp Logic
+            const stamp = document.getElementById('rp-stamp');
+            if(a.status === 'Completed') {
+                stamp.classList.add('visible');
+            } else {
+                stamp.classList.remove('visible');
+            }
 
             // Switch View
             navigateTo('bill-detail');
@@ -1993,7 +2232,7 @@ Terima kasih.
                 const pidRaw = document.getElementById('bk-pat-select').value;
                 // FIX: Check if patient is actually selected
                 if (!pidRaw || pidRaw === "") {
-                    showToast("Please select a patient from the list.");
+                    showToast("Please select a patient from list.");
                     return;
                 }
                 
@@ -2037,7 +2276,7 @@ Terima kasih.
             todaysAppts.forEach(a => {
                 const p = patients.find(p => p.id === a.patientId);
                 const pName = p ? p.name : 'Unknown';
-                const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
+                const sName = a.items.length >0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
                 tbody.innerHTML += `
                 <tr>
                     <td style="font-weight:700;">${a.time}</td>
@@ -2047,7 +2286,7 @@ Terima kasih.
                     <td>
                         ${a.status !== 'Completed' ? `<a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${p ? p.phone : ''}')"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         <button class="btn-sm" onclick="openEditAppt(${a.id})"><i class="fa-solid fa-pen"></i></button> 
-                        ${a.status === 'Completed' ? `<button class="btn-sm btn-bill" onclick="viewBillDetail(${a.id})"><i class="fa-solid fa-file-invoice"></i></button>` : `<button class="btn-sm btn-bill" onclick="createCashbill(${a.id})"><i class="fa-solid fa-file-invoice-dollar"></i></button>`}
+                        ${a.status === 'Completed' ? `<button class="btn-sm btn-bill" onclick="viewBillDetail(${a.id})"><i class="fa-solid fa-file-invoice"></i></button>` : `<button class="btn-sm btn-bill" onclick="createCashbill(${a.id})"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>`}
                         <button class="btn-sm btn-delete" onclick="requestDelete('appointment', ${a.id})"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>`;
@@ -2077,7 +2316,7 @@ Terima kasih.
                 const p = patients.find(p => p.id === a.patientId);
                 const pName = p ? p.name : 'Unknown';
                 const pPhone = p ? p.phone : '-';
-                const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
+                const sName = a.items.length >0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
                 tBody.innerHTML += `
                 <tr>
                     <td>${formatDateDisplay(a.date)}</td>
@@ -2113,7 +2352,7 @@ Terima kasih.
             filteredHistory.forEach(a => {
                 const p = patients.find(p => p.id === a.patientId);
                 const pName = p ? p.name : 'Unknown';
-                const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
+                const sName = a.items.length >0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
                 const invDisplay = a.invoiceId || `INV-${a.id}`;
                 hBody.innerHTML += `
                 <tr>
@@ -2134,8 +2373,8 @@ Terima kasih.
             cancelled.forEach(a => {
                 const p = patients.find(p => p.id === a.patientId);
                 const pName = p ? p.name : 'Unknown';
-                const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
-                cBody.innerHTML += `<tr><td>${formatDateDisplay(a.date)}</td><td style="font-weight:600; color:var(--danger);">${a.time}</td><td>${pName}</td><td>${sName}</td><td><button class="btn-sm btn-delete" onclick="requestDelete('appointment', ${a.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+                const sName = a.items.length >0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
+                cBody.innerHTML += `<tr><td>${formatDateDisplay(a.date)}</td><td style="font-weight:600; color:var(--danger);">${a.time}</td><td>${pName}</td><td>${sName}</td><td><td><button class="btn-sm btn-delete" onclick="requestDelete('appointment', ${a.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             });
         }
 
@@ -2164,7 +2403,7 @@ Terima kasih.
             setTimeout(() => {
                 summaryLabel.innerText = formatDateDisplay(dateVal);
                 const total = calculateTotalForDate(dateVal);
-                totalDisplay.innerText = total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits: 2});
+                totalDisplay.innerText = total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
                 
                 let dayAppts = appointments.filter(a => a.date === dateVal && a.status === 'Completed').sort((a,b) => new Date(a.time) - new Date(b.time));
                 if(query) {
@@ -2238,7 +2477,7 @@ Terima kasih.
                     <td>${count}</td>
                     <td>
                         <button class="btn-sm" onclick="openHistory(${p.id})"><i class="fa-solid fa-clock-rotate-left"></i></button> 
-                        <button class="btn-sm" onclick="openEditPatient(${p.id})"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-sm" onclick="openEditPatient(${p.id})"><i class="fa-solid fa-pen"></i></button> 
                         <button class="btn-sm btn-delete" onclick="requestDelete('patient', ${p.id})"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>`;
@@ -2539,16 +2778,16 @@ Terima kasih.
             document.getElementById('bill-date').innerText = formatDateDisplay(a.date);
             document.getElementById('bill-phone').innerText = p ? p.phone : '-';
             document.getElementById('bill-payment-method').value = a.paymentMethod || 'CASH';
-            if(a.items && a.items.length > 0) {
+            if(a.items && a.items.length >0) {
                 invoiceItems = JSON.parse(JSON.stringify(a.items));
             } else {
-                invoiceItems = [{ id: 1, qty: 1, price: 35 }];
+                invoiceItems = [{ id: 1, qty:1, price: 35 }];
             }
             renderInvoiceRows();
             showModal('invoiceModal');
         }
 
-        function addInvoiceItem() { invoiceItems.push({ id: 1, qty: 1, price: 35 }); renderInvoiceRows(); }
+        function addInvoiceItem() { invoiceItems.push({ id: 1, qty:1, price: 35 }); renderInvoiceRows(); }
         function removeInvoiceItem(idx) { invoiceItems.splice(idx, 1); renderInvoiceRows(); }
         function updateInvoiceItem(idx, field, value) {
             if(field === 'id') {
