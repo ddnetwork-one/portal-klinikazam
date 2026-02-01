@@ -548,7 +548,6 @@
                             <input type="text" class="search-input" placeholder="Search history..." oninput="handleSearch('history', this.value)">
                         </div>
                     </div>
-                    <!-- Added Status Column here -->
                     <div class="table-responsive"><table id="history-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
                 <div class="section-card" style="border-left: 4px solid var(--danger);">
@@ -804,10 +803,10 @@
                                     <!-- Patient Toggle -->
                                     <div style="display:flex; gap: 20px; margin-bottom: 15px; background: #f1f5f9; padding: 10px; border-radius: 8px;">
                                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600; color: var(--primary);">
-                                            <input type="radio" name="patType" value="new" onchange="togglePatientType()"> New Patient
+                                            <input type="radio" name="patType" value="new"> New Patient
                                         </label>
                                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600; color: var(--primary);">
-                                            <input type="radio" name="patType" value="old" checked onchange="togglePatientType()"> Existing Patient
+                                            <input type="radio" name="patType" value="old" checked> Existing Patient
                                         </label>
                                     </div>
 
@@ -815,11 +814,11 @@
                                     <div id="new-pat-inputs" style="display:none;">
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Full Name</label>
-                                            <input type="text" id="bk-name" class="form-input" placeholder="Full Name" required>
+                                            <input type="text" id="bk-name" class="form-input" placeholder="Full Name">
                                         </div>
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Phone Number</label>
-                                            <input type="tel" id="bk-phone" class="form-input" placeholder="012-3456789" required>
+                                            <input type="tel" id="bk-phone" class="form-input" placeholder="012-3456789">
                                         </div>
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">IC Number</label>
@@ -831,7 +830,7 @@
                                     <div id="old-pat-inputs">
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted); margin-bottom:4px; display:block;">Select Patient</label>
-                                            <select id="bk-pat-select" class="form-input" onchange="onExistingPatientSelect()">
+                                            <select id="bk-pat-select" class="form-input">
                                                 <option value="">-- Choose Patient --</option>
                                             </select>
                                         </div>
@@ -1430,8 +1429,6 @@
 
         // --- RECEIPT LOGIC (New) ---
         function generateReceiptNumber(dateStr) {
-            // Logic: KPA-YYYYMMDD-XXX
-            // XXX is sequential count based on localStorage for that specific date
             const dateKey = dateStr.replace(/-/g, '');
             let count = localStorage.getItem(dateKey) || 0;
             count++;
@@ -1564,27 +1561,35 @@
             checkBookingFormComplete();
         }
 
-        // --- VALIDATION FIX (Item 3) ---
+        // --- FIXED VALIDATION LOGIC ---
         function checkBookingFormComplete() {
+            const btn = document.getElementById('confirm-booking-btn');
+            const service = document.getElementById('bk-service').value;
+
+            // 1. Validate Core: Date, Time, Service
+            if (!selectedBookingDate || !selectedBookingTime || !service) {
+                btn.disabled = true;
+                return;
+            }
+
+            // 2. Validate Patient (Robust check)
             const isNew = document.querySelector('input[name="patType"]:checked').value === 'new';
             let isPatientValid = false;
 
-            if(isNew) {
+            if (isNew) {
+                // For new patient, check if inputs have content
                 const name = document.getElementById('bk-name').value;
                 const phone = document.getElementById('bk-phone').value;
-                isPatientValid = name.length > 0 && phone.length > 0;
+                isPatientValid = (name.length > 0 && phone.length > 0);
             } else {
-                const pid = parseInt(document.getElementById('bk-pat-select').value);
-                isPatientValid = !isNaN(pid);
+                // For existing, check if dropdown has a valid value (not empty string)
+                const pid = document.getElementById('bk-pat-select').value;
+                // Use explicit checks for safety
+                isPatientValid = (pid !== "" && pid !== null && pid !== undefined);
             }
 
-            const service = document.getElementById('bk-service').value;
-            const btn = document.getElementById('confirm-booking-btn');
-            if(selectedBookingDate && selectedBookingTime && isPatientValid && service) {
-                btn.disabled = false;
-            } else {
-                btn.disabled = true;
-            }
+            // If all checks pass
+            btn.disabled = !isPatientValid;
         }
 
         function resetBookingForm() {
@@ -1593,8 +1598,8 @@
             currentCalDate = new Date();
             document.getElementById('newBookingForm').reset();
             
-            // Reset Toggle
-            document.querySelector('input[name="patType"][value="old"]').checked = true;
+            // FIX: Default to 'New Patient' so users can start typing immediately
+            document.querySelector('input[name="patType"][value="new"]').checked = true;
             togglePatientType();
 
             // Reset Dropdown
@@ -1647,7 +1652,6 @@ Terima kasih.
             }
         }
 
-        // --- CANCEL APPOINTMENT LOGIC (Item 2) ---
         function openCancelConfirm(id) {
             document.getElementById('cancel-appt-id').value = id;
             showModal('confirmCancelModal');
@@ -1919,10 +1923,25 @@ Terima kasih.
         function initDateLimits() {
             populateServiceDropdowns();
             initSessionListeners();
+            
             // Bind inputs for validation check immediately
             document.getElementById('bk-name').addEventListener('input', checkBookingFormComplete);
             document.getElementById('bk-phone').addEventListener('input', checkBookingFormComplete);
-            document.getElementById('bk-pat-select').addEventListener('change', onExistingPatientSelect); // onExistingPatientSelect calls checkBookingFormComplete
+            
+            // FIX: Explicitly bind select change to validation
+            document.getElementById('bk-pat-select').addEventListener('change', () => {
+                onExistingPatientSelect();
+                checkBookingFormComplete();
+            });
+
+            // FIX: Explicitly bind radio buttons to validation to ensure UI updates immediately
+            document.querySelectorAll('input[name="patType"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    togglePatientType();
+                    checkBookingFormComplete();
+                });
+            });
+
             document.getElementById('bk-service').addEventListener('change', function() {
                 const sid = this.value;
                 const srv = services.find(s => s.id == sid);
@@ -1971,8 +1990,21 @@ Terima kasih.
                     patient = existing;
                 }
             } else {
-                const pid = parseInt(document.getElementById('bk-pat-select').value);
+                const pidRaw = document.getElementById('bk-pat-select').value;
+                // FIX: Check if patient is actually selected
+                if (!pidRaw || pidRaw === "") {
+                    showToast("Please select a patient from the list.");
+                    return;
+                }
+                
+                const pid = parseInt(pidRaw);
                 patient = patients.find(p => p.id === pid);
+                
+                // FIX: Double check if patient was found
+                if (!patient) {
+                    showToast("Error: Could not find patient data. Please try again.");
+                    return;
+                }
             }
 
             if(patient) {
@@ -2046,8 +2078,6 @@ Terima kasih.
                 const pName = p ? p.name : 'Unknown';
                 const pPhone = p ? p.phone : '-';
                 const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
-                
-                // Item 2: Remove Dropdown, Add Cancel Button
                 tBody.innerHTML += `
                 <tr>
                     <td>${formatDateDisplay(a.date)}</td>
@@ -2085,7 +2115,6 @@ Terima kasih.
                 const pName = p ? p.name : 'Unknown';
                 const sName = a.items.length > 0 ? a.items.map(i => services.find(s=>s.id===i.id).name).join(', ') : "Unknown";
                 const invDisplay = a.invoiceId || `INV-${a.id}`;
-                // Item 1: Added Status Column here explicitly
                 hBody.innerHTML += `
                 <tr>
                     <td>${formatDateDisplay(a.date)}</td>
