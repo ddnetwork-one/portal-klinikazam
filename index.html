@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -29,7 +29,7 @@
             --warning: #f59e0b;
             --warning-bg: #fef3c7;
             --danger: #ef4444;
-            --danger-bg: #fee2e2;
+            --danger-bg: #fee2e2; /* Light Red Background */
             --info: #3b82f6;
             --info-bg: #dbeafe;
             --wa-color: #25D366;
@@ -180,6 +180,15 @@
         .section-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; animation: fadeIn 0.4s ease; position: relative; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* UPDATED: SuperAdmin Card Styling */
+        .section-card.super-admin-card {
+            border-left: 5px solid var(--danger); /* Red Border */
+            background-color: var(--danger-bg); /* Light Red Background */
+            border-top: 1px solid var(--danger);
+            border-right: 1px solid var(--danger);
+            border-bottom: 1px solid var(--danger);
+        }
+
         .table-header { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
         .table-header-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; flex-wrap: wrap; }
         .table-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
@@ -216,41 +225,114 @@
         .stat-card p { font-size: 0.85rem; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; opacity: 0.9; }
 
-        /* --- INVOICE LAYOUT (NEW REQUEST) --- */
+        /* --- INVOICE LAYOUT (UPDATED) --- */
         .invoice-box {
-            max-width: 800px;
+            max-width: 850px;
             margin: auto;
-            border: 1px solid #000;
-            padding: 20px;
             background: white;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 12px;
-            color: #000;
+            font-family: 'Inter', "Segoe UI", Arial, sans-serif;
+            color: #1f2937;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .invoice-top-bar {
+            height: 6px;
+            background: var(--primary); /* Using portal primary color */
+        }
+
+        .invoice-content {
+            padding: 30px;
         }
 
         .invoice-header {
             display: flex;
             justify-content: space-between;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
         }
 
-        .clinic-info h2 { margin: 0; font-size: 18px; color: #000; }
-        .clinic-info p { margin: 2px 0; color: #000; }
-        .invoice-title { text-align: right; }
-        .invoice-title h1 { margin: 0; font-size: 22px; color: #000; }
+        .invoice-brand h2 { margin: 0; font-size: 22px; letter-spacing: 0.5px; color: var(--primary); }
+        .invoice-brand p { margin: 3px 0; color: #6b7280; font-size: 11px; }
+        
+        .invoice-title-group { text-align: right; }
+        .invoice-title-group h1 { margin: 0; font-size: 28px; letter-spacing: 2px; }
+        .invoice-title-group span { color: #6b7280; font-size: 11px; display: block; margin-top: 4px; }
 
-        .info-table, .item-table, .total-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .info-table td { padding: 5px; vertical-align: top; color: #000; }
-        .item-table th, .item-table td { border: 1px solid #000; padding: 6px; text-align: left; color: #000; }
-        .item-table th { background: #f0f0f0; }
+        .invoice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .invoice-box h4 {
+            margin: 0 0 8px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+        
+        .invoice-box p {
+            margin: 2px 0;
+            color: #1f2937;
+            font-size: 12px;
+        }
+
+        .item-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .item-table th {
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: #6b7280;
+            text-align: left;
+            padding: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .item-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 12px;
+            vertical-align: top;
+        }
+        
+        .invoice-summary { display: flex; justify-content: flex-end; }
+        .invoice-summary-box {
+            width: 320px;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            background: #f9fafb;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .summary-row.total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px solid var(--primary);
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
         .right { text-align: right; }
-        .total-table td { padding: 6px; color: #000; }
-        .total-table tr td:last-child { text-align: right; }
+        .text-right { text-align: right; }
 
-        .invoice-footer { border-top: 1px solid #000; padding-top: 10px; font-size: 11px; color: #000; }
-        .note { margin-top: 10px; color: #000; }
+        .invoice-footer {
+            margin-top: 40px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #6b7280;
+        }
 
         /* --- CASH BILL PAGE --- */
         .bill-container { display: grid; grid-template-columns: 1fr 350px; gap: 24px; }
@@ -319,7 +401,8 @@
             .sidebar, header, .mobile-menu-btn, .no-print, .view-section:not(#view-bill-detail) { display: none !important; }
             .main-wrapper, .content-area { overflow: visible; height: auto; display: block; padding: 0; margin: 0; }
             #view-bill-detail { display: block !important; padding: 0; background: white; width: 100%; position: static; }
-            .invoice-box { border: 1px solid #000; margin: 0; padding: 10px; max-width: 100%; width: 100%; page-break-inside: avoid; box-shadow: none; }
+            .invoice-box { border: none; margin: 0; padding: 0; max-width: 100%; width: 100%; page-break-inside: avoid; box-shadow: none; }
+            .invoice-top-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             @page { size: A4 portrait; margin: 10mm; }
         }
 
@@ -351,10 +434,11 @@
             .booking-panel:nth-child(1) { height: 350px; }
             .booking-panel:nth-child(2) { height: 250px; }
             .modal-content { max-width: 100%; height: 100%; border-radius: 0; max-height: 100vh; }
-            .invoice-box { padding: 10px; font-size: 10px; }
-            .invoice-header { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
-            .invoice-title { text-align: center; }
-            .item-table th, .item-table td { padding: 4px; font-size: 10px; }
+            .invoice-content { padding: 15px; }
+            .invoice-header, .invoice-grid, .invoice-footer { flex-direction: column; gap: 15px; text-align: left !important; }
+            .invoice-title-group, .right, .text-right { text-align: left !important; }
+            .invoice-summary { justify-content: flex-start; }
+            .invoice-summary-box { width: 100%; border: none; background: transparent; padding: 0; }
         }
 
         @media (max-width: 480px) {
@@ -657,82 +741,86 @@
                 </div>
 
                 <div class="invoice-box">
-                    
-                    <!-- HEADER -->
-                    <div class="invoice-header">
-                        <div class="clinic-info">
-                            <h2>KLINIK PERGIGIAN AZAM</h2>
-                            <p>SP Saujana</p>
-                            <p>21, Jalan PKS (A), Pusat Komersial Saujana</p>
-                            <p>08000 Sungai Petani, Kedah</p>
-                            <p>Tel: 04-123 4567</p>
+                    <!-- Top Bar -->
+                    <div class="invoice-top-bar"></div>
+
+                    <div class="invoice-content">
+                        <!-- HEADER -->
+                        <div class="invoice-header">
+                            <div class="invoice-brand">
+                                <h2>KLINIK PERGIGIAN AZAM</h2>
+                                <p>Cawangan (SP Saujana)</p>
+                                <p>21, Jalan PKS (A), Pusat Komersial Saujana</p>
+                                <p>08000 Sungai Petani, Kedah</p>
+                                <p>Tel: 04-123 4567</p>
+                            </div>
+                            <div class="invoice-title-group">
+                                <h1>INVOICE</h1>
+                                <span>Invoice No: <span id="inv-no">KPA-000</span></span>
+                                <span>Date: <span id="inv-date">--/--/----</span></span>
+                            </div>
                         </div>
-                        <div class="invoice-title">
-                            <h1>INVOICE</h1>
-                            <p><strong>Invoice No:</strong> <span id="inv-no">KPA-000</span></p>
-                            <p><strong>Date:</strong> <span id="inv-date">--/--/----</span></p>
+
+                        <!-- INFO GRID -->
+                        <div class="invoice-grid">
+                            <div>
+                                <h4>BILL TO</h4>
+                                <p><strong id="inv-p-name">Patient Name</strong></p>
+                                <p id="inv-p-ic">IC / Passport No</p>
+                                <p id="inv-p-phone">01X-XXXXXXX</p>
+                            </div>
+                            <div>
+                                <h4>INVOICE DETAILS</h4>
+                                <p>Payment Method: <span id="inv-payment">Cash</span></p>
+                                <p>Attending Doctor: Dr. Amalina</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- PATIENT INFO -->
-                    <table class="info-table">
-                        <tr>
-                            <td>
-                                <strong>Billed To:</strong><br>
-                                <span id="inv-p-name">Patient Name</span><br>
-                                <span id="inv-p-ic">IC / Passport No</span><br>
-                                Tel: <span id="inv-p-phone">01X-XXXXXXX</span>
-                            </td>
-                            <td>
-                                <strong>Payment Mode:</strong><br>
-                                <span id="inv-payment">Cash</span><br><br>
-                                <strong>Doctor:</strong><br>
-                                Dr. Amalina
-                            </td>
-                        </tr>
-                    </table>
+                        <!-- ITEM TABLE -->
+                        <table class="item-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:5%">No</th>
+                                    <th>Description</th>
+                                    <th style="width:10%">Qty</th>
+                                    <th style="width:15%">Unit (RM)</th>
+                                    <th style="width:15%" class="right">Amount (RM)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inv-items-body">
+                                <!-- JS Injected -->
+                            </tbody>
+                        </table>
 
-                    <!-- ITEM TABLE -->
-                    <table class="item-table">
-                        <thead>
-                            <tr>
-                                <th style="width:5%">No</th>
-                                <th>Description</th>
-                                <th style="width:10%">Qty</th>
-                                <th style="width:15%">Unit (RM)</th>
-                                <th style="width:15%">Total (RM)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inv-items-body">
-                            <!-- JS Injected -->
-                        </tbody>
-                    </table>
+                        <!-- TOTALS -->
+                        <div class="invoice-summary">
+                            <div class="invoice-summary-box">
+                                <div class="summary-row">
+                                    <span>Subtotal</span>
+                                    <span id="inv-subtotal">RM 0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>SST (0%)</span>
+                                    <span>RM 0.00</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total Due</span>
+                                    <span id="inv-total">RM 0.00</span>
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- TOTALS -->
-                    <table class="total-table">
-                        <tr>
-                            <td class="right"><strong>Subtotal</strong></td>
-                            <td style="width:150px;" id="inv-subtotal">RM 0.00</td>
-                        </tr>
-                        <tr>
-                            <td class="right"><strong>SST (0%)</strong></td>
-                            <td>RM 0.00</td>
-                        </tr>
-                        <tr>
-                            <td class="right"><strong>Total</strong></td>
-                            <td><strong id="inv-total">RM 0.00</strong></td>
-                        </tr>
-                    </table>
-
-                    <!-- FOOTER -->
-                    <div class="invoice-footer">
-                        <p class="note">
-                            Remark:<br>
-                            Thank you for visiting Klinik Pergigian Azam.
-                        </p>
-                        <p style="margin-top:10px;">
-                            This is a computer-generated invoice. No signature is required.
-                        </p>
+                        <!-- FOOTER -->
+                        <div class="invoice-footer">
+                            <div>
+                                <strong>Payment Details</strong><br>
+                                Maybank • XXXXXXXX
+                            </div>
+                            <div>
+                                This invoice is system-generated.<br>
+                                No signature required.
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -760,10 +848,11 @@
                     <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
 
-                <!-- SuperAdmin / System Developer Table (New Requirement) -->
-                <div class="section-card" style="border-left: 4px solid var(--primary);">
+                <!-- SuperAdmin / System Developer Table (Improved Styling) -->
+                <!-- Added class 'super-admin-card' for the red border and background -->
+                <div class="section-card super-admin-card">
                      <div class="table-header">
-                        <h3><i class="fa-solid fa-user-shield" style="color:var(--primary); margin-right:8px;"></i>SuperAdmin / System Developer</h3>
+                        <h3><i class="fa-solid fa-user-shield" style="color:var(--danger); margin-right:8px;"></i>SuperAdmin / System Developer</h3>
                     </div>
                     <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th></tr></thead><tbody></tbody></table></div>
                 </div>
@@ -939,7 +1028,7 @@
         </div>
     </div>
 
-    <!-- MODALS (Reusing existing structure, ensuring IDs match) -->
+    <!-- MODALS -->
     <!-- 1. Edit Appointment Modal -->
     <div class="modal-overlay" id="editApptModal">
         <div class="modal-content">
@@ -2267,7 +2356,7 @@
                 }
             } else {
                 const pidRaw = document.getElementById('bk-pat-select').value;
-                if (!pidRaw) { showToast("Please select a valid patient from the list."); return; }
+                if (!pidRaw) { showToast("Please select a valid patient from list."); return; }
                 patientId = pidRaw;
             }
 
@@ -2915,18 +3004,46 @@
             showToast("Deleted Successfully");
         }
 
+        // --- WHATSAPP MESSAGING (UPDATED) ---
         function sendWhatsapp(name, date, time, phone) {
             let cleanPhone = phone.replace(/[^0-9]/g, '');
             if(cleanPhone.startsWith('0')) cleanPhone = '60' + cleanPhone.substring(1);
             const displayDate = formatDateDisplay(date);
             
-            const message = `Assalamualaikum dan Salam Sejahtera ✨🦷
+            // 📌 1) WhatsApp Auto Reminder (Sebelum Temujanji)
+            // Determining message type based on status or context usually, 
+            // but here assuming 'Pending' appointment gets a reminder.
+            // If status is 'Completed', we send "Thank You" message.
+            
+            let message = "";
+            const appt = appointments.find(a => a.date === date && a.time === time);
+            const status = appt ? appt.status : 'Pending'; // Default to pending if unknown
 
-Kami dari Azam Dental SP Saujana ingin mengingatkan ${name} mengenai temujanji anda:
+            if (status === 'Completed') {
+                // 🌿 2) WhatsApp Thank You (Selepas Lawatan Pesakit)
+                message = `Terima kasih kerana berkunjung ke Azam Dental SP Saujana hari ini.
 
-📅 Tarikh & Masa: ${displayDate} pada ${time}
+Kami berharap rawatan yang diberikan memuaskan.
+Sekiranya terdapat sebarang ketidakselesaan atau pertanyaan selepas rawatan, sila hubungi kami.
 
-Sila hadir 5–10 minit lebih awal...`;
+Kami menghargai kepercayaan anda dan berharap dapat berkhidmat kepada anda lagi.
+— Azam Dental SP Saujana`;
+            } else {
+                // 📌 1) WhatsApp Auto Reminder (Sebelum Temujanji)
+                message = `Assalamualaikum & Salam Sejahtera,
+
+Ini adalah peringatan temujanji anda bersama Azam Dental SP Saujana:
+
+🗓 ${displayDate}
+⏰ ${time}
+
+Sila hadir 5–10 minit lebih awal bagi memastikan rawatan berjalan lancar dan tidak mengganggu pesakit seterusnya.
+Jika perlu ubah atau batalkan temujanji, mohon maklumkan sekurang-kurangnya 30 minit lebih awal.
+
+Sila sahkan kehadiran dengan membalas mesej ini.
+Terima kasih.
+— Azam Dental SP Saujana`;
+            }
 
             const encodedMsg = encodeURIComponent(message);
             const url = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
