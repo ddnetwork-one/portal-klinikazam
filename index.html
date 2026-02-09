@@ -13,21 +13,17 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Firebase SDK (Compat version for easier HTML/JS usage) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        /* --- VARIABLES (Matching Public Site & Professional Palette) --- */
+        /* --- VARIABLES --- */
         :root {
-            /* Brand Colors */
             --primary: #0284c7;
             --primary-dark: #0369a1;
             --primary-light: #e0f2fe;
             --secondary: #14b8a6;
-            --accent: #14b8a6;
-            
-            /* Status Colors */
             --success: #10b981;
             --success-bg: #dcfce7;
             --warning: #f59e0b;
@@ -39,23 +35,19 @@
             --wa-color: #25D366;
             --wa-bg: #dcfce7;
             
-            /* Backgrounds & Surfaces */
             --bg-body: #f8fafc;
             --bg-sidebar: #ffffff;
             --bg-card: #ffffff;
             
-            /* Text Colors */
             --text-main: #0f172a;
             --text-light: #64748b;
             --border-light: #e2e8f0;
             
-            /* Dimensions */
             --sidebar-width: 280px;
             --header-height: 70px;
             --radius: 12px;
             --radius-lg: 16px;
             
-            /* Shadows */
             --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 12px 24px -5px rgba(2, 132, 199, 0.15);
@@ -70,6 +62,19 @@
         h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--text-main); letter-spacing: -0.01em; }
         button { cursor: pointer; border: none; font-family: inherit; transition: var(--transition); }
         input, select, textarea { font-family: inherit; }
+
+        /* --- LOADING OVERLAY --- */
+        .loading-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 10; display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(2px);
+            border-radius: var(--radius);
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .loading-overlay.active { opacity: 1; pointer-events: auto; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(2, 132, 199, 0.1); border-left-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* --- COMPONENTS --- */
         .invoice-link { color: var(--primary); text-decoration: underline; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
@@ -97,49 +102,28 @@
         }
         .custom-select-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
         .clear-selection {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-            cursor: pointer;
-            font-size: 1rem;
-            display: none;
-            z-index: 2;
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            color: var(--text-light); cursor: pointer; font-size: 1rem;
+            display: none; z-index: 2;
         }
         .clear-selection:hover { color: var(--danger); }
         .options-list {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 100;
-            margin-top: 5px;
-            display: none;
-            list-style: none;
+            position: absolute; top: 100%; left: 0; right: 0; background: white;
+            border: 1px solid var(--border-light); border-radius: var(--radius);
+            box-shadow: var(--shadow-lg); max-height: 250px; overflow-y: auto;
+            z-index: 100; margin-top: 5px; display: none; list-style: none;
         }
         .options-list.show { display: block; }
         .options-list li {
-            padding: 12px 16px;
-            font-size: 0.9rem;
-            color: var(--text-main);
-            cursor: pointer;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 12px 16px; font-size: 0.9rem; color: var(--text-main);
+            cursor: pointer; border-bottom: 1px solid #f1f5f9;
+            display: flex; justify-content: space-between; align-items: center;
         }
         .options-list li:hover { background-color: var(--primary-light); color: var(--primary-dark); }
         .options-list li .sub-text { display: block; font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
         .no-option { padding: 12px; text-align: center; color: var(--text-light); font-style: italic; font-size: 0.85rem; background: #f8fafc; }
 
-        /* --- LOGIN & LOGO --- */
+        /* --- LOGIN --- */
         #login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s; }
         #login-screen.hidden { opacity: 0; pointer-events: none; }
         .login-card { background: rgba(255,255,255, 0.95); backdrop-filter: blur(20px); padding: 40px; border-radius: 24px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); text-align: center; animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); border:1px solid rgba(255,255,255,0.8); }
@@ -190,10 +174,10 @@
         .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
 
         /* --- CONTENT AREA --- */
-        .content-area { flex: 1; padding: 24px; overflow-y: auto; overflow-x: hidden; }
+        .content-area { flex: 1; padding: 24px; overflow-y: auto; overflow-x: hidden; position: relative; }
 
         /* --- CARDS & TABLES --- */
-        .section-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; animation: fadeIn 0.4s ease; }
+        .section-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; animation: fadeIn 0.4s ease; position: relative; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .table-header { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
@@ -232,6 +216,42 @@
         .stat-card p { font-size: 0.85rem; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; opacity: 0.9; }
 
+        /* --- INVOICE LAYOUT (NEW REQUEST) --- */
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #000;
+            padding: 20px;
+            background: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .clinic-info h2 { margin: 0; font-size: 18px; color: #000; }
+        .clinic-info p { margin: 2px 0; color: #000; }
+        .invoice-title { text-align: right; }
+        .invoice-title h1 { margin: 0; font-size: 22px; color: #000; }
+
+        .info-table, .item-table, .total-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .info-table td { padding: 5px; vertical-align: top; color: #000; }
+        .item-table th, .item-table td { border: 1px solid #000; padding: 6px; text-align: left; color: #000; }
+        .item-table th { background: #f0f0f0; }
+        .right { text-align: right; }
+        .total-table td { padding: 6px; color: #000; }
+        .total-table tr td:last-child { text-align: right; }
+
+        .invoice-footer { border-top: 1px solid #000; padding-top: 10px; font-size: 11px; color: #000; }
+        .note { margin-top: 10px; color: #000; }
+
         /* --- CASH BILL PAGE --- */
         .bill-container { display: grid; grid-template-columns: 1fr 350px; gap: 24px; }
         .bill-actions-area { display: flex; flex-direction: column; gap: 15px; }
@@ -240,87 +260,6 @@
         .pay-type:hover { border-color: var(--primary-light); }
         .pay-type.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary-dark); font-weight: 700; }
         .pay-type i { font-size: 1.5rem; display: block; margin-bottom: 5px; }
-        .receipt-preview-box { background: white; padding: 20px; border: 1px dashed var(--border-light); border-radius: var(--radius); min-height: 300px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-
-        /* --- RECEIPT (Shared for View and Print) --- */
-        #view-bill-detail { background: #f1f5f9; padding: 20px; max-width: 100%; overflow-y: auto; display: none; }
-        #view-bill-detail.active { display: block; }
-        
-        .receipt-paper { background: #ffffff; max-width: 900px; margin: 0 auto; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: relative; border-top: 8px solid var(--primary); }
-        .receipt-input { background: transparent; border: none; border-bottom: 1px dashed transparent; padding: 2px 4px; border-radius: 2px; font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit; width: 100%; transition: all 0.2s; }
-        .receipt-input:hover { border-bottom-color: #cbd5e1; background: #f8fafc; }
-        .receipt-input:focus { background: #fff; border-bottom: 2px solid var(--primary); outline: none; }
-        .rp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
-        .rp-brand { display: flex; align-items: center; gap: 20px; }
-        .rp-logo { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .rp-brand-info h1 { color: var(--primary-dark); font-size: 22px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: -0.5px; }
-        .rp-brand-info p { color: var(--text-light); font-size: 13px; line-height: 1.5; max-width: 300px; }
-        .rp-title { text-align: right; }
-        .rp-title h2 { font-size: 32px; color: var(--text-main); font-weight: 800; letter-spacing: -1px; margin-bottom: 5px; }
-        .rp-meta-row { display: flex; justify-content: flex-end; align-items: center; gap: 15px; font-size: 14px; color: var(--text-light); }
-        .rp-meta-item { display: flex; flex-direction: column; align-items: flex-end; }
-        .rp-meta-item span:first-child { font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 600; }
-        .rp-meta-item span:last-child { font-weight: 600; color: var(--text-main); }
-        .rp-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-        .rp-info-block h4 { font-size: 12px; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; letter-spacing: 0.05em; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; display: inline-block; }
-        .rp-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
-        .rp-label { color: var(--text-light); }
-        .rp-val { font-weight: 600; color: var(--text-main); text-align: right; }
-        .rp-table-wrapper { margin-bottom: 30px; }
-        .rp-table { width: 100%; border-collapse: collapse; }
-        .rp-table th { text-align: left; padding: 12px 10px; font-size: 11px; text-transform: uppercase; color: #64748b; background: #f8fafc; font-weight: 700; border-bottom: 2px solid var(--border-light); }
-        .rp-table td { padding: 16px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; font-size: 14px; }
-        .rp-col-right { text-align: right; }
-        .rp-col-center { text-align: center; }
-        .rp-item-name { font-weight: 500; color: var(--text-main); }
-        .rp-price { font-family: 'Poppins', sans-serif; font-weight: 600; }
-        .rp-summary-row { display: flex; justify-content: flex-end; margin-bottom: 30px; }
-        .rp-summary-card { width: 320px; background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .rp-sum-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: var(--text-light); }
-        .rp-sum-total { border-top: 2px solid var(--border-light); margin-top: 10px; padding-top: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .rp-sum-total span:first-child { font-size: 16px; font-weight: 700; color: var(--text-main); }
-        .rp-sum-total span:last-child { font-size: 24px; font-weight: 800; color: var(--primary); }
-        .rp-footer { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 40px; padding-top: 20px; border-top: 1px dashed var(--border-light); font-size: 12px; color: var(--text-light); }
-        .rp-terms { width: 70%; line-height: 1.6; }
-        .rp-qr-box { text-align: center; width: 140px; flex-shrink: 0; }
-        .rp-qr-box img { width: 120px; height: 120px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px; }
-        .paid-stamp { position: absolute; top: 120px; right: 40px; border: 4px solid var(--success); color: var(--success); text-transform: uppercase; padding: 5px 15px; font-weight: 800; font-size: 32px; border-radius: 8px; text-align: center; opacity: 0.15; transform: rotate(-15deg); z-index: 10; pointer-events: none; mix-blend-mode: multiply; }
-        .paid-stamp.visible { opacity: 0.9; }
-        .receipt-actions { margin-top: 30px; padding-bottom: 60px; display: flex; justify-content: space-between; align-items: center; }
-
-        /* --- PRINT STYLES --- */
-        @media print {
-            body { background: white; height: auto; overflow: visible; display: block; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .sidebar, header, .mobile-menu-btn, .no-print, .view-section:not(#view-bill-detail) { display: none !important; }
-            .main-wrapper, .content-area { overflow: visible; height: auto; display: block; padding: 0; margin: 0; }
-            #view-bill-detail { display: block !important; padding: 0; background: white; width: 100%; position: static; }
-            .receipt-paper { box-shadow: none; border: none; margin: 0; padding: 30px 40px; max-width: 100%; width: 100%; page-break-inside: avoid; border-top: 8px solid var(--primary); }
-            .receipt-input { border: none !important; padding: 0 !important; width: auto; display: inline; background: transparent !important; }
-            .paid-stamp { -webkit-print-color-adjust: exact; print-color-adjust: exact; opacity: 0.8; }
-            @page { size: A4 portrait; margin: 10mm; }
-        }
-
-        /* --- UI ELEMENTS --- */
-        .spinner-container { width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 0; min-height: 150px; }
-        .spinner { width: 32px; height: 32px; border: 3px solid rgba(2, 132, 199, 0.1); border-left-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; }
-        .modal-overlay.open { opacity: 1; pointer-events: auto; }
-        .modal-content { background: white; width: 100%; max-width: 550px; border-radius: 20px; box-shadow: var(--shadow-lg); overflow: hidden; transform: scale(0.95); transition: 0.3s; max-height: 90vh; display: flex; flex-direction: column; }
-        .modal-overlay.open .modal-content { transform: scale(1); }
-        .modal-header { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
-        .modal-body { padding: 20px; overflow-y: auto; }
-        .modal-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 10px; }
-
-        .sales-summary { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%); color: white; padding: 30px; border-radius: 20px; box-shadow: var(--shadow-md); }
-        .sales-big-number { font-size: 2.5rem; font-weight: 800; line-height: 1; }
-
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1e293b; color: white; padding: 14px 28px; border-radius: 30px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200; box-shadow: 0 10px 20px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 0.9rem; width: max-content; max-width: 90%; pointer-events: none; opacity: 0; }
-        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        
-        .view-section { display: none; }
-        .view-section.active { display: block; }
 
         /* --- BOOKING --- */
         .booking-container { display: grid; gap: 20px; height: auto; grid-template-columns: 300px 280px 1fr; }
@@ -336,7 +275,7 @@
         .cal-day.active { background: var(--primary); color: white; box-shadow: 0 4px 6px rgba(2, 132, 199, 0.2); }
         .cal-day.today { border: 2px solid var(--primary); color: var(--primary); font-weight: 700; }
         .cal-day.today.active { border-color: white; }
-        .cal-day.disabled { color: #cbd5e1; cursor: not-allowed; }
+        .cal-day.disabled { color: #cbd5e1; cursor: not-allowed; background: #f1f5f9; }
         .cal-day.empty { cursor: default; }
         .slots-header { padding: 15px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
         .slots-list { padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
@@ -356,12 +295,40 @@
         .slot-btn.blocked { border-color: #fca5a5; color: #ef4444; background: #fee2e2; }
         .slot-btn.booked { border-color: var(--primary); background: var(--info-bg); color: var(--primary-dark); cursor: not-allowed; }
 
+        /* --- UI ELEMENTS --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; }
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+        .modal-content { background: white; width: 100%; max-width: 550px; border-radius: 20px; box-shadow: var(--shadow-lg); overflow: hidden; transform: scale(0.95); transition: 0.3s; max-height: 90vh; display: flex; flex-direction: column; }
+        .modal-overlay.open .modal-content { transform: scale(1); }
+        .modal-header { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 20px; overflow-y: auto; }
+        .modal-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 10px; }
+
+        .sales-summary { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%); color: white; padding: 30px; border-radius: 20px; box-shadow: var(--shadow-md); }
+        .sales-big-number { font-size: 2.5rem; font-weight: 800; line-height: 1; }
+
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1e293b; color: white; padding: 14px 28px; border-radius: 30px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200; box-shadow: 0 10px 20px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 0.9rem; width: max-content; max-width: 90%; pointer-events: none; opacity: 0; }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+
+        /* --- PRINT STYLES --- */
+        @media print {
+            body { background: white; height: auto; overflow: visible; display: block; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .sidebar, header, .mobile-menu-btn, .no-print, .view-section:not(#view-bill-detail) { display: none !important; }
+            .main-wrapper, .content-area { overflow: visible; height: auto; display: block; padding: 0; margin: 0; }
+            #view-bill-detail { display: block !important; padding: 0; background: white; width: 100%; position: static; }
+            .invoice-box { border: 1px solid #000; margin: 0; padding: 10px; max-width: 100%; width: 100%; page-break-inside: avoid; box-shadow: none; }
+            @page { size: A4 portrait; margin: 10mm; }
+        }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
             .booking-container { grid-template-columns: 1fr 1fr; }
             .booking-panel:last-child { grid-column: span 2; }
             .bill-container { grid-template-columns: 1fr; }
-            .bill-actions-area { order: -1; } /* Actions on top for mobile */
+            .bill-actions-area { order: -1; }
         }
 
         @media (max-width: 768px) {
@@ -384,18 +351,10 @@
             .booking-panel:nth-child(1) { height: 350px; }
             .booking-panel:nth-child(2) { height: 250px; }
             .modal-content { max-width: 100%; height: 100%; border-radius: 0; max-height: 100vh; }
-            
-            .receipt-paper { padding: 20px; border-top: none; }
-            .rp-header { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
-            .rp-brand-info { text-align: center; }
-            .rp-title { text-align: center; margin-bottom: 20px; }
-            .rp-meta-row { justify-content: center; }
-            .rp-info-grid { grid-template-columns: 1fr; gap: 20px; }
-            .rp-summary-row { justify-content: center; }
-            .rp-summary-card { width: 100%; }
-            .rp-footer { flex-direction: column; align-items: center; gap: 20px; text-align: center; }
-            .receipt-actions { flex-direction: column; gap: 10px; }
-            .receipt-actions button { width: 100%; }
+            .invoice-box { padding: 10px; font-size: 10px; }
+            .invoice-header { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+            .invoice-title { text-align: center; }
+            .item-table th, .item-table td { padding: 4px; font-size: 10px; }
         }
 
         @media (max-width: 480px) {
@@ -430,6 +389,11 @@
         </div>
     </div>
 
+    <!-- LOADING OVERLAY -->
+    <div id="global-loader" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
     <!-- MOBILE SIDEBAR BACKDROP -->
     <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleMobileMenu()"></div>
 
@@ -445,7 +409,6 @@
             <li class="nav-item" onclick="navigateTo('booking')"><i class="fa-solid fa-calendar-plus"></i> New Booking</li>
             <li class="nav-item" onclick="navigateTo('cashbill')"><i class="fa-solid fa-cash-register"></i> Cash Bill</li>
             <li class="nav-item" onclick="navigateTo('billing')"><i class="fa-solid fa-file-invoice-dollar"></i> Reports</li>
-            <!-- Staff Management - Restricted via JS -->
             <li class="nav-item" id="nav-staff" onclick="navigateTo('staff')" style="display:none;"><i class="fa-solid fa-users-cog"></i> Staff Mgmt</li>
             <li class="nav-item" onclick="navigateTo('patients')"><i class="fa-solid fa-user-doctor"></i> Patients</li>
             <li class="nav-item" onclick="navigateTo('services')"><i class="fa-solid fa-notes-medical"></i> Services</li>
@@ -506,7 +469,8 @@
                         <div class="stat-icon" style="background:var(--warning-bg); color:var(--warning);"><i class="fa-solid fa-users"></i></div>
                     </div>
                 </div>
-                <div class="section-card">
+                <div class="section-card" style="position:relative;">
+                    <div class="loading-overlay" id="dash-loader"><div class="spinner"></div></div>
                     <div class="table-header"><h3><i class="fa-solid fa-clock" style="color:var(--primary); margin-right:8px;"></i>Today's Schedule</h3></div>
                     <div class="table-responsive"><table id="dashboard-table"><thead><tr><th>Time</th><th>Patient</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
@@ -514,7 +478,8 @@
 
             <!-- APPOINTMENTS -->
             <section id="view-appointments" class="view-section">
-                <div class="section-card">
+                <div class="section-card" style="position:relative;">
+                    <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
                         <h3>Upcoming Schedule</h3>
                         <div class="search-container">
@@ -524,7 +489,8 @@
                     </div>
                     <div class="table-responsive"><table id="today-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Phone</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
-                <div class="section-card">
+                <div class="section-card" style="position:relative;">
+                    <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
                         <h3>Patient History (Completed)</h3>
                         <div class="search-container">
@@ -534,7 +500,8 @@
                     </div>
                     <div class="table-responsive"><table id="history-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
-                <div class="section-card" style="border-left: 4px solid var(--danger);">
+                <div class="section-card" style="border-left: 4px solid var(--danger); position:relative;">
+                    <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
                         <h3 style="color:var(--danger);"><i class="fa-solid fa-ban" style="margin-right:8px;"></i> Cancelled</h3>
                         <button class="btn-sm" id="toggleCancelledBtn" onclick="toggleCancelledTable()">Show Cancelled</button>
@@ -545,73 +512,95 @@
                 </div>
             </section>
 
-            <!-- STANDALONE CASH BILL PAGE -->
+            <!-- CASH BILL (IMPROVED) -->
             <section id="view-cashbill" class="view-section">
-                <div class="section-card">
-                    <div class="table-header">
-                        <h3><i class="fa-solid fa-cash-register" style="color:var(--success); margin-right:8px;"></i>Standalone Cash Bill</h3>
-                    </div>
-
-                    <div class="bill-container">
-                        <!-- Left: Patient & Service Selection -->
-                        <div>
-                            <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Patient Selection</h4>
-                            <div class="custom-select-wrapper" style="margin-bottom:20px;">
-                                <div class="custom-select-header">
-                                    <input type="text" id="cb-pat-search" class="custom-select-input" placeholder="Search Name or Phone..." autocomplete="off">
-                                    <i class="fa-solid fa-circle-xmark clear-selection" id="clear-cb-pat" onclick="clearCashBillPatient()"></i>
+                <!-- Cashbill List View (Default) -->
+                <div id="cashbill-list-view">
+                    <div class="section-card">
+                        <div class="table-header">
+                            <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--primary); margin-right:8px;"></i>Completed Cashbills / Invoices</h3>
+                            <div class="table-header-actions">
+                                <button class="btn-primary" style="width:auto;" onclick="toggleCashbillCreate(true)"><i class="fa-solid fa-plus"></i> Create Cashbill</button>
+                                <div class="search-container">
+                                    <i class="fa-solid fa-search search-icon"></i>
+                                    <input type="text" class="search-input" placeholder="Search invoices..." oninput="handleSearch('cashbill', this.value)">
                                 </div>
-                                <ul id="cb-pat-list" class="options-list"></ul>
-                                <input type="hidden" id="cb-pat-id">
-                            </div>
-
-                            <div id="cb-pat-details" style="display:none; background:#f8fafc; padding:15px; border-radius:12px; margin-bottom:20px; border:1px solid #e2e8f0;">
-                                <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-light);">Name</span><span style="font-weight:700;" id="cb-p-name">-</span></div>
-                                <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-light);">IC</span><span style="font-weight:600;" id="cb-p-ic">-</span></div>
-                                <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-light);">Phone</span><span style="font-weight:600;" id="cb-p-phone">-</span></div>
-                            </div>
-
-                            <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Add Services</h4>
-                            <div style="margin-bottom:15px;">
-                                <select id="cb-service-select" class="form-input" onchange="addToCashBill()">
-                                    <option value="" disabled selected>-- Select Service to Add --</option>
-                                </select>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table id="cb-items-table">
-                                    <thead><tr><th>Item</th><th>Price</th><th>Action</th></tr></thead>
-                                    <tbody></tbody>
-                                </table>
                             </div>
                         </div>
+                        <div class="loading-overlay"><div class="spinner"></div></div>
+                        <div class="table-responsive"><table id="cashbill-table"><thead><tr><th>Invoice #</th><th>Date</th><th>Patient</th><th>Total (RM)</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+                    </div>
+                </div>
 
-                        <!-- Right: Payment & Actions -->
-                        <div class="bill-actions-area">
-                            <div class="section-card" style="padding:20px;">
-                                <h4 style="margin-bottom:10px;">Total Due</h4>
-                                <div style="font-size:2rem; font-weight:800; color:var(--primary);">RM <span id="cb-total-display">0.00</span></div>
-                            </div>
+                <!-- Cashbill Create View (Hidden by default) -->
+                <div id="cashbill-create-view" style="display:none;">
+                    <div class="section-card">
+                        <div class="table-header">
+                            <h3><i class="fa-solid fa-cash-register" style="color:var(--success); margin-right:8px;"></i>New Cash Bill</h3>
+                            <button class="btn-sm" onclick="toggleCashbillCreate(false)"><i class="fa-solid fa-arrow-left"></i> Back to List</button>
+                        </div>
 
-                            <div class="payment-type-selector">
-                                <div class="pay-type active" id="pay-cash" onclick="setPaymentType('CASH')">
-                                    <i class="fa-solid fa-money-bill-wave"></i> Cash
+                        <div class="bill-container">
+                            <!-- Left: Patient & Service Selection -->
+                            <div>
+                                <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Patient Selection</h4>
+                                <div class="custom-select-wrapper" style="margin-bottom:20px;">
+                                    <div class="custom-select-header">
+                                        <input type="text" id="cb-pat-search" class="custom-select-input" placeholder="Search Name or Phone..." autocomplete="off">
+                                        <i class="fa-solid fa-circle-xmark clear-selection" id="clear-cb-pat" onclick="clearCashBillPatient()"></i>
+                                    </div>
+                                    <ul id="cb-pat-list" class="options-list"></ul>
+                                    <input type="hidden" id="cb-pat-id">
                                 </div>
-                                <div class="pay-type" id="pay-qr" onclick="setPaymentType('QR')">
-                                    <i class="fa-solid fa-qrcode"></i> QR/Transfer
+
+                                <div id="cb-pat-details" style="display:none; background:#f8fafc; padding:15px; border-radius:12px; margin-bottom:20px; border:1px solid #e2e8f0;">
+                                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-light);">Name</span><span style="font-weight:700;" id="cb-p-name">-</span></div>
+                                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-light);">IC</span><span style="font-weight:600;" id="cb-p-ic">-</span></div>
+                                    <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-light);">Phone</span><span style="font-weight:600;" id="cb-p-phone">-</span></div>
+                                </div>
+
+                                <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Add Services</h4>
+                                <div style="margin-bottom:15px;">
+                                    <select id="cb-service-select" class="form-input" onchange="addToCashBill()">
+                                        <option value="" disabled selected>-- Select Service to Add --</option>
+                                    </select>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table id="cb-items-table">
+                                        <thead><tr><th>Item</th><th>Price</th><th>Action</th></tr></thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
 
-                            <div id="payment-inputs" style="display:none; margin-bottom:15px;">
-                                <label style="font-size:0.8rem; font-weight:700; color:var(--text-light); display:block;">Amount Received</label>
-                                <input type="number" id="cb-amount-received" class="form-input" placeholder="0.00" oninput="calculateBalance()">
-                            </div>
+                            <!-- Right: Payment & Actions -->
+                            <div class="bill-actions-area">
+                                <div class="section-card" style="padding:20px;">
+                                    <h4 style="margin-bottom:10px;">Total Due</h4>
+                                    <div style="font-size:2rem; font-weight:800; color:var(--primary);">RM <span id="cb-total-display">0.00</span></div>
+                                </div>
 
-                            <div id="balance-display" style="text-align:center; font-weight:700; font-size:1.1rem; margin-bottom:15px; color:var(--danger); display:none;">
-                                Change: RM <span id="cb-balance">0.00</span>
-                            </div>
+                                <div class="payment-type-selector">
+                                    <div class="pay-type active" id="pay-cash" onclick="setPaymentType('CASH')">
+                                        <i class="fa-solid fa-money-bill-wave"></i> Cash
+                                    </div>
+                                    <div class="pay-type" id="pay-qr" onclick="setPaymentType('QR')">
+                                        <i class="fa-solid fa-qrcode"></i> QR/Transfer
+                                    </div>
+                                </div>
 
-                            <button class="btn-primary" id="cb-save-btn" onclick="saveCashBill()" disabled>Generate Bill & Print</button>
+                                <div id="payment-inputs" style="display:none; margin-bottom:15px;">
+                                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-light); display:block;">Amount Received</label>
+                                    <input type="number" id="cb-amount-received" class="form-input" placeholder="0.00" oninput="calculateBalance()">
+                                </div>
+
+                                <div id="balance-display" style="text-align:center; font-weight:700; font-size:1.1rem; margin-bottom:15px; color:var(--danger); display:none;">
+                                    Change: RM <span id="cb-balance">0.00</span>
+                                </div>
+
+                                <button class="btn-primary" id="cb-save-btn" onclick="saveCashBill()" disabled>Generate Bill & Print</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -648,7 +637,8 @@
                     </div>
                 </div>
 
-                <div class="section-card">
+                <div class="section-card" style="position:relative;">
+                    <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
                         <h3>Patient Bills</h3>
                         <div class="search-container">
@@ -660,142 +650,105 @@
                 </div>
             </section>
 
-            <!-- PROFESSIONAL RECEIPT DESIGN -->
+            <!-- PROFESSIONAL INVOICE (UPDATED LAYOUT) -->
             <section id="view-bill-detail" class="view-section">
                 <div class="no-print" style="margin-bottom: 20px;">
-                    <button class="btn-sm" onclick="navigateTo('billing')"><i class="fa-solid fa-arrow-left"></i> Back to Billing List</button>
+                    <button class="btn-sm" onclick="navigateTo('cashbill')"><i class="fa-solid fa-arrow-left"></i> Back to Cash Bills</button>
                 </div>
 
-                <div class="receipt-paper">
+                <div class="invoice-box">
                     
-                    <!-- PAID STAMP -->
-                    <div id="rp-stamp" class="paid-stamp">PAID</div>
-
                     <!-- HEADER -->
-                    <header class="rp-header">
-                        <div class="rp-brand">
-                            <img src="https://raw.githubusercontent.com/ddnetwork-ent/clinic-azam-dental/main/IMG_2260.JPG" alt="Clinic Logo" class="rp-logo">
-                            <div class="rp-brand-info">
-                                <h1>Klinik Pergigian Azam</h1>
-                                <p>21, Jalan PKS (A), Pusat Komersial Saujana<br>08000 Sungai Petani, Kedah</p>
-                                <p style="color:var(--primary-dark); font-weight:600; margin-top:4px;">Tel: 04-123 4567</p>
-                            </div>
+                    <div class="invoice-header">
+                        <div class="clinic-info">
+                            <h2>KLINIK PERGIGIAN AZAM</h2>
+                            <p>SP Saujana</p>
+                            <p>21, Jalan PKS (A), Pusat Komersial Saujana</p>
+                            <p>08000 Sungai Petani, Kedah</p>
+                            <p>Tel: 04-123 4567</p>
                         </div>
-                        <div class="rp-title">
-                            <h2>RECEIPT</h2>
-                            <div class="rp-meta-row">
-                                <div class="rp-meta-item">
-                                    <span>Invoice No</span>
-                                    <span id="receiptNo">KPA-00000000-000</span>
-                                </div>
-                                <div class="rp-meta-item">
-                                    <span>Date</span>
-                                    <span id="receiptDate">--/--/----</span>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-
-                    <!-- INFO GRID -->
-                    <div class="rp-info-grid">
-                        <div class="rp-info-block">
-                            <h4>Patient Details</h4>
-                            <div class="rp-row">
-                                <span class="rp-label">Name</span>
-                                <span class="rp-val"><input type="text" id="r-patient-name" class="receipt-input" value="Patient Name"></span>
-                            </div>
-                            <div class="rp-row">
-                                <span class="rp-label">Phone</span>
-                                <span class="rp-val"><input type="text" id="r-patient-phone" class="receipt-input" value="012-3456789"></span>
-                            </div>
-                            <div class="rp-row">
-                                <span class="rp-label">IC No.</span>
-                                <span class="rp-val"><input type="text" id="r-patient-ic" class="receipt-input" value="000000-00-0000"></span>
-                            </div>
-                        </div>
-
-                        <div class="rp-info-block">
-                            <h4>Payment Details</h4>
-                            <div class="rp-row">
-                                <span class="rp-label">Appt Time</span>
-                                <span class="rp-val" id="receiptTime">--:--</span>
-                            </div>
-                            <div class="rp-row">
-                                <span class="rp-label">Method</span>
-                                <span class="rp-val" id="r-payment-method">Cash</span>
-                            </div>
-                            <div class="rp-row">
-                                <span class="rp-label">Status</span>
-                                <span class="badge badge-completed">PAID</span>
-                            </div>
+                        <div class="invoice-title">
+                            <h1>INVOICE</h1>
+                            <p><strong>Invoice No:</strong> <span id="inv-no">KPA-000</span></p>
+                            <p><strong>Date:</strong> <span id="inv-date">--/--/----</span></p>
                         </div>
                     </div>
 
-                    <!-- ITEMS TABLE -->
-                    <div class="rp-table-wrapper">
-                        <table class="rp-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 50px;">#</th>
-                                    <th>Description</th>
-                                    <th class="rp-col-center" style="width: 80px;">Qty</th>
-                                    <th class="rp-col-right" style="width: 120px;">Unit Price</th>
-                                    <th class="rp-col-right" style="width: 120px;">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody id="r-items-body">
-                                <!-- JS Injected -->
-                            </tbody>
-                        </table>
-                    </div>
+                    <!-- PATIENT INFO -->
+                    <table class="info-table">
+                        <tr>
+                            <td>
+                                <strong>Billed To:</strong><br>
+                                <span id="inv-p-name">Patient Name</span><br>
+                                <span id="inv-p-ic">IC / Passport No</span><br>
+                                Tel: <span id="inv-p-phone">01X-XXXXXXX</span>
+                            </td>
+                            <td>
+                                <strong>Payment Mode:</strong><br>
+                                <span id="inv-payment">Cash</span><br><br>
+                                <strong>Doctor:</strong><br>
+                                Dr. Amalina
+                            </td>
+                        </tr>
+                    </table>
 
-                    <!-- TOTAL SUMMARY CARD -->
-                    <div class="rp-summary-row">
-                        <div class="rp-summary-card">
-                            <div class="rp-sum-line">
-                                <span>Subtotal</span>
-                                <span id="r-subtotal">RM 0.00</span>
-                            </div>
-                            <div class="rp-sum-line">
-                                <span>Tax (0%)</span>
-                                <span>RM 0.00</span>
-                            </div>
-                            <div class="rp-sum-total">
-                                <span>TOTAL PAID</span>
-                                <span id="r-total">RM 0.00</span>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- ITEM TABLE -->
+                    <table class="item-table">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">No</th>
+                                <th>Description</th>
+                                <th style="width:10%">Qty</th>
+                                <th style="width:15%">Unit (RM)</th>
+                                <th style="width:15%">Total (RM)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inv-items-body">
+                            <!-- JS Injected -->
+                        </tbody>
+                    </table>
+
+                    <!-- TOTALS -->
+                    <table class="total-table">
+                        <tr>
+                            <td class="right"><strong>Subtotal</strong></td>
+                            <td style="width:150px;" id="inv-subtotal">RM 0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="right"><strong>SST (0%)</strong></td>
+                            <td>RM 0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="right"><strong>Total</strong></td>
+                            <td><strong id="inv-total">RM 0.00</strong></td>
+                        </tr>
+                    </table>
 
                     <!-- FOOTER -->
-                    <footer class="rp-footer">
-                        <div class="rp-terms">
-                            <p><strong>Terms & Conditions:</strong></p>
-                            <p>1. Please present this receipt for warranty claims.<br>2. Payment is non-refundable once service is rendered.<br>3. This is a computer generated document. No signature required.<br>4. Thank you for choosing Klinik Pergigian Azam!</p>
-                        </div>
-                        <div class="rp-qr-box">
-                            <img id="r-qr-img" src="" alt="WhatsApp QR">
-                            <p style="font-size: 11px;">Scan to Contact Us</p>
-                        </div>
-                    </footer>
-
-                    <div class="receipt-actions no-print">
-                        <button class="btn-sm" style="background: var(--warning); color: white; border: none;" onclick="updatePatientFromReceipt()"><i class="fa-solid fa-pen-to-square"></i> Update Patient Info</button>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="btn-sm" onclick="openEditInvoiceFromPage()"><i class="fa-solid fa-pen"></i> Edit Items</button>
-                            <button class="btn-primary" style="width: auto; padding: 10px 24px;" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Receipt</button>
-                        </div>
+                    <div class="invoice-footer">
+                        <p class="note">
+                            Remark:<br>
+                            Thank you for visiting Klinik Pergigian Azam.
+                        </p>
+                        <p style="margin-top:10px;">
+                            This is a computer-generated invoice. No signature is required.
+                        </p>
                     </div>
+                </div>
 
+                <div class="no-print" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                     <button class="btn-sm" onclick="openEditInvoiceFromPage()"><i class="fa-solid fa-pen"></i> Edit Items</button>
+                     <button class="btn-primary" style="width: auto; padding: 10px 24px;" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Invoice</button>
                 </div>
             </section>
 
-            <!-- STAFF MANAGEMENT (RESTRICTED) -->
+            <!-- STAFF MANAGEMENT (RESTRICTED + SUPERADMIN TABLE) -->
             <section id="view-staff" class="view-section">
-                <div class="section-card">
+                <!-- Regular Staff Table -->
+                <div class="section-card" style="position:relative;">
+                    <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
-                        <h3><i class="fa-solid fa-users-cog" style="color:var(--primary); margin-right:8px;"></i> Staff Management</h3>
-                        <!-- Hidden for Staff, Visible for Admin/SuperAdmin -->
+                        <h3><i class="fa-solid fa-users-cog" style="color:var(--primary); margin-right:8px;"></i>Staff Management</h3>
                         <div class="table-header-actions">
                             <button class="btn-sm" id="btn-add-staff" onclick="openEditStaff(null)"><i class="fa-solid fa-user-plus"></i> Add Staff</button>
                             <div class="search-container">
@@ -806,11 +759,20 @@
                     </div>
                     <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
+
+                <!-- SuperAdmin / System Developer Table (New Requirement) -->
+                <div class="section-card" style="border-left: 4px solid var(--primary);">
+                     <div class="table-header">
+                        <h3><i class="fa-solid fa-user-shield" style="color:var(--primary); margin-right:8px;"></i>SuperAdmin / System Developer</h3>
+                    </div>
+                    <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th></tr></thead><tbody></tbody></table></div>
+                </div>
             </section>
 
             <!-- PATIENTS -->
             <section id="view-patients" class="view-section">
-                <div class="section-card">
+                <div class="section-card" style="position:relative;">
+                    <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
                         <h3>Patient Directory</h3>
                         <div class="table-header-actions">
@@ -827,7 +789,8 @@
 
             <!-- SERVICES -->
             <section id="view-services" class="view-section">
-                <div class="section-card">
+                <div class="section-card" style="position:relative;">
+                    <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
                         <h3>Clinic Services & Pricing</h3>
                         <div class="table-header-actions">
@@ -976,7 +939,7 @@
         </div>
     </div>
 
-    <!-- MODALS -->
+    <!-- MODALS (Reusing existing structure, ensuring IDs match) -->
     <!-- 1. Edit Appointment Modal -->
     <div class="modal-overlay" id="editApptModal">
         <div class="modal-content">
@@ -1010,13 +973,12 @@
         </div>
     </div>
 
-    <!-- 3. Staff Edit Modal (Enhanced) -->
+    <!-- 3. Staff Edit Modal -->
     <div class="modal-overlay" id="editStaffModal">
         <div class="modal-content">
             <div class="modal-header"><h3 id="staff-modal-title">Manage Staff</h3><button onclick="closeModal('editStaffModal')"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="modal-body">
                 <input type="hidden" id="edit-staff-id">
-                <!-- Read-only Smart ID -->
                 <div style="margin-bottom:15px;">
                     <label style="font-size:0.8rem; font-weight:700;">Smart ID (Auto)</label>
                     <input type="text" id="edit-staff-sid" class="form-input" placeholder="KPA-000" disabled style="background:#f1f5f9; font-family:'Poppins', monospace;">
@@ -1081,7 +1043,7 @@
         </div>
     </div>
 
-    <!-- 5. PROFILE MODAL (Enhanced) -->
+    <!-- 5. PROFILE MODAL -->
     <div class="modal-overlay" id="profileModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1094,36 +1056,15 @@
                     <h4 id="profile-name" style="font-size: 1.2rem; margin-bottom: 5px;">Dr. Amalina</h4>
                     <span id="profile-role" class="badge badge-info" style="font-size: 0.8rem;">Admin</span>
                 </div>
-                
                 <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
                     <h5 style="margin-bottom: 15px; color: var(--primary);">Account Details</h5>
                     <div style="display: grid; gap: 12px;">
-                        <div>
-                            <label style="font-size: 0.75rem; color: var(--text-light);">Username</label>
-                            <div style="font-weight: 600; font-size: 1rem;" id="profile-u">amalina</div>
-                        </div>
-                        <div>
-                            <label style="font-size: 0.75rem; color: var(--text-light);">Employee ID</label>
-                            <div style="font-weight: 600; font-size: 1rem;" id="profile-id">EMP001</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h5 style="margin-bottom: 10px; color: var(--primary);">Organization</h5>
-                    <div style="font-size:0.9rem;">
-                        <div style="padding:12px; background:white; border:1px solid var(--border-light); border-radius:12px; margin-bottom:8px; display:flex; align-items:center; gap:10px;">
-                            <i class="fa-solid fa-hospital" style="color:var(--primary);"></i> <strong>Klinik Pergigian Azam</strong>
-                        </div>
-                        <div style="padding-left:20px; border-left:2px dashed #cbd5e1; margin-left:14px;">
-                            <!-- Organization Tree could go here -->
-                        </div>
+                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Username</label><div style="font-weight: 600; font-size: 1rem;" id="profile-u">amalina</div></div>
+                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Employee ID</label><div style="font-weight: 600; font-size: 1rem;" id="profile-id">EMP001</div></div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-sm" onclick="closeModal('profileModal')">Close</button>
-            </div>
+            <div class="modal-footer"><button class="btn-sm" onclick="closeModal('profileModal')">Close</button></div>
         </div>
     </div>
 
@@ -1140,7 +1081,6 @@
                     <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-light);">Date</span><span style="font-weight:600;" id="bill-date">-</span></div>
                     <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-light);">Phone</span><span style="font-weight:600;" id="bill-phone">-</span></div>
                 </div>
-                
                 <div style="margin-bottom:15px;">
                     <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:5px;">Payment Method</label>
                     <select id="bill-payment-method" class="form-input">
@@ -1149,7 +1089,6 @@
                         <option value="BANK TRANSFER">Bank Transfer</option>
                     </select>
                 </div>
-
                 <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                     <label style="font-size:0.8rem; font-weight:700;">Services</label>
                     <button class="btn-sm" onclick="addInvoiceItem()" style="font-size:0.75rem; padding:6px 10px;">+ Add</button>
@@ -1246,6 +1185,7 @@
         const SESSION_KEY = 'clinicUser';
         const todayStr = new Date().toISOString().split('T')[0];
         
+        // MIN BOOKING DATE IS TOMORROW (Request: Cannot booking on the same day)
         const todayObj = new Date();
         const tomorrowObj = new Date(todayObj);
         tomorrowObj.setDate(tomorrowObj.getDate() + 1);
@@ -1261,6 +1201,7 @@
         let currentCashBillItems = [];
         let cashBillPaymentType = 'CASH';
         let cashBillPatientId = null;
+        let isCashbillCreateView = false;
 
         const defaultSlots = ["09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"];
         
@@ -1273,7 +1214,10 @@
                 document.getElementById('login-screen').classList.add('hidden');
                 setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
                 startLiveClock();
+                // Initial data load
+                showLoading(true);
                 await refreshData(); 
+                showLoading(false);
                 navigateTo('dashboard');
             }
             
@@ -1283,9 +1227,20 @@
             window.onscroll = resetInactivityTimer;
         });
 
+        // --- UI HELPERS ---
+        function showLoading(show) {
+            const loader = document.getElementById('global-loader');
+            if(loader) loader.classList.toggle('active', show);
+            
+            // Also show section specific loaders if visible
+            document.querySelectorAll('.loading-overlay').forEach(el => {
+                if(show && el.closest('.view-section.active')) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+        }
+
         // --- SMART ID GENERATOR ---
         async function generateSmartId(collection, prefix) {
-            // Query for the document with the highest ID matching prefix
             const snapshot = await db.collection(collection)
                 .orderBy('id', 'desc')
                 .limit(1)
@@ -1295,7 +1250,6 @@
             if (!snapshot.empty) {
                 const lastDoc = snapshot.docs[0];
                 const lastId = lastDoc.id;
-                // Assumes format PREFIX-Number (e.g. KPA-001)
                 const parts = lastId.split('-');
                 const lastNum = parseInt(parts[parts.length - 1]);
                 if (!isNaN(lastNum)) {
@@ -1303,18 +1257,18 @@
                 }
             }
             
-            const numStr = String(nextNum).padStart(3, '0'); // e.g., 001
+            const numStr = String(nextNum).padStart(3, '0'); 
             return `${prefix}-${numStr}`;
         }
 
-        // --- INVOICE ID GENERATOR (Daily Sequential) ---
+        // --- INVOICE ID GENERATOR ---
         async function generateInvoiceId(dateStr) {
             const [year, month, day] = dateStr.split('-');
             const prefix = `KPA-${year}${month}-`;
 
             const snapshot = await db.collection('klinikazam_appointments')
                 .where('invoice_id', '>=', prefix)
-                .where('invoice_id', '<', prefix + 'Z') // Simple filter for prefix range
+                .where('invoice_id', '<', prefix + 'Z') 
                 .orderBy('invoice_id', 'desc')
                 .limit(1)
                 .get();
@@ -1348,7 +1302,7 @@
             staff = stSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
             // 4. Fetch Appointments
-            const aSnap = await db.collection('klinikazam_appointments').orderBy('date').get();
+            const aSnap = await db.collection('klinikazam_appointments').orderBy('date', 'desc').get(); // Default desc for new data on top
             appointments = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
             // 5. Fetch Slot Exceptions
@@ -1371,8 +1325,11 @@
                 initCustomPatientSearch(); 
             }
             if(currentViewId === 'cashbill') {
-                initCashBillPatientSearch();
-                populateCashBillServices();
+                if(!isCashbillCreateView) renderCashbillList();
+                else {
+                    initCashBillPatientSearch();
+                    populateCashBillServices();
+                }
             }
 
             populateServiceDropdowns();
@@ -1386,8 +1343,6 @@
             const p = document.getElementById('password').value;
             const loginError = document.getElementById('loginError');
 
-            // Simple Auth: Find staff with matching username/password
-            // In prod, use Firebase Auth, but keeping it simple for this "Firestore-as-db" setup
             const snapshot = await db.collection('klinikazam_staff')
                 .where('username', '==', u)
                 .where('password', '==', p)
@@ -1402,7 +1357,9 @@
                 document.getElementById('login-screen').classList.add('hidden');
                 setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
                 startLiveClock();
+                showLoading(true);
                 await refreshData();
+                showLoading(false);
                 navigateTo('dashboard');
                 resetInactivityTimer();
                 loginError.innerText = "";
@@ -1423,7 +1380,8 @@
             if(navItem) navItem.classList.add('active');
             
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('view-' + viewId).classList.add('active');
+            const activeSection = document.getElementById('view-' + viewId);
+            activeSection.classList.add('active');
             
             const titles = { 
                 'dashboard':'Dashboard', 'appointments':'Appointments', 'booking':'New Booking', 
@@ -1435,6 +1393,10 @@
 
             if(document.getElementById('sidebar').classList.contains('mobile-open')) toggleMobileMenu();
 
+            // Show loading while rendering view
+            showLoading(true);
+
+            // View specific logic
             if(viewId === 'dashboard') renderDashboard();
             if(viewId === 'appointments') renderAppointments();
             if(viewId === 'billing') {
@@ -1459,48 +1421,33 @@
                 initCustomPatientSearch();
             }
             if(viewId === 'cashbill') {
-                resetCashBill();
-                initCashBillPatientSearch();
-                populateCashBillServices();
+                isCashbillCreateView = false;
+                toggleCashbillCreate(false);
+                renderCashbillList();
             }
+
+            setTimeout(() => showLoading(false), 300); // Small delay for visual transition
         }
 
-        // --- ROLE BASED UI LOGIC ---
         function applyRoleBasedUI() {
             if(!currentUser) return;
-
             const isSuperAdmin = currentUser.role === 'SuperAdmin';
             const isAdmin = currentUser.role === 'Admin';
-            const isStaff = currentUser.role === 'Staff';
-
-            // 1. Sidebar Visibility
             const navStaff = document.getElementById('nav-staff');
-            if(isSuperAdmin || isAdmin) {
-                navStaff.style.display = 'flex'; // Admin and SuperAdmin see Staff Mgmt
-            } else {
-                navStaff.style.display = 'none'; // Staff cannot see Staff Mgmt
-            }
-
-            // 2. Staff Management Actions
-            // If in Staff view, we need to re-render to hide buttons correctly
-            if(document.getElementById('view-staff').classList.contains('active')) {
-                renderStaff(); 
-            }
-
-            // 3. General "Create" Buttons (Patients/Services) -> Staff can add data
-            // But Staff cannot Delete.
-            // We handle Delete buttons inside render functions.
+            if(isSuperAdmin || isAdmin) navStaff.style.display = 'flex';
+            else navStaff.style.display = 'none';
+            
+            if(document.getElementById('view-staff').classList.contains('active')) renderStaff(); 
         }
 
         function setupUserUI(user) {
             document.getElementById('userNameDisplay').innerText = user.name;
             document.getElementById('userRoleDisplay').innerText = user.role;
             document.getElementById('userAvatar').innerText = user.name.substring(0,2).toUpperCase();
-            
             document.getElementById('profile-name').innerText = user.name;
             document.getElementById('profile-role').innerText = user.role;
             document.getElementById('profile-u').innerText = user.username;
-            document.getElementById('profile-id').innerText = user.id; // Smart ID
+            document.getElementById('profile-id').innerText = user.id;
             document.getElementById('profile-avatar').innerText = user.name.substring(0,2).toUpperCase();
         }
 
@@ -1555,7 +1502,8 @@
 
             const tbody = document.querySelector('#dashboard-table tbody');
             tbody.innerHTML = '';
-            todaysAppts.forEach(a => {
+            // Sort by time for dashboard
+            todaysAppts.sort((a,b) => a.time.localeCompare(b.time)).forEach(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
                 const sId = a.items && a.items[0] ? a.items[0].id : null;
@@ -1572,7 +1520,6 @@
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
                         ${a.status === 'Completed' ? `<button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-file-invoice"></i></button>` : `<button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>`}
                         
-                        <!-- DELETE: SUPERADMIN ONLY (Self protected) -->
                         ${currentUser.role === 'SuperAdmin' && a.id !== currentUser.id ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 </tr>`;
@@ -1594,7 +1541,8 @@
         function renderAppointments() {
             const queryAppt = document.querySelector('#view-appointments .search-input')?.value.toLowerCase() || '';
             
-            const schedule = appointments.filter(a => a.status !== 'Cancelled' && a.status !== 'Completed').sort((a,b) => new Date(a.date) - new Date(b.date));
+            // Smart Filter: Newest to Oldest (Default)
+            const schedule = appointments.filter(a => a.status !== 'Cancelled' && a.status !== 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
             
             let filteredSchedule = schedule;
             if(queryAppt) {
@@ -1627,7 +1575,6 @@
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
                         <button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>
                         
-                        <!-- CANCEL & DELETE LOGIC -->
                         ${currentUser.role !== 'Staff' ? `<button class="btn-sm btn-delete" onclick="openCancelConfirm('${a.id}')"><i class="fa-solid fa-ban"></i> Cancel</button>` : ''}
                         
                         ${(currentUser.role === 'SuperAdmin' && a.id !== currentUser.id) ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
@@ -1635,6 +1582,7 @@
                 </tr>`;
             });
 
+            // History: Newest to Oldest
             const history = appointments.filter(a => a.status === 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
             const hBody = document.querySelector('#history-table tbody');
             hBody.innerHTML = '';
@@ -1656,7 +1604,7 @@
                 </tr>`;
             });
             
-            const cancelled = appointments.filter(a => a.status === 'Cancelled');
+            const cancelled = appointments.filter(a => a.status === 'Cancelled').sort((a,b) => new Date(b.date) - new Date(a.date));
             const cBody = document.querySelector('#cancelled-table tbody');
             cBody.innerHTML = '';
             cancelled.forEach(a => {
@@ -1664,7 +1612,6 @@
                 const pName = p ? p.name : 'Unknown';
                 const sName = a.items ? a.items.map(i => services.find(s=>s.id===i.id)?.name).join(', ') : "Unknown";
                 
-                // Delete logic for cancelled items (SuperAdmin only)
                 const delBtn = (currentUser.role === 'SuperAdmin' && a.id !== currentUser.id) 
                     ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
 
@@ -1672,7 +1619,60 @@
             });
         }
 
-        // --- CASH BILL (Standalone) LOGIC ---
+        // --- CASH BILL LOGIC ---
+        function toggleCashbillCreate(showCreate) {
+            isCashbillCreateView = showCreate;
+            document.getElementById('cashbill-list-view').style.display = showCreate ? 'none' : 'block';
+            document.getElementById('cashbill-create-view').style.display = showCreate ? 'block' : 'none';
+            
+            if(showCreate) {
+                resetCashBill();
+                initCashBillPatientSearch();
+                populateCashBillServices();
+            } else {
+                renderCashbillList();
+            }
+        }
+
+        function renderCashbillList() {
+            // List all completed appointments that are essentially cashbills
+            // Filter: Status == Completed. Sorted: Newest first.
+            const query = document.querySelector('#view-cashbill .search-input')?.value.toLowerCase() || '';
+            
+            let list = appointments.filter(a => a.status === 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            if(query) {
+                list = list.filter(a => {
+                    const p = patients.find(pt => pt.id === a.patient_id);
+                    const pName = p ? p.name.toLowerCase() : '';
+                    const inv = (a.invoice_id || '').toLowerCase();
+                    return pName.includes(query) || inv.includes(query);
+                });
+            }
+
+            const tbody = document.querySelector('#cashbill-table tbody');
+            tbody.innerHTML = '';
+            if(list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">No cashbills found.</td></tr>';
+            } else {
+                list.forEach(a => {
+                    const p = patients.find(pt => pt.id === a.patient_id);
+                    const total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
+                    tbody.innerHTML += `
+                    <tr>
+                        <td><span class="invoice-link" onclick="viewBillDetail('${a.id}')">${a.invoice_id || 'NO INV'}</span></td>
+                        <td>${formatDateDisplay(a.date)}</td>
+                        <td>${p ? p.name : 'Unknown'}</td>
+                        <td style="font-weight:700;">RM ${total.toFixed(2)}</td>
+                        <td>
+                            <button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-eye"></i> View</button>
+                            <button class="btn-sm btn-wa" onclick="sendWhatsapp('${p?p.name:''}', '${a.date}', '${a.time}', '${p?p.phone:''}')"><i class="fa-brands fa-whatsapp"></i></button>
+                        </td>
+                    </tr>`;
+                });
+            }
+        }
+
         function resetCashBill() {
             cashBillPatientId = null;
             currentCashBillItems = [];
@@ -1722,7 +1722,7 @@
 
             searchInput.addEventListener('input', (e) => {
                 renderList(e.target.value);
-                cashBillPatientId = null; // Deselect on typing
+                cashBillPatientId = null; 
             });
 
             document.addEventListener('click', (e) => {
@@ -1776,7 +1776,7 @@
             const s = services.find(x => x.id == sId);
             currentCashBillItems.push({ id: sId, qty: 1, price: s.price, name: s.name });
             renderCashBillItems();
-            select.value = ""; // Reset dropdown
+            select.value = ""; 
         }
 
         function renderCashBillItems() {
@@ -1862,15 +1862,16 @@
             };
 
             try {
+                showLoading(true);
                 await db.collection('klinikazam_appointments').add(newAppt);
                 showToast("Bill Generated Successfully");
-                resetCashBill();
-                await refreshData();
-                // Optionally open receipt
-                // viewBillDetail(newAppt.id);
+                toggleCashbillCreate(false); // Go back to list
+                await refreshData(); 
             } catch(e) {
                 showToast("Error saving bill");
                 console.error(e);
+            } finally {
+                showLoading(false);
             }
         }
 
@@ -1885,11 +1886,12 @@
 
             if(!start || !end) return;
 
+            // Sort: Newest to Oldest
             let filteredAppts = appointments.filter(a => 
                 a.status === 'Completed' && 
                 a.date >= start && 
                 a.date <= end
-            );
+            ).sort((a,b) => new Date(b.date) - new Date(a.date));
 
             if(query) {
                 filteredAppts = filteredAppts.filter(a => {
@@ -1913,7 +1915,7 @@
             if(filteredAppts.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px;">No bills found in this period.</td></tr>';
             } else {
-                filteredAppts.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(a => {
+                filteredAppts.forEach(a => {
                     const p = patients.find(pt => pt.id === a.patient_id);
                     const pName = p ? p.name : 'Unknown';
                     const pPhone = p ? p.phone : '-';
@@ -1942,7 +1944,6 @@
             }
         }
 
-        // --- CSV EXPORT LOGIC ---
         function exportBillingData() {
             const start = document.getElementById('billing-start').value;
             const end = document.getElementById('billing-end').value;
@@ -1951,7 +1952,8 @@
                 a.status === 'Completed' && 
                 a.date >= start && 
                 a.date <= end
-            ).map(a => {
+            ).sort((a,b) => new Date(b.date) - new Date(a.date)) // Sort descending for export too
+            .map(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 return {
                     Date: a.date,
@@ -1982,7 +1984,7 @@
             showToast("Report Downloaded");
         }
 
-        // --- RECEIPT VIEW ---
+        // --- INVOICE VIEW (UPDATED LAYOUT) ---
         async function viewBillDetail(id) {
             const a = appointments.find(x => x.id === id);
             if(!a) return;
@@ -1997,17 +1999,17 @@
                 showToast("Invoice ID Generated");
             }
 
-            document.getElementById('receiptNo').innerText = a.invoice_id || 'Pending Generation';
-            document.getElementById('receiptDate').innerText = formatDateDisplay(a.date);
-            document.getElementById('receiptTime').innerText = a.time;
+            // Populate New Invoice Layout
+            document.getElementById('inv-no').innerText = a.invoice_id || 'Pending Generation';
+            document.getElementById('inv-date').innerText = formatDateDisplay(a.date);
+            
+            document.getElementById('inv-p-name').innerText = p ? p.name : 'Unknown';
+            document.getElementById('inv-p-ic').innerText = p ? (p.ic || '-') : '-';
+            document.getElementById('inv-p-phone').innerText = p ? (p.phone || '-') : '-';
+            
+            document.getElementById('inv-payment').innerText = a.payment_method || 'CASH';
 
-            document.getElementById('r-patient-name').value = p ? p.name : 'Unknown';
-            document.getElementById('r-patient-phone').value = p ? p.phone : '-';
-            document.getElementById('r-patient-ic').value = p ? p.ic : '-';
-
-            document.getElementById('r-payment-method').innerText = a.payment_method || 'CASH';
-
-            const tbody = document.getElementById('r-items-body');
+            const tbody = document.getElementById('inv-items-body');
             tbody.innerHTML = '';
             let total = 0;
 
@@ -2020,53 +2022,27 @@
 
                     tbody.innerHTML += `
                         <tr>
-                            <td style="color:var(--text-light); font-size: 0.8rem;">${index + 1}</td>
-                            <td><div class="rp-item-name">${name}</div></td>
-                            <td class="rp-col-center">${item.qty}</td>
-                            <td class="rp-col-right"><span class="rp-price">RM ${item.price.toFixed(2)}</span></td>
-                            <td class="rp-col-right"><span class="rp-price">RM ${lineTotal.toFixed(2)}</span></td>
+                            <td>${index + 1}</td>
+                            <td>${name}</td>
+                            <td class="right">${item.qty}</td>
+                            <td class="right">${item.price.toFixed(2)}</td>
+                            <td class="right">${lineTotal.toFixed(2)}</td>
                         </tr>
                     `;
                 });
             }
 
-            document.getElementById('r-subtotal').innerText = `RM ${total.toFixed(2)}`;
-            document.getElementById('r-total').innerText = `RM ${total.toFixed(2)}`;
-
-            const clinicPhone = "60123456789";
-            const msg = encodeURIComponent(`Hi Klinik Azam, I have a question regarding receipt ${a.invoice_id}`);
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/${clinicPhone}?text=${msg}`;
-            document.getElementById('r-qr-img').src = qrUrl;
-
-            const stamp = document.getElementById('rp-stamp');
-            if(a.status === 'Completed') {
-                stamp.classList.add('visible');
-            } else {
-                stamp.classList.remove('visible');
-            }
+            document.getElementById('inv-subtotal').innerText = `RM ${total.toFixed(2)}`;
+            document.getElementById('inv-total').innerText = `RM ${total.toFixed(2)}`;
 
             navigateTo('bill-detail');
-        }
-
-        async function updatePatientFromReceipt() {
-            if(!currentBillAppt) return;
-            const newName = document.getElementById('r-patient-name').value;
-            const newPhone = document.getElementById('r-patient-phone').value;
-            const newIC = document.getElementById('r-patient-ic').value;
-
-            await db.from('klinikazam_patients')
-                .doc(currentBillAppt.patient_id)
-                .update({ name: newName, phone: newPhone, ic: newIC });
-            
-            showToast("Patient Information Updated");
-            await refreshData(); 
         }
 
         function openEditInvoiceFromPage() {
             openInvoice(currentBillAppt.id);
         }
 
-        // --- CALENDAR & BOOKING ---
+        // --- CALENDAR & BOOKING (UPDATED DATE RULE) ---
         function renderCalendar(date) {
             const year = date.getFullYear();
             const month = date.getMonth();
@@ -2089,6 +2065,7 @@
                 const el = document.createElement('div');
                 let classes = 'cal-day';
                 
+                // REQUEST: Cannot booking on the same day
                 if(dateStr < minBookingDate) classes += ' disabled';
                 
                 if(dateStr === getLocalDateStr(new Date())) classes += ' today'; 
@@ -2105,7 +2082,12 @@
                 
                 if(!classes.includes('disabled')) {
                     el.onclick = () => selectDate(dateStr);
+                } else if (dateStr === todayStr) {
+                    // specific click handler for today to show error
+                    el.onclick = () => showToast("Please Booking at least one day earlier.");
+                    el.title = "Booking not allowed on the same day";
                 }
+
                 grid.appendChild(el);
             }
         }
@@ -2118,8 +2100,9 @@
         }
 
         async function selectDate(dateStr) {
+            // Double check constraint
             if(dateStr < minBookingDate) {
-                showToast("Booking must be at least 1 day in advance.");
+                showToast("Please Booking at least one day earlier.");
                 return;
             }
 
@@ -2264,7 +2247,7 @@
                 return;
             }
             const sId = document.getElementById('bk-service').value;
-            const srv = services.find(s=>s.id == sId); // Loose equality for ID types
+            const srv = services.find(s=>s.id == sId);
             const sPrice = srv ? srv.price : 0;
 
             if(isNew) {
@@ -2289,13 +2272,14 @@
             }
 
             if(patientId) {
+                showLoading(true);
                 const smartId = await generateSmartId('klinikazam_appointments', 'APT');
                 const newAppt = {
                     id: smartId,
                     patient_id: patientId,
                     date: selectedBookingDate,
                     time: selectedBookingTime,
-                    items: [{ id: parseInt(sId), qty:1, price: sPrice }], // Ensure ID consistency
+                    items: [{ id: parseInt(sId), qty:1, price: sPrice }],
                     status: 'Pending',
                     payment_method: 'CASH',
                     invoice_id: null
@@ -2307,6 +2291,7 @@
                 renderAppointments();
                 renderDashboard();
                 resetBookingForm();
+                showLoading(false);
             }
         }
 
@@ -2523,7 +2508,6 @@
 
             filtered.forEach(p => {
                 const count = visitCounts[p.id] || 0;
-                // Delete: SuperAdmin Only
                 const delBtn = (currentUser.role === 'SuperAdmin') 
                     ? `<button class="btn-sm btn-delete" onclick="requestDelete('patient', '${p.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
 
@@ -2638,10 +2622,14 @@
             await refreshData();
         }
 
-        // --- STAFF CRUD (RESTRICTED) ---
+        // --- STAFF CRUD (UPDATED FOR SUPERADMIN TABLE) ---
         async function renderStaff() {
             const tbody = document.querySelector('#staff-table tbody');
+            const saBody = document.querySelector('#superadmin-table tbody');
+            
             tbody.innerHTML = '';
+            saBody.innerHTML = '';
+            
             const query = document.querySelector('#view-staff .search-input')?.value.toLowerCase() || '';
             
             let filtered = staff.filter(s => 
@@ -2653,7 +2641,6 @@
             const isSuperAdmin = currentUser.role === 'SuperAdmin';
             const isAdmin = currentUser.role === 'Admin';
 
-            // Hide Add button for Staff
             const addBtn = document.getElementById('btn-add-staff');
             if(isSuperAdmin || isAdmin) {
                 addBtn.style.display = 'inline-flex';
@@ -2662,14 +2649,14 @@
             }
 
             filtered.forEach(s => {
-                // Logic: Can Admin edit? No SuperAdmins. 
-                // Can SuperAdmin edit? Yes. 
-                // Can Staff edit? No.
+                // Determine if this user goes in SuperAdmin table or Regular table
+                const isSa = s.role === 'SuperAdmin';
+                const targetBody = isSa ? saBody : tbody;
+
                 let editBtn = '';
                 let deleteBtn = '';
 
                 if(isSuperAdmin) {
-                    // Cannot edit/delete self or other SuperAdmins (per prompt)
                     const isSelf = s.id === currentUser.id;
                     const isOtherSuper = s.role === 'SuperAdmin' && !isSelf;
                     
@@ -2678,24 +2665,22 @@
                          deleteBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('staff', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
                     }
                 } else if(isAdmin) {
-                    // Admin can edit normal Staff, but NOT SuperAdmins
                     if(s.role !== 'SuperAdmin') {
                         editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
                     }
-                    // Admin CANNOT delete anyone
                 }
-                // Staff role: no buttons
 
-                tbody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}</td><td>${editBtn} ${deleteBtn}</td></tr>`;
+                // For SuperAdmin table, we don't show delete buttons usually, as per logic
+                if(isSa) deleteBtn = ''; 
+
+                targetBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}</td><td>${editBtn} ${deleteBtn}</td></tr>`;
             });
         }
 
         function openEditStaff(id) {
-            // Permission Check before opening modal
             if(currentUser.role === 'Staff') return;
 
             if(!id) {
-                // Creation
                 if(currentUser.role !== 'SuperAdmin' && currentUser.role !== 'Admin') {
                     showToast("Unauthorized");
                     return;
@@ -2707,20 +2692,15 @@
                 document.getElementById('edit-staff-role').value = 'Staff';
                 document.getElementById('edit-staff-u').value = '';
                 document.getElementById('edit-staff-p').value = '';
-                // Generate Preview Smart ID
                 generateSmartId('klinikazam_staff', 'KPA').then(sid => {
                     document.getElementById('edit-staff-sid').value = sid;
                 });
             } else {
-                // Edit
                 const s = staff.find(x => x.id === id);
-                
-                // RBAC: Admin cannot edit SuperAdmin
                 if(currentUser.role === 'Admin' && s.role === 'SuperAdmin') {
                     showToast("Unauthorized to edit SuperAdmin");
                     return;
                 }
-
                 document.getElementById('staff-modal-title').innerText = "Edit Staff";
                 document.getElementById('edit-staff-id').value = id;
                 document.getElementById('edit-staff-sid').value = s.id;
@@ -2728,7 +2708,7 @@
                 document.getElementById('edit-staff-jobtitle').value = s.job_title || 'Staff';
                 document.getElementById('edit-staff-role').value = s.role;
                 document.getElementById('edit-staff-u').value = s.username;
-                document.getElementById('edit-staff-p').value = ''; // Keep blank for security
+                document.getElementById('edit-staff-p').value = ''; 
             }
             showModal('editStaffModal');
         }
@@ -2742,28 +2722,22 @@
             const u = document.getElementById('edit-staff-u').value;
             const p = document.getElementById('edit-staff-p').value;
 
-            // RBAC Check: Admin cannot create SuperAdmin
             if(currentUser.role === 'Admin' && role === 'SuperAdmin') {
                 showToast("Admins cannot create SuperAdmin accounts.");
                 return;
             }
 
             if(id) {
-                // Update
-                // RBAC: Admin cannot update to SuperAdmin
                 const targetStaff = staff.find(x => x.id === id);
                 if(currentUser.role === 'Admin' && targetStaff.role === 'SuperAdmin') {
                     showToast("Unauthorized");
                     return;
                 }
-
                 const updateData = { name, job_title: jobTitle, username: u };
-                if(role !== targetStaff.role) updateData.role = role; // Only update role if changed
+                if(role !== targetStaff.role) updateData.role = role; 
                 if(p) updateData.password = p;
-
                 await db.collection('klinikazam_staff').doc(id).update(updateData);
             } else {
-                // Create
                 const smartId = await generateSmartId('klinikazam_staff', 'KPA');
                 const newStaff = { 
                     id: smartId, 
@@ -2787,7 +2761,6 @@
             const tbody = document.querySelector('#services-table tbody');
             tbody.innerHTML = '';
             services.forEach(s => {
-                // Delete: SuperAdmin Only
                 const delBtn = (currentUser.role === 'SuperAdmin') 
                     ? `<button class="btn-sm btn-delete" onclick="requestDelete('service', '${s.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
 
@@ -2802,7 +2775,7 @@
                 document.getElementById('edit-service-name').value = '';
                 document.getElementById('edit-service-price').value = '';
             } else {
-                const s = services.find(x => x.id == id); // Loose equality
+                const s = services.find(x => x.id == id); 
                 document.getElementById('service-modal-title').innerText = "Edit Service";
                 document.getElementById('edit-service-id').value = id;
                 document.getElementById('edit-service-name').value = s.name;
@@ -2820,7 +2793,7 @@
             if(id) {
                 await db.collection('klinikazam_services').doc(id.toString()).update({ name, price });
             } else {
-                const newSvc = { id: Date.now(), name, price }; // Using timestamp for Services to match old logic, or Smart ID if preferred
+                const newSvc = { id: Date.now(), name, price }; 
                 await db.collection('klinikazam_services').doc(newSvc.id.toString()).set(newSvc);
             }
 
@@ -2830,7 +2803,7 @@
             showToast(id ? "Service Updated" : "Service Added");
         }
 
-        // --- SLOT MANAGEMENT ---
+        // --- SLOT MANAGEMENT (UPDATED CONFIRMATION) ---
         async function renderSlots() {
             const dateVal = document.getElementById('slotDate').value;
             const grid = document.getElementById('slotGrid');
@@ -2875,14 +2848,20 @@
         }
 
         async function toggleSlot(date, time, el) {
-            const idx = slotExceptions.findIndex(e => e.date === date && e.time === time && e.type === 'blocked');
-            if(idx === -1) {
-                await db.collection('klinikazam_slots').add({ id: Date.now(), date, time, type: 'blocked' });
-            } else {
-                await db.collection('klinikazam_slots').doc(slotExceptions[idx].id).delete();
+            // REQUEST: Add confirmation message
+            const isCurrentlyBlocked = el.classList.contains('blocked');
+            const action = isCurrentlyBlocked ? "remove" : "set";
+            
+            if(confirm(`Sure to ${action} block time for ${date} at ${time}?`)) {
+                const idx = slotExceptions.findIndex(e => e.date === date && e.time === time && e.type === 'blocked');
+                if(idx === -1) {
+                    await db.collection('klinikazam_slots').add({ id: Date.now(), date, time, type: 'blocked' });
+                } else {
+                    await db.collection('klinikazam_slots').doc(slotExceptions[idx].id).delete();
+                }
+                await refreshData();
+                renderSlots(); 
             }
-            await refreshData();
-            renderSlots(); 
         }
 
         async function toggleClinicStatus() {
@@ -2898,10 +2877,9 @@
             renderSlots();
         }
 
-        // --- DELETE LOGIC (SUPERADMIN ONLY) ---
+        // --- DELETE LOGIC ---
         let deleteTarget = null;
         function requestDelete(type, id) {
-            // RBAC: Only SuperAdmin
             if(currentUser.role !== 'SuperAdmin') {
                 showToast("Unauthorized: SuperAdmin access required");
                 return;
@@ -2922,7 +2900,6 @@
                 await db.collection('klinikazam_services').doc(deleteTarget.id.toString()).delete();
             }
             else if (deleteTarget.type === 'staff') {
-                // Prevent deleting SuperAdmin
                 const s = staff.find(x => x.id === deleteTarget.id);
                 if(s.role === 'SuperAdmin') {
                     showToast("Cannot delete SuperAdmin accounts");
@@ -3011,13 +2988,12 @@ Sila hadir 5–10 minit lebih awal...`;
             }
         }
         
-        // --- SEARCH HELPERS ---
         function handleSearch(type, val) {
-            // Debounce could be added here
             if(type === 'staff') renderStaff();
             if(type === 'patients') renderPatients();
             if(type === 'appointments') renderAppointments();
             if(type === 'billing') renderBilling();
+            if(type === 'cashbill') renderCashbillList();
         }
     </script>
 </body>
