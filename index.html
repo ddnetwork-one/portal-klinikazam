@@ -15,6 +15,7 @@
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
@@ -29,7 +30,7 @@
             --warning: #f59e0b;
             --warning-bg: #fef3c7;
             --danger: #ef4444;
-            --danger-bg: #fee2e2; /* Light Red Background */
+            --danger-bg: #fee2e2; 
             --info: #3b82f6;
             --info-bg: #dbeafe;
             --wa-color: #25D366;
@@ -76,7 +77,6 @@
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(2, 132, 199, 0.1); border-left-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- COMPONENTS --- */
         .invoice-link { color: var(--primary); text-decoration: underline; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
         .invoice-link:hover { opacity: 0.8; }
 
@@ -132,9 +132,12 @@
         .logo-img { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid white; box-shadow: var(--shadow-sm); }
         .logo-large { width: 80px; height: 80px; object-fit: cover; border-radius: 20px; border: 4px solid white; box-shadow: var(--shadow-md); margin-bottom: 1rem; }
         
+        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
         .form-input { width: 100%; padding: 14px 16px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: var(--radius); font-size: 0.95rem; transition: var(--transition); color: var(--text-main); }
         .form-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
-        
+        .input-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-light); cursor: pointer; }
+        .input-icon:hover { color: var(--primary); }
+
         .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; font-weight: 600; font-size: 1rem; border-radius: var(--radius); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: flex; justify-content: center; align-items: center; gap: 10px; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); }
         .btn-primary:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; transform: none; }
@@ -180,10 +183,9 @@
         .section-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; animation: fadeIn 0.4s ease; position: relative; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* UPDATED: SuperAdmin Card Styling */
         .section-card.super-admin-card {
-            border-left: 5px solid var(--danger); /* Red Border */
-            background-color: var(--danger-bg); /* Light Red Background */
+            border-left: 5px solid var(--danger);
+            background-color: var(--danger-bg);
             border-top: 1px solid var(--danger);
             border-right: 1px solid var(--danger);
             border-bottom: 1px solid var(--danger);
@@ -225,7 +227,7 @@
         .stat-card p { font-size: 0.85rem; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; opacity: 0.9; }
 
-        /* --- INVOICE LAYOUT (UPDATED) --- */
+        /* --- INVOICE LAYOUT --- */
         .invoice-box {
             max-width: 850px;
             margin: auto;
@@ -237,7 +239,7 @@
 
         .invoice-top-bar {
             height: 6px;
-            background: var(--primary); /* Using portal primary color */
+            background: var(--primary); 
         }
 
         .invoice-content {
@@ -460,16 +462,24 @@
             <p style="margin-bottom: 30px; color: var(--text-light); font-weight: 500;">Cawangan (SP Saujana)</p>
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div style="text-align:left; margin-bottom:15px;">
-                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-light);">Username</label>
-                    <input type="text" id="username" class="form-input" placeholder="staff_username" required>
+                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-light);">Username / Email</label>
+                    <div class="input-group">
+                        <input type="text" id="username" class="form-input" placeholder="Enter username or email" required>
+                    </div>
                 </div>
                 <div style="text-align:left; margin-bottom:25px;">
                     <label style="font-size:0.8rem; font-weight:700; color:var(--text-light);">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="password" required>
+                    <div class="input-group">
+                        <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                        <i class="fa-solid fa-eye input-icon" onclick="togglePasswordVisibility('password', this)"></i>
+                    </div>
                 </div>
-                <button type="submit" class="btn-primary">Sign In <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="submit" class="btn-primary" id="loginBtn">Sign In <i class="fa-solid fa-arrow-right"></i></button>
                 <p id="loginError" style="color: var(--danger); font-size: 0.8rem; margin-top: 15px;"></p>
             </form>
+            <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-light); text-align: center;">
+                Forgot password? Contact IT Support @ Danial Danish or use the Support Bubble.
+            </div>
         </div>
     </div>
 
@@ -565,7 +575,7 @@
                 <div class="section-card" style="position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
-                        <h3>Upcoming Schedule</h3>
+                        <h3>Upcoming Schedule <i class="fa-solid fa-sort-down" style="font-size:0.7em; color:var(--text-light); margin-left:5px;"></i></h3>
                         <div class="search-container">
                             <i class="fa-solid fa-search search-icon"></i>
                             <input type="text" class="search-input" placeholder="Search name, date, service..." oninput="handleSearch('appointments', this.value)">
@@ -576,7 +586,7 @@
                 <div class="section-card" style="position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
-                        <h3>Patient History (Completed)</h3>
+                        <h3>Patient History (Completed) <i class="fa-solid fa-sort-down" style="font-size:0.7em; color:var(--text-light); margin-left:5px;"></i></h3>
                         <div class="search-container">
                             <i class="fa-solid fa-search search-icon"></i>
                             <input type="text" class="search-input" placeholder="Search history..." oninput="handleSearch('history', this.value)">
@@ -587,7 +597,7 @@
                 <div class="section-card" style="border-left: 4px solid var(--danger); position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
-                        <h3 style="color:var(--danger);"><i class="fa-solid fa-ban" style="margin-right:8px;"></i> Cancelled</h3>
+                        <h3 style="color:var(--danger);"><i class="fa-solid fa-ban" style="margin-right:8px;"></i> Cancelled <i class="fa-solid fa-sort-down" style="font-size:0.7em; color:rgba(239,68,68,0.5); margin-left:5px;"></i></h3>
                         <button class="btn-sm" id="toggleCancelledBtn" onclick="toggleCancelledTable()">Show Cancelled</button>
                     </div>
                     <div id="cancelled-container" style="display:none;">
@@ -602,7 +612,7 @@
                 <div id="cashbill-list-view">
                     <div class="section-card">
                         <div class="table-header">
-                            <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--primary); margin-right:8px;"></i>Completed Cashbills / Invoices</h3>
+                            <h3><i class="fa-solid fa-file-invoice-dollar" style="color:var(--primary); margin-right:8px;"></i>Completed Cashbills / Invoices <i class="fa-solid fa-sort-down" style="font-size:0.7em; color:var(--text-light); margin-left:5px;"></i></h3>
                             <div class="table-header-actions">
                                 <button class="btn-primary" style="width:auto;" onclick="toggleCashbillCreate(true)"><i class="fa-solid fa-plus"></i> Create Cashbill</button>
                                 <div class="search-container">
@@ -724,7 +734,7 @@
                 <div class="section-card" style="position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
-                        <h3>Patient Bills</h3>
+                        <h3>Patient Bills <i class="fa-solid fa-sort-down" style="font-size:0.7em; color:var(--text-light); margin-left:5px;"></i></h3>
                         <div class="search-container">
                             <i class="fa-solid fa-search search-icon"></i>
                             <input type="text" class="search-input" placeholder="Search invoice, patient..." oninput="handleSearch('billing', this.value)">
@@ -734,14 +744,13 @@
                 </div>
             </section>
 
-            <!-- PROFESSIONAL INVOICE (UPDATED LAYOUT) -->
+            <!-- PROFESSIONAL INVOICE -->
             <section id="view-bill-detail" class="view-section">
                 <div class="no-print" style="margin-bottom: 20px;">
                     <button class="btn-sm" onclick="navigateTo('cashbill')"><i class="fa-solid fa-arrow-left"></i> Back to Cash Bills</button>
                 </div>
 
                 <div class="invoice-box">
-                    <!-- Top Bar -->
                     <div class="invoice-top-bar"></div>
 
                     <div class="invoice-content">
@@ -788,7 +797,6 @@
                                 </tr>
                             </thead>
                             <tbody id="inv-items-body">
-                                <!-- JS Injected -->
                             </tbody>
                         </table>
 
@@ -836,7 +844,7 @@
                 <div class="section-card" style="position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
-                        <h3><i class="fa-solid fa-users-cog" style="color:var(--primary); margin-right:8px;"></i>Staff Management</h3>
+                        <h3><i class="fa-solid fa-users-cog" style="color:var(--primary); margin-right:8px;"></i>Staff Management <i class="fa-solid fa-sort-down" style="font-size:0.7em; color:var(--text-light); margin-left:5px;"></i></h3>
                         <div class="table-header-actions">
                             <button class="btn-sm" id="btn-add-staff" onclick="openEditStaff(null)"><i class="fa-solid fa-user-plus"></i> Add Staff</button>
                             <div class="search-container">
@@ -845,16 +853,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+                    <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username/Email</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                 </div>
 
-                <!-- SuperAdmin / System Developer Table (Improved Styling) -->
-                <!-- Added class 'super-admin-card' for the red border and background -->
+                <!-- SuperAdmin / System Developer Table -->
                 <div class="section-card super-admin-card">
                      <div class="table-header">
                         <h3><i class="fa-solid fa-user-shield" style="color:var(--danger); margin-right:8px;"></i>SuperAdmin / System Developer</h3>
                     </div>
-                    <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th></tr></thead><tbody></tbody></table></div>
+                    <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username/Email</th></tr></thead><tbody></tbody></table></div>
                 </div>
             </section>
 
@@ -863,7 +870,7 @@
                 <div class="section-card" style="position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
-                        <h3>Patient Directory</h3>
+                        <h3>Patient Directory <i class="fa-solid fa-sort-down" style="font-size:0.7em; color:var(--text-light); margin-left:5px;"></i></h3>
                         <div class="table-header-actions">
                             <button class="btn-sm" onclick="openEditPatient(null)"><i class="fa-solid fa-user-plus"></i> Add Patient</button>
                             <div class="search-container">
@@ -967,7 +974,6 @@
                                         </label>
                                     </div>
 
-                                    <!-- Mode: New Patient -->
                                     <div id="new-pat-inputs" style="display:none;">
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-light); margin-bottom:4px; display:block;">Full Name</label>
@@ -983,12 +989,9 @@
                                         </div>
                                     </div>
 
-                                    <!-- Mode: Existing Patient (Default) -->
                                     <div id="old-pat-inputs">
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-light); margin-bottom:4px; display:block;">Select Patient</label>
-                                            
-                                            <!-- CUSTOM SEARCHABLE DROPDOWN -->
                                             <div class="custom-select-wrapper">
                                                 <div class="custom-select-header">
                                                     <input type="text" id="bk-pat-search" class="custom-select-input" placeholder="Search Name or Phone..." autocomplete="off">
@@ -1029,7 +1032,97 @@
     </div>
 
     <!-- MODALS -->
-    <!-- 1. Edit Appointment Modal -->
+    
+    <!-- 1. STAFF EDIT MODAL (UPDATED FOR AUTH) -->
+    <div class="modal-overlay" id="editStaffModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3 id="staff-modal-title">Manage Staff</h3><button onclick="closeModal('editStaffModal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-staff-id">
+                
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:0.8rem; font-weight:700;">Smart ID (Auto)</label>
+                    <input type="text" id="edit-staff-sid" class="form-input" placeholder="KPA-000" disabled style="background:#f1f5f9; font-family:'Poppins', monospace;">
+                </div>
+                
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Staff Name</label><input type="text" id="edit-staff-name" class="form-input"></div>
+                
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Job Title</label><select id="edit-staff-jobtitle" class="form-input">
+                    <option value="Dentist">Dentist</option>
+                    <option value="Nurse">Nurse</option>
+                    <option value="Assistant">Assistant</option>
+                    <option value="Admin">Admin</option>
+                </select></div>
+                
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Role</label><select id="edit-staff-role" class="form-input">
+                    <option value="Staff">Staff</option>
+                    <option value="Admin">Admin</option>
+                    <option value="SuperAdmin">SuperAdmin</option>
+                </select></div>
+
+                <div id="auth-fields-container">
+                    <div style="margin-bottom:15px;">
+                        <label style="font-size:0.8rem; font-weight:700;">Email (Login ID)</label>
+                        <input type="email" id="edit-staff-email" class="form-input" placeholder="staff@example.com">
+                    </div>
+                    <div style="margin-bottom:15px;">
+                        <label style="font-size:0.8rem; font-weight:700;">Username (Alternative Login)</label>
+                        <input type="text" id="edit-staff-u" class="form-input" placeholder="e.g. dr.amalina">
+                    </div>
+                    <div style="margin-bottom:15px;">
+                        <label style="font-size:0.8rem; font-weight:700;">Password <span id="pass-hint" style="font-size:0.7rem; font-weight:400; color:var(--text-light)">(Required for new staff)</span></label>
+                        <div class="input-group">
+                            <input type="password" id="edit-staff-p" class="form-input" placeholder="••••••••">
+                            <i class="fa-solid fa-eye input-icon" onclick="togglePasswordVisibility('edit-staff-p', this)"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" onclick="closeModal('editStaffModal')">Cancel</button>
+                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="saveStaffEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. PROFILE MODAL (UPDATED FOR RESET) -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>My Profile</h3>
+                <button onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="text-align: center; background: linear-gradient(135deg, var(--primary-light), white); padding: 30px; border-radius: 16px;">
+                    <div class="avatar" style="width: 80px; height: 80px; font-size: 1.8rem; margin: 0 auto 15px; border: 4px solid white; box-shadow: var(--shadow-md);" id="profile-avatar">DA</div>
+                    <h4 id="profile-name" style="font-size: 1.2rem; margin-bottom: 5px;">Dr. Amalina</h4>
+                    <span id="profile-role" class="badge badge-info" style="font-size: 0.8rem;">Admin</span>
+                </div>
+                <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
+                    <h5 style="margin-bottom: 15px; color: var(--primary);">Account Details</h5>
+                    <div style="display: grid; gap: 12px;">
+                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Username</label><div style="font-weight: 600; font-size: 1rem;" id="profile-u">amalina</div></div>
+                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Email</label><div style="font-weight: 600; font-size: 1rem;" id="profile-email">email@example.com</div></div>
+                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Employee ID</label><div style="font-weight: 600; font-size: 1rem;" id="profile-id">EMP001</div></div>
+                    </div>
+                    
+                    <!-- RESET PASSWORD SECTION -->
+                    <div id="reset-password-section" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #cbd5e1; display: none;">
+                        <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px;">Having trouble logging in?</p>
+                        <button class="btn-sm btn-wa" style="width: 100%; justify-content: center;" onclick="sendPasswordReset()">
+                            <i class="fa-solid fa-key"></i> Send Password Reset Email
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" onclick="closeModal('profileModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Edit Appointment Modal -->
     <div class="modal-overlay" id="editApptModal">
         <div class="modal-content">
             <div class="modal-header"><h3>Edit Appointment</h3><button onclick="closeModal('editApptModal')"><i class="fa-solid fa-xmark"></i></button></div>
@@ -1046,7 +1139,7 @@
         </div>
     </div>
 
-    <!-- 2. Edit Service Modal -->
+    <!-- 4. Edit Service Modal -->
     <div class="modal-overlay" id="editServiceModal">
         <div class="modal-content">
             <div class="modal-header"><h3 id="service-modal-title">Add Service</h3><button onclick="closeModal('editServiceModal')"><i class="fa-solid fa-xmark"></i></button></div>
@@ -1062,39 +1155,7 @@
         </div>
     </div>
 
-    <!-- 3. Staff Edit Modal -->
-    <div class="modal-overlay" id="editStaffModal">
-        <div class="modal-content">
-            <div class="modal-header"><h3 id="staff-modal-title">Manage Staff</h3><button onclick="closeModal('editStaffModal')"><i class="fa-solid fa-xmark"></i></button></div>
-            <div class="modal-body">
-                <input type="hidden" id="edit-staff-id">
-                <div style="margin-bottom:15px;">
-                    <label style="font-size:0.8rem; font-weight:700;">Smart ID (Auto)</label>
-                    <input type="text" id="edit-staff-sid" class="form-input" placeholder="KPA-000" disabled style="background:#f1f5f9; font-family:'Poppins', monospace;">
-                </div>
-                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Staff Name</label><input type="text" id="edit-staff-name" class="form-input"></div>
-                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Job Title</label><select id="edit-staff-jobtitle" class="form-input">
-                    <option value="Dentist">Dentist</option>
-                    <option value="Nurse">Nurse</option>
-                    <option value="Assistant">Assistant</option>
-                    <option value="Admin">Admin</option>
-                </select></div>
-                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Role</label><select id="edit-staff-role" class="form-input">
-                    <option value="Staff">Staff</option>
-                    <option value="Admin">Admin</option>
-                    <option value="SuperAdmin">SuperAdmin</option>
-                </select></div>
-                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Username</label><input type="text" id="edit-staff-u" class="form-input"></div>
-                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Password</label><input type="password" id="edit-staff-p" class="form-input" placeholder="Leave blank to keep current"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-sm" onclick="closeModal('editStaffModal')">Cancel</button>
-                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="saveStaffEdit()">Save</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. Patient Details & Manual History Modal -->
+    <!-- 5. Patient Details & Manual History Modal -->
     <div class="modal-overlay" id="historyModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1129,31 +1190,6 @@
             <div class="modal-footer">
                 <button class="btn-sm" onclick="closeModal('historyModal')">Close</button>
             </div>
-        </div>
-    </div>
-
-    <!-- 5. PROFILE MODAL -->
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>My Profile</h3>
-                <button onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body" style="display: flex; flex-direction: column; gap: 20px;">
-                <div style="text-align: center; background: linear-gradient(135deg, var(--primary-light), white); padding: 30px; border-radius: 16px;">
-                    <div class="avatar" style="width: 80px; height: 80px; font-size: 1.8rem; margin: 0 auto 15px; border: 4px solid white; box-shadow: var(--shadow-md);" id="profile-avatar">DA</div>
-                    <h4 id="profile-name" style="font-size: 1.2rem; margin-bottom: 5px;">Dr. Amalina</h4>
-                    <span id="profile-role" class="badge badge-info" style="font-size: 0.8rem;">Admin</span>
-                </div>
-                <div style="background: #f8fafc; padding: 20px; border-radius: 12px;">
-                    <h5 style="margin-bottom: 15px; color: var(--primary);">Account Details</h5>
-                    <div style="display: grid; gap: 12px;">
-                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Username</label><div style="font-weight: 600; font-size: 1rem;" id="profile-u">amalina</div></div>
-                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Employee ID</label><div style="font-weight: 600; font-size: 1rem;" id="profile-id">EMP001</div></div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer"><button class="btn-sm" onclick="closeModal('profileModal')">Close</button></div>
         </div>
     </div>
 
@@ -1261,6 +1297,7 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.firestore();
 
         // --- GLOBAL STATE ---
@@ -1274,7 +1311,7 @@
         const SESSION_KEY = 'clinicUser';
         const todayStr = new Date().toISOString().split('T')[0];
         
-        // MIN BOOKING DATE IS TOMORROW (Request: Cannot booking on the same day)
+        // MIN BOOKING DATE IS TOMORROW
         const todayObj = new Date();
         const tomorrowObj = new Date(todayObj);
         tomorrowObj.setDate(tomorrowObj.getDate() + 1);
@@ -1296,42 +1333,90 @@
         
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', async () => {
-            const storedUser = localStorage.getItem(SESSION_KEY);
-            if (storedUser) {
-                currentUser = JSON.parse(storedUser);
-                setupUserUI(currentUser);
-                document.getElementById('login-screen').classList.add('hidden');
-                setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
-                startLiveClock();
-                // Initial data load
-                showLoading(true);
-                await refreshData(); 
-                showLoading(false);
-                navigateTo('dashboard');
-            }
-            
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    // User is logged in via Firebase Auth
+                    // We need to fetch the full profile from Firestore using the UID
+                    const staffDoc = await db.collection('klinikazam_staff').doc(user.uid).get();
+                    if (staffDoc.exists) {
+                        currentUser = { id: staffDoc.id, uid: user.uid, email: user.email, ...staffDoc.data() };
+                        localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+                        postLoginSetup();
+                    } else {
+                        // Fallback: If UID doesn't match ID (migration case), try finding by email
+                        const snap = await db.collection('klinikazam_staff').where('email', '==', user.email).limit(1).get();
+                        if(!snap.empty) {
+                            currentUser = { id: snap.docs[0].id, uid: user.uid, email: user.email, ...snap.docs[0].data() };
+                            localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+                            postLoginSetup();
+                        } else {
+                            // Auth exists but no profile record? Logout
+                            await auth.signOut();
+                            localStorage.removeItem(SESSION_KEY);
+                            location.reload();
+                        }
+                    }
+                } else {
+                    // No auth user
+                    const storedUser = localStorage.getItem(SESSION_KEY);
+                    if (storedUser) {
+                        // Check if legacy session exists (username/password stored manually) - this shouldn't happen now with Auth
+                        // But if it does, we force logout to use Auth
+                        logout();
+                    }
+                }
+            });
+
             window.onmousemove = resetInactivityTimer;
             window.onkeypress = resetInactivityTimer;
             window.onclick = resetInactivityTimer;
             window.onscroll = resetInactivityTimer;
         });
 
+        async function postLoginSetup() {
+            document.getElementById('login-screen').classList.add('hidden');
+            setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
+            setupUserUI(currentUser);
+            startLiveClock();
+            
+            showLoading(true);
+            await refreshData(); 
+            showLoading(false);
+            navigateTo('dashboard');
+            resetInactivityTimer();
+        }
+
         // --- UI HELPERS ---
         function showLoading(show) {
             const loader = document.getElementById('global-loader');
             if(loader) loader.classList.toggle('active', show);
             
-            // Also show section specific loaders if visible
             document.querySelectorAll('.loading-overlay').forEach(el => {
                 if(show && el.closest('.view-section.active')) el.classList.add('active');
                 else el.classList.remove('active');
             });
         }
 
-        // --- SMART ID GENERATOR ---
+        function togglePasswordVisibility(inputId, iconEl) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                iconEl.classList.remove('fa-eye');
+                iconEl.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                iconEl.classList.remove('fa-eye-slash');
+                iconEl.classList.add('fa-eye');
+            }
+        }
+
+        // --- SMART ID GENERATOR (IMPROVED) ---
         async function generateSmartId(collection, prefix) {
+            // Query for documents starting with prefix, order by ID descending
             const snapshot = await db.collection(collection)
                 .orderBy('id', 'desc')
+                .startAt(prefix)
+                .endAt(prefix + '\uf8ff')
                 .limit(1)
                 .get();
             
@@ -1339,8 +1424,10 @@
             if (!snapshot.empty) {
                 const lastDoc = snapshot.docs[0];
                 const lastId = lastDoc.id;
+                // Assumes format PREFIX-NUM
                 const parts = lastId.split('-');
-                const lastNum = parseInt(parts[parts.length - 1]);
+                const lastNumStr = parts[parts.length - 1];
+                const lastNum = parseInt(lastNumStr);
                 if (!isNaN(lastNum)) {
                     nextNum = lastNum + 1;
                 }
@@ -1391,7 +1478,7 @@
             staff = stSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
             // 4. Fetch Appointments
-            const aSnap = await db.collection('klinikazam_appointments').orderBy('date', 'desc').get(); // Default desc for new data on top
+            const aSnap = await db.collection('klinikazam_appointments').orderBy('date', 'desc').get(); 
             appointments = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
             // 5. Fetch Slot Exceptions
@@ -1431,35 +1518,47 @@
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
             const loginError = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
 
-            const snapshot = await db.collection('klinikazam_staff')
-                .where('username', '==', u)
-                .where('password', '==', p)
-                .limit(1)
-                .get();
+            loginError.innerText = "";
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing In...';
 
-            if (!snapshot.empty) {
-                const doc = snapshot.docs[0];
-                currentUser = { id: doc.id, ...doc.data() };
-                localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
-                setupUserUI(currentUser);
-                document.getElementById('login-screen').classList.add('hidden');
-                setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
-                startLiveClock();
-                showLoading(true);
-                await refreshData();
-                showLoading(false);
-                navigateTo('dashboard');
-                resetInactivityTimer();
-                loginError.innerText = "";
-            } else {
-                loginError.innerText = "Invalid credentials";
+            try {
+                let userCredential;
+                // Check if input looks like an email
+                if (u.includes('@')) {
+                    userCredential = await auth.signInWithEmailAndPassword(u, p);
+                } else {
+                    // If not email, query Firestore to find email associated with username
+                    const snap = await db.collection('klinikazam_staff').where('username', '==', u).limit(1).get();
+                    if (snap.empty) {
+                        throw new Error("User not found");
+                    }
+                    const staffData = snap.docs[0].data();
+                    if (!staffData.email) {
+                        throw new Error("No email linked to this username. Please contact admin.");
+                    }
+                    userCredential = await auth.signInWithEmailAndPassword(staffData.email, p);
+                }
+                // Auth state listener in init will handle the rest
+            } catch (error) {
+                console.error(error);
+                loginError.innerText = "Invalid credentials: " + error.message;
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Sign In <i class="fa-solid fa-arrow-right"></i>';
             }
         }
 
         function logout() {
-            localStorage.removeItem(SESSION_KEY);
-            location.reload();
+            auth.signOut().then(() => {
+                localStorage.removeItem(SESSION_KEY);
+                currentUser = null;
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            });
         }
 
         // --- NAVIGATION & UI ---
@@ -1482,10 +1581,8 @@
 
             if(document.getElementById('sidebar').classList.contains('mobile-open')) toggleMobileMenu();
 
-            // Show loading while rendering view
             showLoading(true);
 
-            // View specific logic
             if(viewId === 'dashboard') renderDashboard();
             if(viewId === 'appointments') renderAppointments();
             if(viewId === 'billing') {
@@ -1515,7 +1612,7 @@
                 renderCashbillList();
             }
 
-            setTimeout(() => showLoading(false), 300); // Small delay for visual transition
+            setTimeout(() => showLoading(false), 300); 
         }
 
         function applyRoleBasedUI() {
@@ -1533,11 +1630,34 @@
             document.getElementById('userNameDisplay').innerText = user.name;
             document.getElementById('userRoleDisplay').innerText = user.role;
             document.getElementById('userAvatar').innerText = user.name.substring(0,2).toUpperCase();
+            
+            // Profile Modal
             document.getElementById('profile-name').innerText = user.name;
             document.getElementById('profile-role').innerText = user.role;
-            document.getElementById('profile-u').innerText = user.username;
+            document.getElementById('profile-u').innerText = user.username || '-';
+            document.getElementById('profile-email').innerText = user.email || '-';
             document.getElementById('profile-id').innerText = user.id;
             document.getElementById('profile-avatar').innerText = user.name.substring(0,2).toUpperCase();
+
+            // Show Reset Password button for SuperAdmins
+            const resetSection = document.getElementById('reset-password-section');
+            if(user.role === 'SuperAdmin') {
+                resetSection.style.display = 'block';
+            } else {
+                resetSection.style.display = 'none';
+            }
+        }
+
+        function sendPasswordReset() {
+            if(currentUser && currentUser.email) {
+                auth.sendPasswordResetEmail(currentUser.email)
+                    .then(() => {
+                        showToast(`Reset email sent to ${currentUser.email}`);
+                    })
+                    .catch((error) => {
+                        showToast("Error sending reset email: " + error.message);
+                    });
+            }
         }
 
         function toggleMobileMenu() {
@@ -1591,7 +1711,6 @@
 
             const tbody = document.querySelector('#dashboard-table tbody');
             tbody.innerHTML = '';
-            // Sort by time for dashboard
             todaysAppts.sort((a,b) => a.time.localeCompare(b.time)).forEach(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
@@ -1630,8 +1749,8 @@
         function renderAppointments() {
             const queryAppt = document.querySelector('#view-appointments .search-input')?.value.toLowerCase() || '';
             
-            // Smart Filter: Newest to Oldest (Default)
-            const schedule = appointments.filter(a => a.status !== 'Cancelled' && a.status !== 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
+            // Default Sort: Newest to Oldest
+            let schedule = appointments.filter(a => a.status !== 'Cancelled' && a.status !== 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
             
             let filteredSchedule = schedule;
             if(queryAppt) {
@@ -1672,7 +1791,8 @@
             });
 
             // History: Newest to Oldest
-            const history = appointments.filter(a => a.status === 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
+            let history = appointments.filter(a => a.status === 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
+            
             const hBody = document.querySelector('#history-table tbody');
             hBody.innerHTML = '';
             history.forEach(a => {
@@ -1693,7 +1813,9 @@
                 </tr>`;
             });
             
-            const cancelled = appointments.filter(a => a.status === 'Cancelled').sort((a,b) => new Date(b.date) - new Date(a.date));
+            // Cancelled: Newest to Oldest
+            let cancelled = appointments.filter(a => a.status === 'Cancelled').sort((a,b) => new Date(b.date) - new Date(a.date));
+            
             const cBody = document.querySelector('#cancelled-table tbody');
             cBody.innerHTML = '';
             cancelled.forEach(a => {
@@ -1724,10 +1846,9 @@
         }
 
         function renderCashbillList() {
-            // List all completed appointments that are essentially cashbills
-            // Filter: Status == Completed. Sorted: Newest first.
             const query = document.querySelector('#view-cashbill .search-input')?.value.toLowerCase() || '';
             
+            // Sort: Newest to Oldest
             let list = appointments.filter(a => a.status === 'Completed').sort((a,b) => new Date(b.date) - new Date(a.date));
 
             if(query) {
@@ -1954,7 +2075,7 @@
                 showLoading(true);
                 await db.collection('klinikazam_appointments').add(newAppt);
                 showToast("Bill Generated Successfully");
-                toggleCashbillCreate(false); // Go back to list
+                toggleCashbillCreate(false); 
                 await refreshData(); 
             } catch(e) {
                 showToast("Error saving bill");
@@ -2041,7 +2162,7 @@
                 a.status === 'Completed' && 
                 a.date >= start && 
                 a.date <= end
-            ).sort((a,b) => new Date(b.date) - new Date(a.date)) // Sort descending for export too
+            ).sort((a,b) => new Date(b.date) - new Date(a.date)) 
             .map(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 return {
@@ -2073,7 +2194,7 @@
             showToast("Report Downloaded");
         }
 
-        // --- INVOICE VIEW (UPDATED LAYOUT) ---
+        // --- INVOICE VIEW ---
         async function viewBillDetail(id) {
             const a = appointments.find(x => x.id === id);
             if(!a) return;
@@ -2088,7 +2209,6 @@
                 showToast("Invoice ID Generated");
             }
 
-            // Populate New Invoice Layout
             document.getElementById('inv-no').innerText = a.invoice_id || 'Pending Generation';
             document.getElementById('inv-date').innerText = formatDateDisplay(a.date);
             
@@ -2131,7 +2251,7 @@
             openInvoice(currentBillAppt.id);
         }
 
-        // --- CALENDAR & BOOKING (UPDATED DATE RULE) ---
+        // --- CALENDAR & BOOKING ---
         function renderCalendar(date) {
             const year = date.getFullYear();
             const month = date.getMonth();
@@ -2154,7 +2274,6 @@
                 const el = document.createElement('div');
                 let classes = 'cal-day';
                 
-                // REQUEST: Cannot booking on the same day
                 if(dateStr < minBookingDate) classes += ' disabled';
                 
                 if(dateStr === getLocalDateStr(new Date())) classes += ' today'; 
@@ -2172,7 +2291,6 @@
                 if(!classes.includes('disabled')) {
                     el.onclick = () => selectDate(dateStr);
                 } else if (dateStr === todayStr) {
-                    // specific click handler for today to show error
                     el.onclick = () => showToast("Please Booking at least one day earlier.");
                     el.title = "Booking not allowed on the same day";
                 }
@@ -2189,7 +2307,6 @@
         }
 
         async function selectDate(dateStr) {
-            // Double check constraint
             if(dateStr < minBookingDate) {
                 showToast("Please Booking at least one day earlier.");
                 return;
@@ -2242,7 +2359,6 @@
             checkBookingFormComplete();
         }
 
-        // --- CUSTOM PATIENT SEARCH DROPDOWN (Booking) ---
         function initCustomPatientSearch() {
             const searchInput = document.getElementById('bk-pat-search');
             const list = document.getElementById('bk-pat-list');
@@ -2325,7 +2441,6 @@
             checkBookingFormComplete();
         }
 
-        // --- SAVING BOOKING ---
         async function saveNewBooking(e) {
             e.preventDefault();
             const isNew = document.querySelector('input[name="patType"]:checked').value === 'new';
@@ -2589,11 +2704,12 @@
                 }
             });
 
+            // Sort: Newest to Oldest based on creation? Just alphabetical for patients
             let filtered = patients.filter(p => 
                 p.name.toLowerCase().includes(query) || 
                 p.phone.includes(query) || 
                 p.id.includes(query)
-            );
+            ).sort((a,b) => a.name.localeCompare(b.name));
 
             filtered.forEach(p => {
                 const count = visitCounts[p.id] || 0;
@@ -2654,7 +2770,6 @@
             showToast(id ? "Patient Updated" : "Patient Added");
         }
 
-        // --- MANUAL PATIENT HISTORY ---
         function openHistory(patientId) {
             historyPatientId = patientId;
             const p = patients.find(x => x.id === patientId);
@@ -2711,7 +2826,7 @@
             await refreshData();
         }
 
-        // --- STAFF CRUD (UPDATED FOR SUPERADMIN TABLE) ---
+        // --- STAFF CRUD (UPDATED FOR AUTH) ---
         async function renderStaff() {
             const tbody = document.querySelector('#staff-table tbody');
             const saBody = document.querySelector('#superadmin-table tbody');
@@ -2721,11 +2836,13 @@
             
             const query = document.querySelector('#view-staff .search-input')?.value.toLowerCase() || '';
             
+            // Sort Alphabetical for Staff List
             let filtered = staff.filter(s => 
                 s.name.toLowerCase().includes(query) || 
                 s.role.toLowerCase().includes(query) ||
-                s.username.toLowerCase().includes(query)
-            );
+                (s.username && s.username.toLowerCase().includes(query)) ||
+                (s.email && s.email.toLowerCase().includes(query))
+            ).sort((a,b) => a.name.localeCompare(b.name));
 
             const isSuperAdmin = currentUser.role === 'SuperAdmin';
             const isAdmin = currentUser.role === 'Admin';
@@ -2738,7 +2855,6 @@
             }
 
             filtered.forEach(s => {
-                // Determine if this user goes in SuperAdmin table or Regular table
                 const isSa = s.role === 'SuperAdmin';
                 const targetBody = isSa ? saBody : tbody;
 
@@ -2759,17 +2875,21 @@
                     }
                 }
 
-                // For SuperAdmin table, we don't show delete buttons usually, as per logic
                 if(isSa) deleteBtn = ''; 
 
-                targetBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}</td><td>${editBtn} ${deleteBtn}</td></tr>`;
+                // Show Email or Username
+                const loginInfo = s.email ? s.email : (s.username || '-');
+
+                targetBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${loginInfo}</td><td>${editBtn} ${deleteBtn}</td></tr>`;
             });
         }
 
         function openEditStaff(id) {
             if(currentUser.role === 'Staff') return;
 
-            if(!id) {
+            const isNew = !id;
+            
+            if(isNew) {
                 if(currentUser.role !== 'SuperAdmin' && currentUser.role !== 'Admin') {
                     showToast("Unauthorized");
                     return;
@@ -2779,8 +2899,14 @@
                 document.getElementById('edit-staff-name').value = '';
                 document.getElementById('edit-staff-jobtitle').value = 'Assistant';
                 document.getElementById('edit-staff-role').value = 'Staff';
+                
+                // Auth Fields for New User
+                document.getElementById('edit-staff-email').value = '';
+                document.getElementById('edit-staff-email').disabled = false;
                 document.getElementById('edit-staff-u').value = '';
                 document.getElementById('edit-staff-p').value = '';
+                document.getElementById('pass-hint').innerText = "(Required)";
+                
                 generateSmartId('klinikazam_staff', 'KPA').then(sid => {
                     document.getElementById('edit-staff-sid').value = sid;
                 });
@@ -2796,8 +2922,13 @@
                 document.getElementById('edit-staff-name').value = s.name;
                 document.getElementById('edit-staff-jobtitle').value = s.job_title || 'Staff';
                 document.getElementById('edit-staff-role').value = s.role;
-                document.getElementById('edit-staff-u').value = s.username;
+                
+                // Auth Fields for Edit
+                document.getElementById('edit-staff-email').value = s.email || '';
+                document.getElementById('edit-staff-email').disabled = true; // Cannot change email easily due to Auth
+                document.getElementById('edit-staff-u').value = s.username || '';
                 document.getElementById('edit-staff-p').value = ''; 
+                document.getElementById('pass-hint').innerText = "(Leave blank to keep)";
             }
             showModal('editStaffModal');
         }
@@ -2810,6 +2941,7 @@
             const role = document.getElementById('edit-staff-role').value;
             const u = document.getElementById('edit-staff-u').value;
             const p = document.getElementById('edit-staff-p').value;
+            const email = document.getElementById('edit-staff-email').value;
 
             if(currentUser.role === 'Admin' && role === 'SuperAdmin') {
                 showToast("Admins cannot create SuperAdmin accounts.");
@@ -2817,6 +2949,7 @@
             }
 
             if(id) {
+                // Edit Existing
                 const targetStaff = staff.find(x => x.id === id);
                 if(currentUser.role === 'Admin' && targetStaff.role === 'SuperAdmin') {
                     showToast("Unauthorized");
@@ -2824,19 +2957,54 @@
                 }
                 const updateData = { name, job_title: jobTitle, username: u };
                 if(role !== targetStaff.role) updateData.role = role; 
-                if(p) updateData.password = p;
+                // Note: Changing password via admin edit requires Auth Admin SDK usually. 
+                // For this client-side demo, we just note it.
+                if(p) {
+                   // Ideally use admin SDK to update password. 
+                   // Here we might update a 'temp_password' field or assume Auth is managed separately.
+                   // Since this is a web client, we can't easily update another user's password without re-authenticating them.
+                   // We will skip password update for other users in this restricted environment, 
+                   // or rely on the "Reset Password" flow.
+                   showToast("Password update skipped. Use 'Send Reset Email' in Profile.");
+                }
                 await db.collection('klinikazam_staff').doc(id).update(updateData);
             } else {
-                const smartId = await generateSmartId('klinikazam_staff', 'KPA');
-                const newStaff = { 
-                    id: smartId, 
-                    name, 
-                    job_title: jobTitle, 
-                    role, 
-                    username: u, 
-                    password: p || '1234' 
-                };
-                await db.collection('klinikazam_staff').doc(smartId).set(newStaff);
+                // Create New
+                if(!email || !p) {
+                    showToast("Email and Password are required for new staff.");
+                    return;
+                }
+
+                try {
+                    // 1. Create Auth User
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, p);
+                    const uid = userCredential.user.uid;
+
+                    // 2. Generate Smart ID (using the generated UID as doc ID for best practice, or keep KPA-ID)
+                    // Let's stick to KPA-ID as the public ID, but store UID in Firestore
+                    const smartId = await generateSmartId('klinikazam_staff', 'KPA');
+                    
+                    const newStaff = { 
+                        id: smartId, 
+                        uid: uid, // Link to Auth
+                        name, 
+                        job_title: jobTitle, 
+                        role, 
+                        username: u,
+                        email: email
+                        // Do NOT store password in Firestore anymore
+                    };
+                    
+                    // 3. Write to Firestore using UID as key ensures 1:1 mapping
+                    await db.collection('klinikazam_staff').doc(uid).set(newStaff);
+                    
+                    // Update ID to UID for internal logic
+                    id = uid; 
+                    
+                } catch (error) {
+                    showToast("Auth Error: " + error.message);
+                    return;
+                }
             }
 
             await refreshData(); 
@@ -2892,7 +3060,7 @@
             showToast(id ? "Service Updated" : "Service Added");
         }
 
-        // --- SLOT MANAGEMENT (UPDATED CONFIRMATION) ---
+        // --- SLOT MANAGEMENT (UPDATED FOR UNBLOCK) ---
         async function renderSlots() {
             const dateVal = document.getElementById('slotDate').value;
             const grid = document.getElementById('slotGrid');
@@ -2926,27 +3094,30 @@
                 } else if (isBlocked) {
                     className += ' blocked';
                     btnDiv.innerHTML = `${time}<br><small>Break</small>`;
-                    btnDiv.onclick = () => toggleSlot(dateVal, time, btnDiv);
+                    // Clicking blocked slot allows unblocking
+                    btnDiv.onclick = () => toggleSlot(dateVal, time, btnDiv, true);
                 } else {
                     btnDiv.innerHTML = time;
-                    btnDiv.onclick = () => toggleSlot(dateVal, time, btnDiv);
+                    btnDiv.onclick = () => toggleSlot(dateVal, time, btnDiv, false);
                 }
                 btnDiv.className = className;
                 grid.appendChild(btnDiv);
             });
         }
 
-        async function toggleSlot(date, time, el) {
-            // REQUEST: Add confirmation message
-            const isCurrentlyBlocked = el.classList.contains('blocked');
-            const action = isCurrentlyBlocked ? "remove" : "set";
+        async function toggleSlot(date, time, el, isCurrentlyBlocked) {
+            const action = isCurrentlyBlocked ? "remove block from" : "block";
             
-            if(confirm(`Sure to ${action} block time for ${date} at ${time}?`)) {
-                const idx = slotExceptions.findIndex(e => e.date === date && e.time === time && e.type === 'blocked');
-                if(idx === -1) {
-                    await db.collection('klinikazam_slots').add({ id: Date.now(), date, time, type: 'blocked' });
+            if(confirm(`Sure to ${action} ${date} at ${time}?`)) {
+                if(isCurrentlyBlocked) {
+                    // Unblock: Find exception and delete
+                    const ex = slotExceptions.find(e => e.date === date && e.time === time && e.type === 'blocked');
+                    if(ex) {
+                        await db.collection('klinikazam_slots').doc(ex.id).delete();
+                    }
                 } else {
-                    await db.collection('klinikazam_slots').doc(slotExceptions[idx].id).delete();
+                    // Block: Add exception
+                    await db.collection('klinikazam_slots').add({ id: Date.now(), date, time, type: 'blocked' });
                 }
                 await refreshData();
                 renderSlots(); 
@@ -2989,12 +3160,11 @@
                 await db.collection('klinikazam_services').doc(deleteTarget.id.toString()).delete();
             }
             else if (deleteTarget.type === 'staff') {
-                const s = staff.find(x => x.id === deleteTarget.id);
-                if(s.role === 'SuperAdmin') {
-                    showToast("Cannot delete SuperAdmin accounts");
-                    return;
-                }
+                // Firestore delete
                 await db.collection('klinikazam_staff').doc(deleteTarget.id).delete();
+                // Note: Auth user deletion requires Admin SDK. Cannot be done easily from client web app.
+                // In a real app, call a Cloud Function. Here we just delete the profile.
+                showToast("Profile deleted. Auth user remains (requires Admin cleanup).");
             }
             else if (deleteTarget.type === 'patient') {
                 await db.collection('klinikazam_patients').doc(deleteTarget.id).delete();
@@ -3004,23 +3174,17 @@
             showToast("Deleted Successfully");
         }
 
-        // --- WHATSAPP MESSAGING (UPDATED) ---
+        // --- WHATSAPP MESSAGING ---
         function sendWhatsapp(name, date, time, phone) {
             let cleanPhone = phone.replace(/[^0-9]/g, '');
             if(cleanPhone.startsWith('0')) cleanPhone = '60' + cleanPhone.substring(1);
             const displayDate = formatDateDisplay(date);
             
-            // 📌 1) WhatsApp Auto Reminder (Sebelum Temujanji)
-            // Determining message type based on status or context usually, 
-            // but here assuming 'Pending' appointment gets a reminder.
-            // If status is 'Completed', we send "Thank You" message.
-            
             let message = "";
             const appt = appointments.find(a => a.date === date && a.time === time);
-            const status = appt ? appt.status : 'Pending'; // Default to pending if unknown
+            const status = appt ? appt.status : 'Pending'; 
 
             if (status === 'Completed') {
-                // 🌿 2) WhatsApp Thank You (Selepas Lawatan Pesakit)
                 message = `Terima kasih kerana berkunjung ke Azam Dental SP Saujana hari ini.
 
 Kami berharap rawatan yang diberikan memuaskan.
@@ -3029,7 +3193,6 @@ Sekiranya terdapat sebarang ketidakselesaan atau pertanyaan selepas rawatan, sil
 Kami menghargai kepercayaan anda dan berharap dapat berkhidmat kepada anda lagi.
 — Azam Dental SP Saujana`;
             } else {
-                // 📌 1) WhatsApp Auto Reminder (Sebelum Temujanji)
                 message = `Assalamualaikum & Salam Sejahtera,
 
 Ini adalah peringatan temujanji anda bersama Azam Dental SP Saujana:
@@ -3067,7 +3230,7 @@ Terima kasih.
 
         function showToast(msg) {
             const t = document.getElementById('toast'); 
-            document.getElementById('toastMsg').innerText = msg;
+            document.getElementById('toastMsg').innerText =             msg;
             t.classList.remove('hide');
             t.classList.add('show');
             setTimeout(() => {
