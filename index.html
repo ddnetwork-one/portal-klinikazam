@@ -77,10 +77,6 @@
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(2, 132, 199, 0.1); border-left-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- COMPONENTS --- */
-        .invoice-link { color: var(--primary); text-decoration: underline; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-        .invoice-link:hover { opacity: 0.8; }
-
         /* --- SEARCH INPUT --- */
         .search-container { position: relative; width: 100%; max-width: 300px; }
         .search-input { width: 100%; padding: 10px 10px 10px 36px; border: 1px solid var(--border-light); border-radius: var(--radius); font-size: 0.85rem; background: #f8fafc; transition: var(--transition); color: var(--text-main); }
@@ -181,10 +177,9 @@
         .section-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); padding: 24px; margin-bottom: 24px; animation: fadeIn 0.4s ease; position: relative; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* UPDATED: SuperAdmin Card Styling */
         .section-card.super-admin-card {
-            border-left: 5px solid var(--danger); /* Red Border */
-            background-color: var(--danger-bg); /* Light Red Background */
+            border-left: 5px solid var(--danger); 
+            background-color: var(--danger-bg); 
             border-top: 1px solid var(--danger);
             border-right: 1px solid var(--danger);
             border-bottom: 1px solid var(--danger);
@@ -194,7 +189,6 @@
         .table-header-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; flex-wrap: wrap; }
         .table-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
 
-        /* Sort Dropdown Styling */
         .sort-select {
             padding: 8px 12px;
             border: 1px solid var(--border-light);
@@ -262,7 +256,7 @@
         .stat-card p { font-size: 0.85rem; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; opacity: 0.9; }
 
-        /* --- INVOICE LAYOUT (UPDATED) --- */
+        /* --- INVOICE LAYOUT --- */
         .invoice-box {
             max-width: 850px;
             margin: auto;
@@ -271,105 +265,27 @@
             color: #1f2937;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
-
-        .invoice-top-bar {
-            height: 6px;
-            background: var(--primary);
-        }
-
-        .invoice-content {
-            padding: 30px;
-        }
-
-        .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
+        .invoice-top-bar { height: 6px; background: var(--primary); }
+        .invoice-content { padding: 30px; }
+        .invoice-header { display: flex; justify-content: space-between; margin-bottom: 30px; }
         .invoice-brand h2 { margin: 0; font-size: 22px; letter-spacing: 0.5px; color: var(--primary); }
         .invoice-brand p { margin: 3px 0; color: #6b7280; font-size: 11px; }
-        
         .invoice-title-group { text-align: right; }
         .invoice-title-group h1 { margin: 0; font-size: 28px; letter-spacing: 2px; }
         .invoice-title-group span { color: #6b7280; font-size: 11px; display: block; margin-top: 4px; }
-
-        .invoice-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .invoice-box h4 {
-            margin: 0 0 8px;
-            font-size: 11px;
-            letter-spacing: 1px;
-            color: var(--primary);
-            text-transform: uppercase;
-        }
-        
-        .invoice-box p {
-            margin: 2px 0;
-            color: #1f2937;
-            font-size: 12px;
-        }
-
-        .item-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        .item-table th {
-            text-transform: uppercase;
-            font-size: 10px;
-            letter-spacing: 1px;
-            color: #6b7280;
-            text-align: left;
-            padding: 10px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        .item-table td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 12px;
-            vertical-align: top;
-        }
-        
+        .invoice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .invoice-box h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: 1px; color: var(--primary); text-transform: uppercase; }
+        .invoice-box p { margin: 2px 0; color: #1f2937; font-size: 12px; }
+        .item-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .item-table th { text-transform: uppercase; font-size: 10px; letter-spacing: 1px; color: #6b7280; text-align: left; padding: 10px; border-bottom: 2px solid #e5e7eb; }
+        .item-table td { padding: 12px 10px; border-bottom: 1px solid #e5e7eb; font-size: 12px; vertical-align: top; }
         .invoice-summary { display: flex; justify-content: flex-end; }
-        .invoice-summary-box {
-            width: 320px;
-            border: 1px solid #e5e7eb;
-            padding: 20px;
-            background: #f9fafb;
-        }
-        
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 12px;
-        }
-        .summary-row.total {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 2px solid var(--primary);
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
+        .invoice-summary-box { width: 320px; border: 1px solid #e5e7eb; padding: 20px; background: #f9fafb; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
+        .summary-row.total { margin-top: 12px; padding-top: 12px; border-top: 2px solid var(--primary); font-size: 16px; font-weight: 600; }
         .right { text-align: right; }
         .text-right { text-align: right; }
-
-        .invoice-footer {
-            margin-top: 40px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 15px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: #6b7280;
-        }
+        .invoice-footer { margin-top: 40px; border-top: 1px solid #e5e7eb; padding-top: 15px; display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; }
 
         /* --- CASH BILL PAGE --- */
         .bill-container { display: grid; grid-template-columns: 1fr 350px; gap: 24px; }
@@ -404,9 +320,12 @@
         .slot-item.booked { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; text-decoration: line-through; border-color: transparent; }
         .slot-item.blocked { background: #fee2e2; color: #ef4444; cursor: not-allowed; border: 1px solid #fecaca; opacity: 0.8; }
         .form-panel { padding: 20px; overflow-y: auto; }
+        
+        /* IMPROVED: Live Summary Panel */
         .live-summary { background: var(--primary-light); border: 1px solid var(--secondary); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
         .live-summary h5 { font-size: 0.75rem; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 8px; letter-spacing: 0.05em; }
         .live-summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
+        .live-summary-val { font-weight: 700; color: var(--primary-dark); text-align: right; }
 
         .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
         .slot-btn { padding: 10px; text-align: center; border: 2px solid #e2e8f0; border-radius: 12px; background: white; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 70px; transition: 0.2s; }
@@ -536,10 +455,10 @@
             <li class="nav-item" onclick="navigateTo('booking')"><i class="fa-solid fa-calendar-plus"></i> New Booking</li>
             <li class="nav-item" onclick="navigateTo('cashbill')"><i class="fa-solid fa-cash-register"></i> Cash Bill</li>
             <li class="nav-item" onclick="navigateTo('billing')"><i class="fa-solid fa-file-invoice-dollar"></i> Reports</li>
-            <li class="nav-item" id="nav-staff" onclick="navigateTo('staff')" style="display:none;"><i class="fa-solid fa-users-cog"></i> Staff Management</li>
+            <li class="nav-item" id="nav-staff" onclick="navigateTo('staff')" style="display:none;"><i class="fa-solid fa-users-cog"></i> Staff Mgmt</li>
             <li class="nav-item" onclick="navigateTo('patients')"><i class="fa-solid fa-user-doctor"></i> Patients</li>
             <li class="nav-item" onclick="navigateTo('services')"><i class="fa-solid fa-notes-medical"></i> Services</li>
-            <li class="nav-item" onclick="navigateTo('slots')"><i class="fa-regular fa-clock"></i> Slot Management</li>
+            <li class="nav-item" onclick="navigateTo('slots')"><i class="fa-regular fa-clock"></i> Slot Mgmt</li>
         </ul>
         <div class="sidebar-footer">
             <div class="user-pill" onclick="openProfile()">
@@ -613,7 +532,7 @@
                         <div class="table-header-actions">
                             <div class="search-container">
                                 <i class="fa-solid fa-search search-icon"></i>
-                                <input type="text" class="search-input" placeholder="Search name, date, service..." oninput="handleSearch('appointments', this.value)">
+                                <input type="text" class="search-input" placeholder="Search name, service, date..." oninput="handleSearch('appointments', this.value)">
                             </div>
                             <select class="sort-select" onchange="handleSort('appointments', this.value)">
                                 <option value="desc">Newest First</option>
@@ -634,7 +553,7 @@
                         <div class="table-header-actions">
                             <div class="search-container">
                                 <i class="fa-solid fa-search search-icon"></i>
-                                <input type="text" class="search-input" placeholder="Search history..." oninput="handleSearch('history', this.value)">
+                                <input type="text" class="search-input" placeholder="Search history, service..." oninput="handleSearch('history', this.value)">
                             </div>
                             <select class="sort-select" onchange="handleSort('history', this.value)">
                                 <option value="desc">Newest First</option>
@@ -662,7 +581,7 @@
                 </div>
             </section>
 
-            <!-- CASH BILL (IMPROVED) -->
+            <!-- CASH BILL -->
             <section id="view-cashbill" class="view-section">
                 <!-- Cashbill List View (Default) -->
                 <div id="cashbill-list-view">
@@ -814,7 +733,7 @@
                 </div>
             </section>
 
-            <!-- PROFESSIONAL INVOICE (UPDATED LAYOUT) -->
+            <!-- PROFESSIONAL INVOICE -->
             <section id="view-bill-detail" class="view-section">
                 <div class="no-print" style="margin-bottom: 20px;">
                     <button class="btn-sm" onclick="navigateTo('cashbill')"><i class="fa-solid fa-arrow-left"></i> Back to Cash Bills</button>
@@ -910,7 +829,7 @@
                 </div>
             </section>
 
-            <!-- STAFF MANAGEMENT (RESTRICTED + SUPERADMIN TABLE) -->
+            <!-- STAFF MANAGEMENT -->
             <section id="view-staff" class="view-section">
                 <!-- Regular Staff Table -->
                 <div class="section-card" style="position:relative;">
@@ -930,7 +849,7 @@
                     <div id="pag-staff" class="pagination-bar"></div>
                 </div>
 
-                <!-- SuperAdmin / System Developer Table (Improved Styling) -->
+                <!-- SuperAdmin / System Developer Table -->
                 <div class="section-card super-admin-card">
                      <div class="table-header">
                         <h3><i class="fa-solid fa-user-shield" style="color:var(--danger); margin-right:8px;"></i>SuperAdmin / System Developer</h3>
@@ -1093,7 +1012,7 @@
 
                                     <h4 style="margin:20px 0 15px; color:var(--primary); font-size:1rem;">Service</h4>
                                     <div style="margin-bottom:15px;">
-                                        <select id="bk-service" class="form-input" onchange="checkBookingFormComplete()">
+                                        <select id="bk-service" class="form-input" onchange="updateBookingServiceSummary()">
                                             <option value="" disabled selected>-- Choose Service --</option>
                                         </select>
                                     </div>
@@ -1145,7 +1064,7 @@
         </div>
     </div>
 
-    <!-- 3. Staff Edit Modal (UPDATED FOR AUTH) -->
+    <!-- 3. Staff Edit Modal -->
     <div class="modal-overlay" id="editStaffModal">
         <div class="modal-content">
             <div class="modal-header"><h3 id="staff-modal-title">Manage Staff</h3><button onclick="closeModal('editStaffModal')"><i class="fa-solid fa-xmark"></i></button></div>
@@ -1174,7 +1093,6 @@
                     </select>
                 </div>
                 
-                <!-- Email & Username for Auth -->
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Email <span style="color:var(--danger)">*</span></label><input type="email" id="edit-staff-email" class="form-input" placeholder="staff@clinic.com"></div>
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Username</label><input type="text" id="edit-staff-u" class="form-input"></div>
                 
@@ -1394,7 +1312,6 @@
         };
 
         // --- PAGINATION STATE ---
-        // Keys correspond to table IDs
         let paginationConfig = {
             'appointments-upcoming': { page: 1, limit: 10 },
             'appointments-history': { page: 1, limit: 10 },
@@ -1419,8 +1336,6 @@
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
                     // User is signed in, fetch staff details
-                    const staffDoc = await db.collection('klinikazam_staff').doc(user.email).get(); // Assume email is stored as doc ID or we search
-                    // Better approach: Query staff by email
                     const q = await db.collection('klinikazam_staff').where('email', '==', user.email).get();
                     
                     if(!q.empty) {
@@ -1434,13 +1349,10 @@
                         showLoading(false);
                         navigateTo('dashboard');
                     } else {
-                        // Auth user exists but no DB record (should not happen if signup logic is correct)
                         showToast("Error: Staff record not found.");
                         auth.signOut();
                     }
                 } else {
-                    // User is signed out
-                    // Check local session? No, we rely on Firebase Auth now.
                     document.getElementById('login-screen').classList.remove('hidden');
                 }
             });
@@ -1472,7 +1384,7 @@
             let nextNum = 1;
             if (!snapshot.empty) {
                 const lastDoc = snapshot.docs[0];
-                const lastId = lastDoc.id; // Assuming ID field matches Doc ID for Smart ID
+                const lastId = lastDoc.id; 
                 const parts = lastId.split('-');
                 const lastNum = parseInt(parts[parts.length - 1]);
                 if (!isNaN(lastNum)) {
@@ -1559,7 +1471,7 @@
             applyRoleBasedUI();
         }
 
-        // --- AUTHENTICATION (UPDATED) ---
+        // --- AUTHENTICATION ---
         async function handleLogin(e) {
             e.preventDefault();
             const u = document.getElementById('username').value;
@@ -1579,7 +1491,6 @@
 
             try {
                 await auth.signInWithEmailAndPassword(email, p);
-                // Auth listener will handle the rest
                 loginError.innerText = "";
             } catch (error) {
                 console.error(error);
@@ -1734,7 +1645,6 @@
             const config = paginationConfig[viewKey];
             const totalPages = Math.ceil(totalItems / config.limit);
             
-            // Don't render if 0 or 1 page (optional, but good UX)
             if(totalItems === 0) {
                 container.innerHTML = '';
                 return;
@@ -1764,7 +1674,6 @@
             const newPage = config.page + delta;
             if(newPage > 0) {
                 config.page = newPage;
-                // Trigger re-render of the specific view
                 if(viewKey.includes('appointments')) renderAppointments();
                 else if(viewKey === 'patients') renderPatients();
                 else if(viewKey === 'staff') renderStaff();
@@ -1775,8 +1684,7 @@
 
         function changePaginationLimit(viewKey, limit) {
             paginationConfig[viewKey].limit = parseInt(limit);
-            paginationConfig[viewKey].page = 1; // Reset to first page
-            // Trigger re-render
+            paginationConfig[viewKey].page = 1; 
             if(viewKey.includes('appointments')) renderAppointments();
             else if(viewKey === 'patients') renderPatients();
             else if(viewKey === 'staff') renderStaff();
@@ -1784,7 +1692,6 @@
             else if(viewKey === 'cashbill') renderCashbillList();
         }
 
-        // --- SORTING HANDLER ---
         function handleSort(type, value) {
             sortState[type] = value;
             if(type === 'appointments' || type === 'history') renderAppointments();
@@ -1806,9 +1713,14 @@
             todaysAppts.sort((a,b) => a.time.localeCompare(b.time)).forEach(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
-                const sId = a.items && a.items[0] ? a.items[0].id : null;
-                const sName = sId ? (services.find(s => s.id === sId)?.name || "Service") : "Unknown";
                 
+                // IMPROVED: Get Service Name reliably
+                let sName = "Unknown";
+                if(a.items && a.items.length > 0) {
+                    const s = services.find(svc => svc.id == a.items[0].id);
+                    sName = s ? s.name : "Unknown";
+                }
+
                 tbody.innerHTML += `
                 <tr>
                     <td style="font-weight:700;">${a.time}</td>
@@ -1844,7 +1756,6 @@
             const sortVal = sortState.appointments;
             
             let schedule = appointments.filter(a => a.status !== 'Cancelled' && a.status !== 'Completed');
-            // Sorting
             schedule.sort((a,b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
@@ -1856,7 +1767,13 @@
                 filteredSchedule = schedule.filter(a => {
                     const p = patients.find(pt => pt.id === a.patient_id);
                     const pName = p ? p.name.toLowerCase() : '';
-                    const sName = a.items ? a.items.map(i => services.find(s=>s.id===i.id)?.name).join(', ').toLowerCase() : '';
+                    // IMPROVED: Get Service Name for search
+                    let sName = "";
+                    if(a.items && a.items.length > 0) {
+                        const s = services.find(svc => svc.id == a.items[0].id);
+                        sName = s ? s.name.toLowerCase() : "";
+                    }
+                    
                     return pName.includes(queryAppt) || sName.includes(queryAppt) || a.date.includes(queryAppt);
                 });
             }
@@ -1869,8 +1786,14 @@
                 const p = patients.find(pt => pt.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
                 const pPhone = p ? p.phone : '-';
-                const sName = a.items ? a.items.map(i => services.find(s=>s.id===i.id)?.name).join(', ') : "Unknown";
                 
+                // IMPROVED: Get Service Name
+                let sName = "Unknown";
+                if(a.items && a.items.length > 0) {
+                    const s = services.find(svc => svc.id == a.items[0].id);
+                    sName = s ? s.name : "Unknown";
+                }
+
                 tBody.innerHTML += `
                 <tr>
                     <td>${formatDateDisplay(a.date)}</td>
@@ -1901,14 +1824,18 @@
                 return histSort === 'desc' ? dateB - dateA : dateA - dateB;
             });
 
-            // Filter history
             const queryHist = document.querySelectorAll('#view-appointments .search-input')[1]?.value.toLowerCase() || '';
             let filteredHist = history;
             if(queryHist) {
                 filteredHist = history.filter(a => {
                     const p = patients.find(pt => pt.id === a.patient_id);
                     const pName = p ? p.name.toLowerCase() : '';
-                    const sName = a.items ? a.items.map(i => services.find(s=>s.id===i.id)?.name).join(', ').toLowerCase() : '';
+                    // IMPROVED: Get Service Name for History search
+                    let sName = "";
+                    if(a.items && a.items.length > 0) {
+                        const s = services.find(svc => svc.id == a.items[0].id);
+                        sName = s ? s.name.toLowerCase() : "";
+                    }
                     return pName.includes(queryHist) || sName.includes(queryHist);
                 });
             }
@@ -1919,7 +1846,14 @@
             pagedHist.data.forEach(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
-                const sName = a.items ? a.items.map(i => services.find(s=>s.id===i.id)?.name).join(', ') : "Unknown";
+                
+                // IMPROVED: Get Service Name for History table
+                let sName = "Unknown";
+                if(a.items && a.items.length > 0) {
+                    const s = services.find(svc => svc.id == a.items[0].id);
+                    sName = s ? s.name : "Unknown";
+                }
+                
                 const invDisplay = a.invoice_id || `INV-${a.id}`;
                 hBody.innerHTML += `
                 <tr>
@@ -1939,14 +1873,18 @@
             let cancelled = appointments.filter(a => a.status === 'Cancelled');
             cancelled.sort((a,b) => new Date(b.date) - new Date(a.date));
             
-            // Filter cancelled
             const queryCancel = document.querySelectorAll('#view-appointments .search-input')[2]?.value.toLowerCase() || '';
             let filteredCancel = cancelled;
             if(queryCancel) {
                 filteredCancel = cancelled.filter(a => {
                     const p = patients.find(p => p.id === a.patient_id);
                     const pName = p ? p.name.toLowerCase() : '';
-                    const sName = a.items ? a.items.map(i => services.find(s=>s.id===i.id)?.name).join(', ').toLowerCase() : "";
+                    // IMPROVED: Service name search in cancelled
+                    let sName = "";
+                    if(a.items && a.items.length > 0) {
+                        const s = services.find(svc => svc.id == a.items[0].id);
+                        sName = s ? s.name.toLowerCase() : "";
+                    }
                     return pName.includes(queryCancel) || sName.includes(queryCancel);
                 });
             }
@@ -1957,8 +1895,14 @@
             pagedCancel.data.forEach(a => {
                 const p = patients.find(p => p.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
-                const sName = a.items ? a.items.map(i => services.find(s=>s.id===i.id)?.name).join(', ') : "Unknown";
                 
+                // IMPROVED: Service name in cancelled table
+                let sName = "Unknown";
+                if(a.items && a.items.length > 0) {
+                    const s = services.find(svc => svc.id == a.items[0].id);
+                    sName = s ? s.name : "Unknown";
+                }
+
                 const delBtn = (currentUser.role === 'SuperAdmin' && a.id !== currentUser.id) 
                     ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
 
@@ -2284,8 +2228,9 @@
                     const pPhone = p ? p.phone : '-';
                     const displayId = a.invoice_id || `INV-${a.id}`;
                     
+                    // IMPROVED: Generate item string correctly
                     let itemsStr = a.items.map(i => {
-                        const s = services.find(sv => sv.id === i.id);
+                        const s = services.find(s => s.id == i.id);
                         return `${s ? s.name : 'Unknown'} (x${i.qty})`;
                     }).join(', ');
                     
@@ -2320,13 +2265,21 @@
             .sort((a,b) => new Date(b.date) - new Date(a.date)) 
             .map(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
+                // IMPROVED: Service Name in CSV Export
+                let serviceName = "Unknown";
+                if(a.items && a.items.length > 0) {
+                    const s = services.find(svc => svc.id == a.items[0].id);
+                    serviceName = s ? s.name : "Unknown";
+                }
+
                 return {
                     Date: a.date,
                     Time: a.time,
                     Patient: p ? p.name : 'Unknown',
                     Phone: p ? p.phone : '-',
                     Invoice: a.invoice_id || '-',
-                    Total: a.items.reduce((sum, i) => sum + (i.price * i.qty), 0)
+                    Total: a.items.reduce((sum, i) => sum + (i.price * i.qty), 0),
+                    Service: serviceName
                 };
             });
 
@@ -2349,7 +2302,7 @@
             showToast("Report Downloaded");
         }
 
-        // --- INVOICE VIEW (UPDATED LAYOUT) ---
+        // --- INVOICE VIEW ---
         async function viewBillDetail(id) {
             const a = appointments.find(x => x.id === id);
             if(!a) return;
@@ -2364,7 +2317,6 @@
                 showToast("Invoice ID Generated");
             }
 
-            // Populate New Invoice Layout
             document.getElementById('inv-no').innerText = a.invoice_id || 'Pending Generation';
             document.getElementById('inv-date').innerText = formatDateDisplay(a.date);
             
@@ -2380,7 +2332,8 @@
 
             if(a.items) {
                 a.items.forEach((item, index) => {
-                    const s = services.find(s => s.id === item.id);
+                    // IMPROVED: Ensure service name is found correctly in invoice
+                    const s = services.find(s => s.id == item.id);
                     const name = s ? s.name : 'Unknown Service';
                     const lineTotal = item.price * item.qty;
                     total += lineTotal;
@@ -2407,7 +2360,7 @@
             openInvoice(currentBillAppt.id);
         }
 
-        // --- CALENDAR & BOOKING (UPDATED DATE RULE) ---
+        // --- CALENDAR & BOOKING ---
         function renderCalendar(date) {
             const year = date.getFullYear();
             const month = date.getMonth();
@@ -2430,7 +2383,6 @@
                 const el = document.createElement('div');
                 let classes = 'cal-day';
                 
-                // Check if Sunday (0)
                 const isSunday = dayDate.getDay() === 0;
 
                 if(dateStr < minBookingDate) classes += ' disabled';
@@ -2444,7 +2396,6 @@
                 const apptCount = appointments.filter(a => a.date === dateStr && a.status !== 'Cancelled').length;
                 const isFull = apptCount >= defaultSlots.length;
 
-                // Disable if Sunday, Closed, Full, or Past date
                 if(isClosed || isFull || dateStr < minBookingDate || isSunday) classes += ' disabled';
                 el.className = classes;
                 
@@ -2519,6 +2470,20 @@
             el.classList.add('selected');
             document.getElementById('slot-sub-display').innerText = `Selected: ${time}`;
             document.getElementById('summary-time').innerText = time;
+            checkBookingFormComplete();
+        }
+
+        // --- IMPROVED: Update Service Summary in Booking ---
+        function updateBookingServiceSummary() {
+            const sId = document.getElementById('bk-service').value;
+            const summaryVal = document.getElementById('summary-service');
+            
+            if(sId) {
+                const s = services.find(svc => svc.id == sId);
+                summaryVal.innerText = s ? s.name : "Unknown Service";
+            } else {
+                summaryVal.innerText = "-";
+            }
             checkBookingFormComplete();
         }
 
@@ -2673,7 +2638,9 @@
             document.getElementById('confirm-booking-btn').disabled = true;
             document.getElementById('slot-date-display').innerText = "Select a Date";
             document.getElementById('booking-slots-list').innerHTML = `<div style="text-align:center; color:var(--text-light); margin-top:30px; font-size:0.85rem;"><i class="fa-regular fa-calendar" style="font-size:1.5rem; margin-bottom:8px; opacity:0.3;"></i><br>Select date from calendar</div>`;
-            document.getElementById('summary-date').innerText = "-"; document.getElementById('summary-time').innerText = "-";
+            document.getElementById('summary-date').innerText = "-"; 
+            document.getElementById('summary-time').innerText = "-";
+            document.getElementById('summary-service').innerText = "-"; // Reset service summary
             renderCalendar(currentCalDate);
             initCustomPatientSearch(); 
         }
@@ -2954,9 +2921,15 @@
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">No history found.</td></tr>';
             } else {
                 history.forEach(a => {
-                    const s = services.find(x => x.id === (a.items && a.items[0] ? a.items[0].id : null));
+                    // IMPROVED: Show service name in history modal
+                    let sName = "Unknown";
+                    if(a.items && a.items.length > 0) {
+                        const s = services.find(svc => svc.id == a.items[0].id);
+                        sName = s ? s.name : "Unknown";
+                    }
+
                     const invId = a.invoice_id || `INV-${a.id}`;
-                    tbody.innerHTML += `<tr><td>${a.date}</td><td>${s ? s.name : 'Unknown'}</td><td>${invId}</td></tr>`;
+                    tbody.innerHTML += `<tr><td>${a.date}</td><td>${sName}</td><td>${invId}</td></tr>`;
                 });
             }
             showModal('historyModal');
@@ -2994,7 +2967,7 @@
     await refreshData();
 }
 
-// --- STAFF CRUD (UPDATED FOR AUTH) ---
+// --- STAFF CRUD ---
 async function renderStaff() {
     const tbody = document.querySelector('#staff-table tbody');
     const saBody = document.querySelector('#superadmin-table tbody');
@@ -3020,16 +2993,13 @@ async function renderStaff() {
         addBtn.style.display = 'none';
     }
 
-    // Separate SuperAdmins and regular staff
     const superAdmins = filtered.filter(s => s.role === 'SuperAdmin');
     const regularStaff = filtered.filter(s => s.role !== 'SuperAdmin');
 
-    // Render SuperAdmins (No Pagination usually for small lists)
     superAdmins.forEach(s => {
         saBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}<br><small>${s.email||''}</small></td><td>-</td></tr>`;
     });
 
-    // Paginate Regular Staff
     const pagedData = getPaginatedData(regularStaff, 'staff');
     pagedData.data.forEach(s => {
         let editBtn = '';
@@ -3046,7 +3016,6 @@ async function renderStaff() {
              editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
         }
 
-        // Send Password Reset (Only SuperAdmin)
         if(isSuperAdmin && s.email) {
             resetBtn = `<button class="btn-sm btn-reset" onclick="sendPasswordReset('${s.email}')" title="Send Reset Email"><i class="fa-solid fa-key"></i></button>`;
         }
@@ -3096,7 +3065,7 @@ function openEditStaff(id) {
 }
 
 async function sendPasswordReset(email) {
-    if(confirm(`Send                 password reset email to ${email}?`)) {
+    if(confirm(`Send password reset email to ${email}?`)) {
                 try {
                     await auth.sendPasswordResetEmail(email);
                     showToast("Reset email sent!");
@@ -3124,7 +3093,6 @@ async function sendPasswordReset(email) {
             }
 
             if(id) {
-                // Update existing
                 const targetStaff = staff.find(x => x.id === id);
                 if(currentUser.role === 'Admin' && targetStaff.role === 'SuperAdmin') {
                     showToast("Unauthorized");
@@ -3132,17 +3100,12 @@ async function sendPasswordReset(email) {
                 }
                 const updateData = { name, job_title: jobTitle, username: u, email };
                 if(role !== targetStaff.role) updateData.role = role; 
-                // Password update handled via Reset Email flow usually, or if provided
-                // We can't easily update password in Firebase Auth without re-auth.
-                // We will skip password update here to keep logic simple and secure, rely on Reset.
                 await db.collection('klinikazam_staff').doc(id).update(updateData);
             } else {
-                // New Staff - Create Auth User
                 if(!p || p.length < 6) { showToast("Password must be at least 6 chars"); return; }
                 
                 try {
                     showLoading(true);
-                    // Check if email exists in Firestore first
                     const existing = await db.collection('klinikazam_staff').where('email', '==', email).get();
                     if(!existing.empty) {
                         throw new Error("Email already in use by another staff.");
@@ -3161,7 +3124,6 @@ async function sendPasswordReset(email) {
                     };
                     await db.collection('klinikazam_staff').doc(smartId).set(newStaff);
                     
-                    // Sign out the newly created user immediately so we stay logged in as Admin
                     await userCredential.user.delete(); 
                     
                     showToast("Staff Created. Please log in again to continue.");
@@ -3175,7 +3137,7 @@ async function sendPasswordReset(email) {
                     showLoading(false);
                     return;
                 }
-                return; // Return early as reload handles UI
+                return; 
             }
 
             await refreshData(); 
@@ -3220,10 +3182,8 @@ async function sendPasswordReset(email) {
             const price = parseFloat(document.getElementById('edit-service-price').value);
 
             if(id) {
-                // Update existing service
                 await db.collection('klinikazam_services').doc(id.toString()).update({ name, price });
             } else {
-                // Create new service
                 const newSvc = { id: Date.now(), name, price }; 
                 await db.collection('klinikazam_services').doc(newSvc.id.toString()).set(newSvc);
             }
@@ -3239,7 +3199,7 @@ async function sendPasswordReset(email) {
             const dateVal = document.getElementById('slotDate').value;
             const grid = document.getElementById('slotGrid');
             const btn = document.getElementById('clinicStatusBtn');
-            grid.innerHTML = `<div style="grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 150px;"><div class="spinner"></div></div>`;
+            grid.innerHTML = `<div style="grid-column: 1/-1; display: flex; flex-direction: column; align            ; justify-content: center; height: 150px;"><div class="spinner"></div></div>`;
 
             const isClosed = slotExceptions.some(e => e.date === dateVal && e.type === 'closed');
             
@@ -3352,23 +3312,18 @@ async function sendPasswordReset(email) {
             showToast("Deleted Successfully");
         }
 
-        // --- WHATSAPP MESSAGING (UPDATED) ---
+        // --- WHATSAPP MESSAGING ---
         function sendWhatsapp(name, date, time, phone) {
             let cleanPhone = phone.replace(/[^0-9]/g, '');
             if(cleanPhone.startsWith('0')) cleanPhone = '60' + cleanPhone.substring(1);
             const displayDate = formatDateDisplay(date);
             
-            // 📌 1) WhatsApp Auto Reminder (Sebelum Temujanji)
-            // Determining message type based on status or context usually, 
-            // but here assuming 'Pending' appointment gets a reminder.
-            // If status is 'Completed', we send "Thank You" message.
-            
             let message = "";
             const appt = appointments.find(a => a.date === date && a.time === time);
-            const status = appt ? appt.status : 'Pending'; // Default to pending if unknown
+            const status = appt ? appt.status : 'Pending'; 
 
             if (status === 'Completed') {
-                // 🌿 2) WhatsApp Thank You (Selepas Lawatan Pesakit)
+                // 🌿 WhatsApp Thank You (Selepas Lawatan Pesakit)
                 message = `Terima kasih kerana berkunjung ke Azam Dental SP Saujana hari ini.
 
 Kami berharap rawatan yang diberikan memuaskan.
@@ -3377,7 +3332,7 @@ Sekiranya terdapat sebarang ketidakselesaan atau pertanyaan selepas rawatan, sil
 Kami menghargai kepercayaan anda dan berharap dapat berkhidmat kepada anda lagi.
 — Azam Dental SP Saujana`;
             } else {
-                // 📌 1) WhatsApp Auto Reminder (Sebelum Temujanji)
+                // 📌 WhatsApp Auto Reminder (Sebelum Temujanji)
                 message = `Assalamualaikum & Salam Sejahtera,
 
 Ini adalah peringatan temujanji anda bersama Azam Dental SP Saujana:
