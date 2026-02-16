@@ -13,7 +13,7 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Firebase SDK (Added Auth) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -141,9 +141,9 @@
         .brand { height: var(--header-height); display: flex; align-items: center; padding: 0 24px; font-size: 1.1rem; font-weight: 800; color: var(--primary-dark); border-bottom: 1px solid #f1f5f9; }
         .nav-menu { flex: 1; padding: 20px 16px; list-style: none; overflow-y: auto; }
         .nav-item { display: flex; align-items: center; padding: 12px 16px; margin-bottom: 4px; color: var(--text-light); font-weight: 500; border-radius: var(--radius); cursor: pointer; transition: var(--transition); font-size: 0.9rem; white-space: nowrap; }
-        .nav-item i { width: 26px; font-size: 1.1rem; margin-right: 12px; text-align: center; color: var(--primary); transition: color 0.2s; }
+        .nav-item svg { width: 20px; height: 20px; margin-right: 12px; stroke: var(--primary); transition: stroke 0.2s; flex-shrink: 0; }
         .nav-item:hover { background: #f0f9ff; color: var(--primary-dark); }
-        .nav-item:hover i { color: var(--primary-dark); }
+        .nav-item:hover svg { stroke: var(--primary-dark); }
         .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; padding-left: 12px; }
         .sidebar-footer { padding: 16px; border-top: 1px solid #f1f5f9; }
         .user-pill { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 12px; background: #f8fafc; cursor: pointer; border: 1px solid transparent; transition: var(--transition); }
@@ -332,6 +332,40 @@
         .slot-btn:hover:not(.booked):not(.blocked) { border-color: var(--primary); color: var(--primary); }
         .slot-btn.blocked { border-color: #fca5a5; color: #ef4444; background: #fee2e2; }
         .slot-btn.booked { border-color: var(--primary); background: var(--info-bg); color: var(--primary-dark); cursor: not-allowed; }
+        
+        /* --- SLOT MANAGEMENT STYLES --- */
+        .slot-mgmt-header {
+            display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .status-indicator {
+            display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 50px; font-weight: 700; font-size: 0.85rem;
+        }
+        .status-open { background: var(--success-bg); color: #15803d; border: 1px solid #bbf7d0; }
+        .status-closed { background: var(--danger-bg); color: #b91c1c; border: 1px solid #fecaca; }
+        .action-btn-group { display: flex; gap: 8px; }
+        
+        .slot-status-legend {
+            display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.8rem;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
+        
+        .slot-card {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;
+            border: 2px solid var(--border-light); border-radius: var(--radius); background: white; 
+            cursor: pointer; transition: 0.2s; min-height: 80px;
+        }
+        .slot-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .slot-card.available { border-color: var(--border-light); background: #fff; }
+        .slot-card.booked { border-color: var(--primary); background: var(--primary-light); cursor: default; opacity: 0.9; }
+        .slot-card.blocked { border-color: var(--danger); background: var(--danger-bg); }
+        .slot-card.blocked:hover { background: #fecaca; }
+        
+        .slot-card .time { font-weight: 700; font-size: 0.95rem; }
+        .slot-card .label { font-size: 0.7rem; margin-top: 4px; text-transform: uppercase; font-weight: 600; }
+        .slot-card.booked .label { color: var(--primary-dark); }
+        .slot-card.blocked .label { color: var(--danger); }
+
 
         /* --- UI ELEMENTS --- */
         .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; }
@@ -450,15 +484,94 @@
             Klinik Pergigian Azam <br> SP Saujana
         </div>
         <ul class="nav-menu">
-            <li class="nav-item" onclick="navigateTo('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
-            <li class="nav-item" onclick="navigateTo('appointments')"><i class="fa-regular fa-calendar-check"></i> Appointments</li>
-            <li class="nav-item" onclick="navigateTo('booking')"><i class="fa-solid fa-calendar-plus"></i> New Booking</li>
-            <li class="nav-item" onclick="navigateTo('cashbill')"><i class="fa-solid fa-cash-register"></i> Cash Bill</li>
-            <li class="nav-item" onclick="navigateTo('billing')"><i class="fa-solid fa-file-invoice-dollar"></i> Reports</li>
-            <li class="nav-item" id="nav-staff" onclick="navigateTo('staff')" style="display:none;"><i class="fa-solid fa-users-cog"></i> Staff Mgmt</li>
-            <li class="nav-item" onclick="navigateTo('patients')"><i class="fa-solid fa-user-doctor"></i> Patients</li>
-            <li class="nav-item" onclick="navigateTo('services')"><i class="fa-solid fa-notes-medical"></i> Services</li>
-            <li class="nav-item" onclick="navigateTo('slots')"><i class="fa-regular fa-clock"></i> Slot Mgmt</li>
+            <li class="nav-item" onclick="navigateTo('dashboard')">
+                <!-- Dashboard Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="4" width="6" height="6" rx="1.2"/>
+                  <rect x="14" y="4" width="6" height="6" rx="1.2"/>
+                  <rect x="4" y="14" width="6" height="6" rx="1.2"/>
+                  <rect x="14" y="14" width="6" height="6" rx="1.2"/>
+                </svg>
+                Dashboard
+            </li>
+            <li class="nav-item" onclick="navigateTo('appointments')">
+                <!-- Appointments Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                  <polyline points="9 14 11 16 15 12"/>
+                </svg>
+                Appointments
+            </li>
+            <li class="nav-item" onclick="navigateTo('booking')">
+                <!-- New Booking Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                  <line x1="12" y1="13" x2="12" y2="17"/>
+                  <line x1="10" y1="15" x2="14" y2="15"/>
+                </svg>
+                New Booking
+            </li>
+            <li class="nav-item" onclick="navigateTo('cashbill')">
+                <!-- Cash Bill Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <path d="M6 10h12M6 14h12"/>
+                  <circle cx="12" cy="12" r="2.5"/>
+                </svg>
+                Cash Bill
+            </li>
+            <li class="nav-item" onclick="navigateTo('billing')">
+                <!-- Reports Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="8" y1="13" x2="16" y2="13"/>
+                  <line x1="8" y1="17" x2="14" y2="17"/>
+                  <line x1="8" y1="9" x2="12" y2="9"/>
+                </svg>
+                Reports
+            </li>
+            <li class="nav-item" id="nav-staff" onclick="navigateTo('staff')" style="display:none;">
+                <!-- Staff Mgmt Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="8.5" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M15.5 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Staff Mgmt
+            </li>
+            <li class="nav-item" onclick="navigateTo('patients')">
+                <!-- Patients Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Patients
+            </li>
+            <li class="nav-item" onclick="navigateTo('services')">
+                <!-- Services Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                Services
+            </li>
+            <li class="nav-item" onclick="navigateTo('slots')">
+                <!-- Slot Mgmt Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 6v6l4 2"/>
+                  <line x1="4" y1="8" x2="8" y2="8"/>
+                </svg>
+                Slot Mgmt
+            </li>
         </ul>
         <div class="sidebar-footer">
             <div class="user-pill" onclick="openProfile()">
@@ -895,19 +1008,33 @@
             <!-- SLOTS -->
             <section id="view-slots" class="view-section">
                 <div class="section-card">
-                    <div class="table-header">
-                        <h3>Manage Availability</h3>
-                        <button class="btn-sm" onclick="toggleClinicStatus()" id="clinicStatusBtn"><i class="fa-solid fa-toggle-on"></i> Set as Closed</button>
+                    <div class="slot-mgmt-header">
+                        <div>
+                            <h3 style="margin-bottom: 5px;">Manage Availability</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-light);">Select a date to manage operational hours</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                             <input type="date" id="slotDate" class="form-input" style="width:auto;" onchange="renderSlots()">
+                             <div id="clinic-status-indicator" class="status-indicator status-open">
+                                 <i class="fa-solid fa-circle-check"></i> Open
+                             </div>
+                        </div>
                     </div>
-                    <div class="table-header-actions" style="margin-bottom:10px;">
-                        <input type="date" id="slotDate" class="form-input" style="width:auto;" onchange="renderSlots()">
+
+                    <div class="slot-status-legend">
+                        <div class="legend-item"><div class="legend-dot" style="background: white; border-color: var(--border-light);"></div> Available</div>
+                        <div class="legend-item"><div class="legend-dot" style="background: var(--primary-light); border-color: var(--primary);"></div> Booked</div>
+                        <div class="legend-item"><div class="legend-dot" style="background: var(--danger-bg); border-color: var(--danger);"></div> Break/Closed</div>
                     </div>
-                    <p style="font-size:0.75rem; color:var(--text-light); margin-bottom:10px;">
-                        <span style="font-weight:700; color:var(--primary);">Blue</span> = Booked | 
-                        <span style="font-weight:700; color:var(--danger);">Red</span> = Break | 
-                        <span style="font-weight:700; color:var(--text-light);">White</span> = Available
-                    </p>
-                    <div class="slot-grid" id="slotGrid"></div>
+
+                    <div id="slot-management-grid" class="slot-grid">
+                        <!-- Slots rendered here -->
+                    </div>
+                    
+                    <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+                         <button class="btn-sm" id="bulk-close-btn" onclick="bulkToggleSlots('close')"><i class="fa-solid fa-lock"></i> Close All Slots</button>
+                         <button class="btn-sm" id="bulk-open-btn" onclick="bulkToggleSlots('open')"><i class="fa-solid fa-lock-open"></i> Open All Slots</button>
+                    </div>
                 </div>
             </section>
 
@@ -1291,7 +1418,7 @@
         const SESSION_KEY = 'clinicUser';
         const todayStr = new Date().toISOString().split('T')[0];
         
-        // MIN BOOKING DATE IS TOMORROW (Request: Cannot booking on the same day)
+        // MIN BOOKING DATE IS TOMORROW
         const todayObj = new Date();
         const tomorrowObj = new Date(todayObj);
         tomorrowObj.setDate(tomorrowObj.getDate() + 1);
@@ -1303,7 +1430,7 @@
         let currentBillAppt = null;
         let historyPatientId = null;
 
-        // Sort State (Default: Newest First)
+        // Sort State
         let sortState = {
             appointments: 'desc',
             history: 'desc',
@@ -1335,7 +1462,6 @@
             // Auth State Listener
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
-                    // User is signed in, fetch staff details
                     const q = await db.collection('klinikazam_staff').where('email', '==', user.email).get();
                     
                     if(!q.empty) {
@@ -1479,7 +1605,6 @@
             const loginError = document.getElementById('loginError');
             let email = u;
 
-            // If input doesn't contain '@', assume it's a Username
             if (!u.includes('@')) {
                 const q = await db.collection('klinikazam_staff').where('username', '==', u).limit(1).get();
                 if (q.empty) {
@@ -1713,8 +1838,6 @@
             todaysAppts.sort((a,b) => a.time.localeCompare(b.time)).forEach(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
-                
-                // IMPROVED: Get Service Name reliably
                 let sName = "Unknown";
                 if(a.items && a.items.length > 0) {
                     const s = services.find(svc => svc.id == a.items[0].id);
@@ -1767,7 +1890,6 @@
                 filteredSchedule = schedule.filter(a => {
                     const p = patients.find(pt => pt.id === a.patient_id);
                     const pName = p ? p.name.toLowerCase() : '';
-                    // IMPROVED: Get Service Name for search
                     let sName = "";
                     if(a.items && a.items.length > 0) {
                         const s = services.find(svc => svc.id == a.items[0].id);
@@ -1787,7 +1909,6 @@
                 const pName = p ? p.name : 'Unknown';
                 const pPhone = p ? p.phone : '-';
                 
-                // IMPROVED: Get Service Name
                 let sName = "Unknown";
                 if(a.items && a.items.length > 0) {
                     const s = services.find(svc => svc.id == a.items[0].id);
@@ -1830,7 +1951,6 @@
                 filteredHist = history.filter(a => {
                     const p = patients.find(pt => pt.id === a.patient_id);
                     const pName = p ? p.name.toLowerCase() : '';
-                    // IMPROVED: Get Service Name for History search
                     let sName = "";
                     if(a.items && a.items.length > 0) {
                         const s = services.find(svc => svc.id == a.items[0].id);
@@ -1846,8 +1966,6 @@
             pagedHist.data.forEach(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
-                
-                // IMPROVED: Get Service Name for History table
                 let sName = "Unknown";
                 if(a.items && a.items.length > 0) {
                     const s = services.find(svc => svc.id == a.items[0].id);
@@ -1863,7 +1981,7 @@
                     <td>${sName}</td>
                     <td><span class="badge badge-completed">Completed</span></td>
                     <td>
-                        <span class="invoice-link" onclick="viewBillDetail('${a.id}')">[${invDisplay}]</span>
+                        <button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-eye"></i> ${invDisplay}</button>
                     </td>
                 </tr>`;
             });
@@ -1879,7 +1997,6 @@
                 filteredCancel = cancelled.filter(a => {
                     const p = patients.find(p => p.id === a.patient_id);
                     const pName = p ? p.name.toLowerCase() : '';
-                    // IMPROVED: Service name search in cancelled
                     let sName = "";
                     if(a.items && a.items.length > 0) {
                         const s = services.find(svc => svc.id == a.items[0].id);
@@ -1895,8 +2012,6 @@
             pagedCancel.data.forEach(a => {
                 const p = patients.find(p => p.id === a.patient_id);
                 const pName = p ? p.name : 'Unknown';
-                
-                // IMPROVED: Service name in cancelled table
                 let sName = "Unknown";
                 if(a.items && a.items.length > 0) {
                     const s = services.find(svc => svc.id == a.items[0].id);
@@ -2059,7 +2174,7 @@
 
         function populateCashBillServices() {
             const select = document.getElementById('cb-service-select');
-            select.innerHTML = '<option value="" disabled selected>-- Select Service to Add --</option>';
+            select.innerHTML = '<option value=""             disabled selected>-- Select Service to Add --</option>';
             services.forEach(s => select.innerHTML += `<option value="${s.id}" data-price="${s.price}">${s.name} - RM ${s.price}</option>`);
         }
 
@@ -2228,7 +2343,6 @@
                     const pPhone = p ? p.phone : '-';
                     const displayId = a.invoice_id || `INV-${a.id}`;
                     
-                    // IMPROVED: Generate item string correctly
                     let itemsStr = a.items.map(i => {
                         const s = services.find(s => s.id == i.id);
                         return `${s ? s.name : 'Unknown'} (x${i.qty})`;
@@ -2265,7 +2379,6 @@
             .sort((a,b) => new Date(b.date) - new Date(a.date)) 
             .map(a => {
                 const p = patients.find(pt => pt.id === a.patient_id);
-                // IMPROVED: Service Name in CSV Export
                 let serviceName = "Unknown";
                 if(a.items && a.items.length > 0) {
                     const s = services.find(svc => svc.id == a.items[0].id);
@@ -2332,10 +2445,9 @@
 
             if(a.items) {
                 a.items.forEach((item, index) => {
-                    // IMPROVED: Ensure service name is found correctly in invoice
                     const s = services.find(s => s.id == item.id);
                     const name = s ? s.name : 'Unknown Service';
-                    const lineTotal = item.price * item.qty;
+                    const lineTotal = item.price * item.qty 
                     total += lineTotal;
 
                     tbody.innerHTML += `
@@ -2384,19 +2496,21 @@
                 let classes = 'cal-day';
                 
                 const isSunday = dayDate.getDay() === 0;
+                const isPast = dateStr < minBookingDate;
 
-                if(dateStr < minBookingDate) classes += ' disabled';
+                if(isPast) classes += ' disabled';
                 
                 if(dateStr === getLocalDateStr(new Date())) classes += ' today'; 
                 if(selectedBookingDate === dateStr) classes += ' active';
                 el.className = classes;
                 el.innerText = i;
                 
+                // Check slot exceptions for closed days
                 const isClosed = slotExceptions.some(e => e.date === dateStr && e.type === 'closed');
                 const apptCount = appointments.filter(a => a.date === dateStr && a.status !== 'Cancelled').length;
                 const isFull = apptCount >= defaultSlots.length;
 
-                if(isClosed || isFull || dateStr < minBookingDate || isSunday) classes += ' disabled';
+                if(isClosed || isFull || isPast || isSunday) classes += ' disabled';
                 el.className = classes;
                 
                 if(!classes.includes('disabled')) {
@@ -2442,14 +2556,15 @@
             list.innerHTML = '';
             
             const bookedTimes = appointments.filter(a => a.date === dateStr && a.status !== 'Cancelled' && a.status !== 'Completed').map(a => a.time);
-            const blocked = slotExceptions.filter(e => e.date === dateStr && e.type === 'blocked').map(e => e.time);
+            const blockedTimes = slotExceptions.filter(e => e.date === dateStr && e.type === 'blocked').map(e => e.time);
 
             defaultSlots.forEach(time => {
                 const isBooked = bookedTimes.includes(time);
-                const isBlocked = blocked.includes(time);
+                const isBlocked = blockedTimes.includes(time);
                 const btn = document.createElement('div');
                 let className = 'slot-item';
-                if(isBooked) {
+                
+                if (isBooked) {
                     className += ' booked';
                     btn.innerHTML = `${time} <small>Booked</small>`;
                 } else if (isBlocked) {
@@ -2473,7 +2588,6 @@
             checkBookingFormComplete();
         }
 
-        // --- IMPROVED: Update Service Summary in Booking ---
         function updateBookingServiceSummary() {
             const sId = document.getElementById('bk-service').value;
             const summaryVal = document.getElementById('summary-service');
@@ -2580,6 +2694,13 @@
                 showToast("Please select Date and Time.");
                 return;
             }
+            
+            const isBlocked = slotExceptions.some(e => e.date === selectedBookingDate && e.time === selectedBookingTime && e.type === 'blocked');
+            if(isBlocked) {
+                showToast("This slot is blocked for break time.");
+                return;
+            }
+
             const sId = document.getElementById('bk-service').value;
             const srv = services.find(s=>s.id == sId);
             const sPrice = srv ? srv.price : 0;
@@ -2640,7 +2761,7 @@
             document.getElementById('booking-slots-list').innerHTML = `<div style="text-align:center; color:var(--text-light); margin-top:30px; font-size:0.85rem;"><i class="fa-regular fa-calendar" style="font-size:1.5rem; margin-bottom:8px; opacity:0.3;"></i><br>Select date from calendar</div>`;
             document.getElementById('summary-date').innerText = "-"; 
             document.getElementById('summary-time').innerText = "-";
-            document.getElementById('summary-service').innerText = "-"; // Reset service summary
+            document.getElementById('summary-service').innerText = "-";
             renderCalendar(currentCalDate);
             initCustomPatientSearch(); 
         }
@@ -2921,7 +3042,6 @@
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">No history found.</td></tr>';
             } else {
                 history.forEach(a => {
-                    // IMPROVED: Show service name in history modal
                     let sName = "Unknown";
                     if(a.items && a.items.length > 0) {
                         const s = services.find(svc => svc.id == a.items[0].id);
@@ -2948,124 +3068,124 @@
             }
 
             const smartId = await generateSmartId('klinikazam_appointments', 'APT');
-    const manualInvId = `OLD-${date.replace(/-/g,'')}`;
+            const manualInvId = `OLD-${date.replace(/-/g,'')}`;
 
-    const newAppt = {
-        id: smartId,
-        patient_id: historyPatientId,
-        date: date,
-        time: "12:00 PM",
-        items: [{ id: sId, qty: qty, price: price }],
-        status: 'Completed',
-        payment_method: 'CASH',
-        invoice_id: manualInvId
-    };
+            const newAppt = {
+                id: smartId,
+                patient_id: historyPatientId,
+                date: date,
+                time: "12:00 PM",
+                items: [{ id: sId, qty: qty, price: price }],
+                status: 'Completed',
+                payment_method: 'CASH',
+                invoice_id: manualInvId
+            };
 
-    await db.collection('klinikazam_appointments').doc(smartId).set(newAppt);
-    showToast("Old data added successfully");
-    openHistory(historyPatientId);
-    await refreshData();
-}
+            await db.collection('klinikazam_appointments').doc(smartId).set(newAppt);
+            showToast("Old data added successfully");
+            openHistory(historyPatientId);
+            await refreshData();
+        }
 
-// --- STAFF CRUD ---
-async function renderStaff() {
-    const tbody = document.querySelector('#staff-table tbody');
-    const saBody = document.querySelector('#superadmin-table tbody');
-    
-    tbody.innerHTML = '';
-    saBody.innerHTML = '';
-    
-    const query = document.querySelector('#view-staff .search-input')?.value.toLowerCase() || '';
-    
-    let filtered = staff.filter(s => 
-        s.name.toLowerCase().includes(query) || 
-        s.role.toLowerCase().includes(query) ||
-        s.username.toLowerCase().includes(query)
-    );
+        // --- STAFF CRUD ---
+        async function renderStaff() {
+            const tbody = document.querySelector('#staff-table tbody');
+            const saBody = document.querySelector('#superadmin-table tbody');
+            
+            tbody.innerHTML = '';
+            saBody.innerHTML = '';
+            
+            const query = document.querySelector('#view-staff .search-input')?.value.toLowerCase() || '';
+            
+            let filtered = staff.filter(s => 
+                s.name.toLowerCase().includes(query) || 
+                s.role.toLowerCase().includes(query) ||
+                s.username.toLowerCase().includes(query)
+            );
 
-    const isSuperAdmin = currentUser.role === 'SuperAdmin';
-    const isAdmin = currentUser.role === 'Admin';
+            const isSuperAdmin = currentUser.role === 'SuperAdmin';
+            const isAdmin = currentUser.role === 'Admin';
 
-    const addBtn = document.getElementById('btn-add-staff');
-    if(isSuperAdmin || isAdmin) {
-        addBtn.style.display = 'inline-flex';
-    } else {
-        addBtn.style.display = 'none';
-    }
-
-    const superAdmins = filtered.filter(s => s.role === 'SuperAdmin');
-    const regularStaff = filtered.filter(s => s.role !== 'SuperAdmin');
-
-    superAdmins.forEach(s => {
-        saBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}<br><small>${s.email||''}</small></td><td>-</td></tr>`;
-    });
-
-    const pagedData = getPaginatedData(regularStaff, 'staff');
-    pagedData.data.forEach(s => {
-        let editBtn = '';
-        let deleteBtn = '';
-        let resetBtn = '';
-
-        if(isSuperAdmin) {
-            const isSelf = s.id === currentUser.id;
-            if(!isSelf) {
-                 editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
-                 deleteBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('staff', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
+            const addBtn = document.getElementById('btn-add-staff');
+            if(isSuperAdmin || isAdmin) {
+                addBtn.style.display = 'inline-flex';
+            } else {
+                addBtn.style.display = 'none';
             }
-        } else if(isAdmin) {
-             editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
+
+            const superAdmins = filtered.filter(s => s.role === 'SuperAdmin');
+            const regularStaff = filtered.filter(s => s.role !== 'SuperAdmin');
+
+            superAdmins.forEach(s => {
+                saBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}<br><small>${s.email||''}</small></td><td>-</td></tr>`;
+            });
+
+            const pagedData = getPaginatedData(regularStaff, 'staff');
+            pagedData.data.forEach(s => {
+                let editBtn = '';
+                let deleteBtn = '';
+                let resetBtn = '';
+
+                if(isSuperAdmin) {
+                    const isSelf = s.id === currentUser.id;
+                    if(!isSelf) {
+                         editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
+                         deleteBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('staff', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
+                    }
+                } else if(isAdmin) {
+                     editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
+                }
+
+                if(isSuperAdmin && s.email) {
+                    resetBtn = `<button class="btn-sm btn-reset" onclick="sendPasswordReset('${s.email}')" title="Send Reset Email"><i class="fa-solid fa-key"></i></button>`;
+                }
+
+                tbody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}<br><small>${s.email||''}</small></td><td>${editBtn} ${resetBtn} ${deleteBtn}</td></tr>`;
+            });
+
+            renderPaginationControls('staff', regularStaff.length);
         }
 
-        if(isSuperAdmin && s.email) {
-            resetBtn = `<button class="btn-sm btn-reset" onclick="sendPasswordReset('${s.email}')" title="Send Reset Email"><i class="fa-solid fa-key"></i></button>`;
+        function openEditStaff(id) {
+            if(currentUser.role === 'Staff') return;
+
+            if(!id) {
+                if(currentUser.role !== 'SuperAdmin' && currentUser.role !== 'Admin') {
+                    showToast("Unauthorized");
+                    return;
+                }
+                document.getElementById('staff-modal-title').innerText = "Add Staff";
+                document.getElementById('edit-staff-id').value = '';
+                document.getElementById('edit-staff-name').value = '';
+                document.getElementById('edit-staff-jobtitle').value = 'Assistant';
+                document.getElementById('edit-staff-role').value = 'Staff';
+                document.getElementById('edit-staff-u').value = '';
+                document.getElementById('edit-staff-p').value = '';
+                document.getElementById('edit-staff-email').value = '';
+                generateSmartId('klinikazam_staff', 'KPA').then(sid => {
+                    document.getElementById('edit-staff-sid').value = sid;
+                });
+            } else {
+                const s = staff.find(x => x.id === id);
+                if(currentUser.role === 'Admin' && s.role === 'SuperAdmin') {
+                    showToast("Unauthorized to edit SuperAdmin");
+                    return;
+                }
+                document.getElementById('staff-modal-title').innerText = "Edit Staff";
+                document.getElementById('edit-staff-id').value = id;
+                document.getElementById('edit-staff-sid').value = s.id;
+                document.getElementById('edit-staff-name').value = s.name;
+                document.getElementById('edit-staff-jobtitle').value = s.job_title || 'Staff';
+                document.getElementById('edit-staff-role').value = s.role;
+                document.getElementById('edit-staff-u').value = s.username;
+                document.getElementById('edit-staff-p').value = ''; 
+                document.getElementById('edit-staff-email').value = s.email || '';
+            }
+            showModal('editStaffModal');
         }
 
-        tbody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}<br><small>${s.email||''}</small></td><td>${editBtn} ${resetBtn} ${deleteBtn}</td></tr>`;
-    });
-
-    renderPaginationControls('staff', regularStaff.length);
-}
-
-function openEditStaff(id) {
-    if(currentUser.role === 'Staff') return;
-
-    if(!id) {
-        if(currentUser.role !== 'SuperAdmin' && currentUser.role !== 'Admin') {
-            showToast("Unauthorized");
-            return;
-        }
-        document.getElementById('staff-modal-title').innerText = "Add Staff";
-        document.getElementById('edit-staff-id').value = '';
-        document.getElementById('edit-staff-name').value = '';
-        document.getElementById('edit-staff-jobtitle').value = 'Assistant';
-        document.getElementById('edit-staff-role').value = 'Staff';
-        document.getElementById('edit-staff-u').value = '';
-        document.getElementById('edit-staff-p').value = '';
-        document.getElementById('edit-staff-email').value = '';
-        generateSmartId('klinikazam_staff', 'KPA').then(sid => {
-            document.getElementById('edit-staff-sid').value = sid;
-        });
-    } else {
-        const s = staff.find(x => x.id === id);
-        if(currentUser.role === 'Admin' && s.role === 'SuperAdmin') {
-            showToast("Unauthorized to edit SuperAdmin");
-            return;
-        }
-        document.getElementById('staff-modal-title').innerText = "Edit Staff";
-        document.getElementById('edit-staff-id').value = id;
-        document.getElementById('edit-staff-sid').value = s.id;
-        document.getElementById('edit-staff-name').value = s.name;
-        document.getElementById('edit-staff-jobtitle').value = s.job_title || 'Staff';
-        document.getElementById('edit-staff-role').value = s.role;
-        document.getElementById('edit-staff-u').value = s.username;
-        document.getElementById('edit-staff-p').value = ''; 
-        document.getElementById('edit-staff-email').value = s.email || '';
-    }
-    showModal('editStaffModal');
-}
-
-async function sendPasswordReset(email) {
-    if(confirm(`Send password reset email to ${email}?`)) {
+        async function sendPasswordReset(email) {
+            if(confirm(`Send password reset email to ${email}?`)) {
                 try {
                     await auth.sendPasswordResetEmail(email);
                     showToast("Reset email sent!");
@@ -3194,22 +3314,40 @@ async function sendPasswordReset(email) {
             showToast(id ? "Service Updated" : "Service Added");
         }
 
-        // --- SLOT MANAGEMENT ---
+        // --- IMPROVED SLOT MANAGEMENT LOGIC ---
         async function renderSlots() {
             const dateVal = document.getElementById('slotDate').value;
-            const grid = document.getElementById('slotGrid');
-            const btn = document.getElementById('clinicStatusBtn');
-            grid.innerHTML = `<div style="grid-column: 1/-1; display: flex; flex-direction: column; align            ; justify-content: center; height: 150px;"><div class="spinner"></div></div>`;
+            const grid = document.getElementById('slot-management-grid');
+            const statusIndicator = document.getElementById('clinic-status-indicator');
 
+            if(!dateVal) return;
+
+            // Check if clinic is closed for the day
             const isClosed = slotExceptions.some(e => e.date === dateVal && e.type === 'closed');
             
-            grid.innerHTML = '';
+            // Update Status Indicator
             if(isClosed) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:var(--text-light); background:#fff; border-radius:12px; font-weight:600;">Clinic Closed</div>';
-                btn.innerHTML = '<i class="fa-solid fa-toggle-off"></i> Open Clinic';
-                return;
+                statusIndicator.className = "status-indicator status-closed";
+                statusIndicator.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Closed`;
             } else {
-                btn.innerHTML = '<i class="fa-solid fa-toggle-on"></i> Set as Closed';
+                statusIndicator.className = "status-indicator status-open";
+                statusIndicator.innerHTML = `<i class="fa-solid fa-circle-check"></i> Open`;
+            }
+
+            grid.innerHTML = '';
+
+            // If closed, show simple message and option to open
+            if(isClosed) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align:center; padding: 40px; background: var(--danger-bg); border-radius: 12px; border: 1px dashed var(--danger);">
+                        <h4 style="color:var(--danger); margin-bottom: 10px;">Clinic is Closed</h4>
+                        <p style="color:var(--text-light); margin-bottom: 20px;">No slots are available for booking.</p>
+                        <button class="btn-primary" style="width:auto; background: var(--success); box-shadow: none;" onclick="toggleClinicStatus('${dateVal}', true)">
+                            <i class="fa-solid fa-door-open"></i> Open Clinic
+                        </button>
+                    </div>
+                `;
+                return;
             }
 
             const blocked = slotExceptions.filter(e => e.date === dateVal && e.type === 'blocked').map(e => e.time);
@@ -3219,59 +3357,149 @@ async function sendPasswordReset(email) {
                 const isBlocked = blocked.includes(time);
                 const booking = bookedAppts.find(a => a.time === time);
                 const p = booking ? patients.find(pt => pt.id === booking.patient_id) : null;
-                const btnDiv = document.createElement('div');
-                let className = 'slot-btn';
+                
+                const card = document.createElement('div');
                 
                 if (booking) {
-                    className += ' booked';
-                    btnDiv.innerHTML = `${time}<br><small>${p ? p.name : 'Unknown'}</small>`;
+                    card.className = 'slot-card booked';
+                    card.innerHTML = `
+                        <div class="time">${time}</div>
+                        <div class="label">Booked (${p ? p.name.split(' ')[0] : 'Unknown'})</div>
+                    `;
                 } else if (isBlocked) {
-                    className += ' blocked';
-                    btnDiv.innerHTML = `${time}<br><small>Break</small>`;
-                    // Clicking a blocked slot unblocks it
-                    btnDiv.onclick = () => toggleSlot(dateVal, time, btnDiv);
+                    card.className = 'slot-card blocked';
+                    card.innerHTML = `
+                        <div class="time">${time}</div>
+                        <div class="label">Break</div>
+                    `;
+                    card.onclick = () => toggleSlotBlock(dateVal, time, true); // Click to unblock
                 } else {
-                    btnDiv.innerHTML = time;
-                    // Clicking an available slot blocks it
-                    btnDiv.onclick = () => toggleSlot(dateVal, time, btnDiv);
+                    card.className = 'slot-card available';
+                    card.innerHTML = `
+                        <div class="time">${time}</div>
+                        <div class="label">Available</div>
+                    `;
+                    card.onclick = () => toggleSlotBlock(dateVal, time, false); // Click to block
                 }
-                btnDiv.className = className;
-                grid.appendChild(btnDiv);
+
+                grid.appendChild(card);
             });
         }
 
-        async function toggleSlot(date, time, el) {
-            // Check current status
-            const isCurrentlyBlocked = el.classList.contains('blocked');
-            const action = isCurrentlyBlocked ? "unblock" : "block";
+        async function toggleSlotBlock(date, time, isCurrentlyBlocked) {
+            const action = isCurrentlyBlocked ? "open" : "block";
             
-            if(confirm(`Sure to ${action} time for ${date} at ${time}?`)) {
-                const idx = slotExceptions.findIndex(e => e.date === date && e.time === time && e.type === 'blocked');
-                if(idx === -1) {
-                    // Add Block
-                    await db.collection('klinikazam_slots').add({ id: Date.now(), date, time, type: 'blocked' });
-                } else {
-                    // Remove Block (Unblock)
-                    await db.collection('klinikazam_slots').doc(slotExceptions[idx].id).delete();
+            if(confirm(`Are you sure you want to ${action} the slot at ${time}?`)) {
+                showLoading(true);
+                try {
+                    if (isCurrentlyBlocked) {
+                        // Remove block -> Open slot
+                        const blockRef = slotExceptions.find(e => e.date === date && e.time === time && e.type === 'blocked');
+                        if (blockRef) {
+                            await db.collection('klinikazam_slots').doc(blockRef.id).delete();
+                        }
+                    } else {
+                        // Add block -> Close slot
+                        const newBlock = {
+                            id: Date.now().toString(),
+                            date: date,
+                            time: time,
+                            type: 'blocked'
+                        };
+                        await db.collection('klinikazam_slots').doc(newBlock.id).set(newBlock);
+                    }
+                    await refreshData();
+                    showToast(`Slot ${action}ed successfully`);
+                } catch (e) {
+                    console.error(e);
+                    showToast("Error updating slot");
+                } finally {
+                    showLoading(false);
                 }
-                await refreshData();
-                renderSlots(); 
             }
         }
 
-        async function toggleClinicStatus() {
-            const date = document.getElementById('slotDate').value;
-            const idx = slotExceptions.findIndex(e => e.date === date && e.type === 'closed');
+        async function toggleClinicStatus(date, forceOpen = false) {
+            const isCurrentlyClosed = slotExceptions.some(e => e.date === date && e.type === 'closed');
             
-            if(idx === -1) { 
-                // Close Clinic
-                await db.collection('klinikazam_slots').add({ id: Date.now(), date, type: 'closed' });
-            } else { 
-                // Open Clinic
-                await db.collection('klinikazam_slots').doc(slotExceptions[idx].id).delete();
+            if (isCurrentlyClosed && forceOpen) {
+                // Logic to open clinic
+                if(confirm("Are you sure you want to OPEN the clinic for this date?")) {
+                    showLoading(true);
+                    const closedRef = slotExceptions.find(e => e.date === date && e.type === 'closed');
+                    if (closedRef) {
+                        await db.collection('klinikazam_slots').doc(closedRef.id).delete();
+                    }
+                    await refreshData();
+                    showToast("Clinic is now Open");
+                    showLoading(false);
+                }
+            } else if (!isCurrentlyClosed) {
+                // Logic to close clinic
+                if(confirm("Are you sure you want to CLOSE the clinic for this date? This will hide all slots.")) {
+                    showLoading(true);
+                    const newClose = {
+                        id: Date.now().toString(),
+                        date: date,
+                        type: 'closed'
+                    };
+                    await db.collection('klinikazam_slots').doc(newClose.id).set(newClose);
+                    await refreshData();
+                    showToast("Clinic is now Closed");
+                    showLoading(false);
+                }
             }
-            await refreshData();
-            renderSlots();
+        }
+
+        async function bulkToggleSlots(action) {
+            const date = document.getElementById('slotDate').value;
+            if(!date) return;
+
+            const isClosed = slotExceptions.some(e => e.date === date && e.type === 'closed');
+            if(isClosed) {
+                showToast("Clinic is currently closed. Open it first.");
+                return;
+            }
+
+            if(confirm(`Are you sure you want to ${action} ALL slots for ${date}?`)) {
+                showLoading(true);
+                const batch = db.batch();
+
+                defaultSlots.forEach(time => {
+                    // Do not touch booked slots
+                    const isBooked = appointments.some(a => a.date === date && a.time === time && a.status !== 'Cancelled' && a.status !== 'Completed');
+                    if(isBooked) return;
+
+                    const existingBlock = slotExceptions.find(e => e.date === date && e.time === time && e.type === 'blocked');
+                    
+                    if (action === 'close') {
+                        if (!existingBlock) {
+                            const ref = db.collection('klinikazam_slots').doc();
+                            batch.set(ref, {
+                                id: ref.id,
+                                date: date,
+                                time: time,
+                                type: 'blocked'
+                            });
+                        }
+                    } else if (action === 'open') {
+                        if (existingBlock) {
+                            batch.delete(db.collection('klinikazam_slots').doc(existingBlock.id));
+                        }
+                    }
+                });
+
+                try {
+                    await batch.commit();
+                    await refreshData();
+                    showToast(`All slots ${action === 'close' ? 'blocked' : 'opened'}`);
+                } catch(e) {
+                    console.error(e);
+                    showToast("Error updating slots");
+                } finally {
+                    showLoading(false);
+                }
+            }
         }
 
         // --- DELETE LOGIC ---
@@ -3288,8 +3516,6 @@ async function sendPasswordReset(email) {
         }
 
         async function executeDeleteAction() {
-            let error = null;
-            
             if (deleteTarget.type === 'appointment') {
                 await db.collection('klinikazam_appointments').doc(deleteTarget.id).delete();
             }
@@ -3323,7 +3549,6 @@ async function sendPasswordReset(email) {
             const status = appt ? appt.status : 'Pending'; 
 
             if (status === 'Completed') {
-                // 🌿 WhatsApp Thank You (Selepas Lawatan Pesakit)
                 message = `Terima kasih kerana berkunjung ke Azam Dental SP Saujana hari ini.
 
 Kami berharap rawatan yang diberikan memuaskan.
@@ -3332,7 +3557,6 @@ Sekiranya terdapat sebarang ketidakselesaan atau pertanyaan selepas rawatan, sil
 Kami menghargai kepercayaan anda dan berharap dapat berkhidmat kepada anda lagi.
 — Azam Dental SP Saujana`;
             } else {
-                // 📌 WhatsApp Auto Reminder (Sebelum Temujanji)
                 message = `Assalamualaikum & Salam Sejahtera,
 
 Ini adalah peringatan temujanji anda bersama Azam Dental SP Saujana:
