@@ -1410,15 +1410,15 @@
     <!-- End of OpenWidget code -->
 
     <script>
-        // --- FIREBASE CONFIGURATION ---
+        // --- UPDATED FIREBASE CONFIGURATION ---
         const firebaseConfig = {
-            apiKey: "AIzaSyBkH-3VaTJHVHSCROb2rIf5H03yZa3GYOo",
-            authDomain: "ddcloudnetwork.firebaseapp.com",
-            projectId: "ddcloudnetwork",
-            storageBucket: "ddcloudnetwork.firebasestorage.app",
-            messagingSenderId: "692579973408",
-            appId: "1:692579973408:web:027492492ddf57dbf3bf45",
-            measurementId: "G-58N4W6Y5CN"
+            apiKey: "AIzaSyCbwfnGjssByz2uq-8F2eZ_kUISBdqpgrQ",
+            authDomain: "klinikpergigianazam-sp.firebaseapp.com",
+            projectId: "klinikpergigianazam-sp",
+            storageBucket: "klinikpergigianazam-sp.firebasestorage.app",
+            messagingSenderId: "891219130960",
+            appId: "1:891219130960:web:f7992e0cc50cd5a2052f55",
+            measurementId: "G-T5541QH59F"
         };
 
         // Initialize Firebase
@@ -2174,8 +2174,8 @@
             cashBillPatientId = p.id;
             document.getElementById('cb-pat-search').value = p.name; 
             document.getElementById('cb-pat-id').value = p.id;
-            document.getElementById('cb-pat-list').classList.remove('show'); 
-            document.getElementById('clear-cb-pat').style.display = 'block';
+            document.getElementById('cb-pat-list').classList.remove('show');
+                        document.getElementById('clear-cb-pat').style.display = 'block';
             
             document.getElementById('cb-pat-details').style.display = 'block';
             document.getElementById('cb-p-name').innerText = p.name;
@@ -2295,7 +2295,7 @@
 
             try {
                 showLoading(true);
-                await db.collection('klinikazam_appointments').add(newAppt);
+                await db.collection('klinikazam_appointments').doc(newAppt.id).set(newAppt);
                 showToast("Bill Generated Successfully");
                 toggleCashbillCreate(false); 
                 await refreshData(); 
