@@ -539,7 +539,7 @@
                   <path d="M6 10h12M6 14h12"/>
                   <circle cx="12" cy="12" r="2.5"/>
                 </svg>
-                Cash Bill
+                Cashbill
             </li>
             <li class="nav-item" onclick="navigateTo('billing')">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -558,7 +558,7 @@
                   <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
                   <path d="M15.5 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
-                Staff Mgmt
+                Staff Management
             </li>
             <li class="nav-item" onclick="navigateTo('patients')">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -661,6 +661,7 @@
                                 <option value="desc">Newest First</option>
                                 <option value="asc">Oldest First</option>
                             </select>
+                            <button class="btn-sm btn-bill" onclick="exportData('appointments')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="today-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Phone</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
@@ -682,6 +683,7 @@
                                 <option value="desc">Newest First</option>
                                 <option value="asc">Oldest First</option>
                             </select>
+                            <button class="btn-sm btn-bill" onclick="exportData('history')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="history-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
@@ -721,6 +723,7 @@
                                     <option value="desc">Newest First</option>
                                     <option value="asc">Oldest First</option>
                                 </select>
+                                <button class="btn-sm btn-bill" onclick="exportData('cashbill')"><i class="fa-solid fa-download"></i> Export</button>
                             </div>
                         </div>
                         <div class="loading-overlay"><div class="spinner"></div></div>
@@ -848,6 +851,7 @@
                                 <option value="desc">Newest First</option>
                                 <option value="asc">Oldest First</option>
                             </select>
+                            <button class="btn-sm btn-bill" onclick="exportData('billing')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="billing-table"><thead><tr><th>Invoice #</th><th>Date</th><th>Patient</th><th>Phone</th><th>Items</th><th>Total (RM)</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
@@ -952,6 +956,7 @@
                                 <i class="fa-solid fa-search search-icon"></i>
                                 <input type="text" class="search-input" placeholder="Search staff..." oninput="handleSearch('staff', this.value)">
                             </div>
+                            <button class="btn-sm btn-bill" onclick="exportData('staff')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
@@ -978,6 +983,7 @@
                                 <i class="fa-solid fa-search search-icon"></i>
                                 <input type="text" class="search-input" placeholder="Search name, phone, IC..." oninput="handleSearch('patients', this.value)">
                             </div>
+                            <button class="btn-sm btn-bill" onclick="exportData('patients')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="patients-table"><thead><tr><th>Name</th><th>Phone</th><th>IC No.</th><th>Visits</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
@@ -1032,7 +1038,10 @@
                 <div class="section-card">
                     <div class="table-header" style="margin-bottom:0;">
                         <h3><i class="fa-solid fa-calendar-plus" style="color:var(--primary); margin-right:8px;"></i>New Appointment</h3>
-                        <button class="btn-sm" onclick="resetBookingForm()">Reset</button>
+                        <div class="table-header-actions">
+                             <button class="btn-sm" onclick="exportData('booking')"><i class="fa-solid fa-download"></i> Export Data</button>
+                             <button class="btn-sm" onclick="resetBookingForm()">Reset</button>
+                        </div>
                     </div>
                     <form id="newBookingForm" onsubmit="saveNewBooking(event)" style="margin-top:20px;">
                         <div class="booking-container">
@@ -1202,6 +1211,7 @@
                 </div>
                 
                 <!-- NEW Fields -->
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Email</label><input type="email" id="edit-staff-email" class="form-input" placeholder="email@example.com"></div>
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">IC Number</label><input type="text" id="edit-staff-ic" class="form-input" placeholder="IC Number"></div>
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Contact No</label><input type="tel" id="edit-staff-contact" class="form-input" placeholder="01x-xxxxxxx"></div>
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Emergency Contact</label><input type="text" id="edit-staff-emergency" class="form-input" placeholder="Name / Phone"></div>
@@ -1689,7 +1699,7 @@
             
             const titles = { 
                 'dashboard':'Dashboard', 'appointments':'Appointments', 'booking':'New Booking', 
-                'cashbill':'Cash Bill', 'billing':'Reports', 'staff':'Staff Management', 
+                'cashbill':'Cashbill', 'billing':'Reports', 'staff':'Staff Management', 
                 'patients':'Patients', 'services':'Services', 'slots':'Slot Management', 
                 'bill-detail':'Bill Details' 
             };
@@ -1862,6 +1872,166 @@
             if(type === 'appointments' || type === 'history') renderAppointments();
             if(type === 'cashbill') renderCashbillList();
             if(type === 'billing') renderBilling();
+        }
+
+        // --- EXPORT FUNCTIONS ---
+        function exportData(type) {
+            let data = [];
+            let filename = `export_${type}_${new Date().toISOString().split('T')[0]}.csv`;
+            let headers = [];
+
+            const sanitize = (str) => String(str || '').replace(/"/g, '""');
+
+            try {
+                if (type === 'appointments' || type === 'history') {
+                    const isHistory = type === 'history';
+                    let list = appointments.filter(a => isHistory ? a.status === 'Completed' : (a.status !== 'Cancelled' && a.status !== 'Completed'));
+                    
+                    data = list.map(a => {
+                        const p = patients.find(pt => pt.id === a.patient_id);
+                        let sName = "Unknown";
+                        if(a.items && a.items.length > 0) {
+                            const s = services.find(svc => svc.id == a.items[0].id);
+                            sName = s ? s.name : "Unknown";
+                        }
+                        return {
+                            Date: a.date,
+                            Time: a.time,
+                            Patient: p ? p.name : 'Unknown',
+                            Phone: p ? p.phone : '-',
+                            Service: sName,
+                            Status: a.status
+                        };
+                    });
+                    headers = ['Date', 'Time', 'Patient', 'Phone', 'Service', 'Status'];
+                } 
+                else if (type === 'cashbill') {
+                    let list = appointments.filter(a => a.status === 'Completed');
+                    data = list.map(a => {
+                        const p = patients.find(pt => pt.id === a.patient_id);
+                        let total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
+                        return {
+                            InvoiceNo: a.invoice_id || '-',
+                            Date: a.date,
+                            Patient: p ? p.name : 'Unknown',
+                            Total: total.toFixed(2),
+                            PaymentMethod: a.payment_method || 'CASH'
+                        };
+                    });
+                    headers = ['InvoiceNo', 'Date', 'Patient', 'Total', 'PaymentMethod'];
+                }
+                else if (type === 'billing') {
+                    // Use filtered billing data
+                    const start = document.getElementById('billing-start').value;
+                    const end = document.getElementById('billing-end').value;
+                    let list = appointments.filter(a => 
+                        a.status === 'Completed' && 
+                        a.date >= start && a.date <= end
+                    );
+                    data = list.map(a => {
+                        const p = patients.find(pt => pt.id === a.patient_id);
+                        let total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
+                        let sName = "Unknown";
+                        if(a.items && a.items.length > 0) {
+                            const s = services.find(svc => svc.id == a.items[0].id);
+                            sName = s ? s.name : "Unknown";
+                        }
+                        return {
+                            InvoiceNo: a.invoice_id || '-',
+                            Date: a.date,
+                            Patient: p ? p.name : 'Unknown',
+                            Phone: p ? p.phone : '-',
+                            Service: sName,
+                            Total: total.toFixed(2)
+                        };
+                    });
+                    headers = ['InvoiceNo', 'Date', 'Patient', 'Phone', 'Service', 'Total'];
+                }
+                else if (type === 'staff') {
+                    data = staff.map(s => {
+                        return {
+                            ID: s.id,
+                            Name: s.name,
+                            JobTitle: s.job_title || '-',
+                            Role: s.role,
+                            Username: s.username,
+                            Email: s.email || '-'
+                        };
+                    });
+                    headers = ['ID', 'Name', 'JobTitle', 'Role', 'Username', 'Email'];
+                }
+                else if (type === 'patients') {
+                    const visitCounts = {};
+                    appointments.forEach(a => {
+                        if(a.status === 'Completed') {
+                            visitCounts[a.patient_id] = (visitCounts[a.patient_id] || 0) + 1;
+                        }
+                    });
+                    data = patients.map(p => {
+                        return {
+                            ID: p.id,
+                            Name: p.name,
+                            Phone: p.phone,
+                            IC: p.ic || '-',
+                            TotalVisits: visitCounts[p.id] || 0
+                        };
+                    });
+                    headers = ['ID', 'Name', 'Phone', 'IC', 'TotalVisits'];
+                }
+                else if (type === 'booking') {
+                    // Export all upcoming appointments
+                    let list = appointments.filter(a => a.status !== 'Cancelled' && a.status !== 'Completed');
+                     data = list.map(a => {
+                        const p = patients.find(pt => pt.id === a.patient_id);
+                        let sName = "Unknown";
+                        if(a.items && a.items.length > 0) {
+                            const s = services.find(svc => svc.id == a.items[0].id);
+                            sName = s ? s.name : "Unknown";
+                        }
+                        return {
+                            Date: a.date,
+                            Time: a.time,
+                            Patient: p ? p.name : 'Unknown',
+                            Phone: p ? p.phone : '-',
+                            Service: sName,
+                            Status: a.status
+                        };
+                    });
+                    headers = ['Date', 'Time', 'Patient', 'Phone', 'Service', 'Status'];
+                }
+
+                if (data.length === 0) {
+                    showToast("No data to export");
+                    return;
+                }
+
+                // Convert to CSV
+                const csvRows = [];
+                // Header row
+                csvRows.push(headers.join(','));
+                // Data rows
+                for (const row of data) {
+                    const values = headers.map(header => {
+                        const escaped = sanitize(row[header]);
+                        return `"${escaped}"`;
+                    });
+                    csvRows.push(values.join(','));
+                }
+
+                const csvContent = csvRows.join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast("Export Successful");
+
+            } catch (e) {
+                console.error(e);
+                showToast("Export Failed");
+            }
         }
 
         // --- DASHBOARD LOGIC ---
@@ -2407,51 +2577,8 @@
         }
 
         function exportBillingData() {
-            const start = document.getElementById('billing-start').value;
-            const end = document.getElementById('billing-end').value;
-            
-            let data = appointments.filter(a => 
-                a.status === 'Completed' && 
-                a.date >= start && 
-                a.date <= end
-            )
-            .sort((a,b) => new Date(b.date) - new Date(a.date)) 
-            .map(a => {
-                const p = patients.find(pt => pt.id === a.patient_id);
-                let serviceName = "Unknown";
-                if(a.items && a.items.length > 0) {
-                    const s = services.find(svc => svc.id == a.items[0].id);
-                    serviceName = s ? s.name : "Unknown";
-                }
-
-                return {
-                    Date: a.date,
-                    Time: a.time,
-                    Patient: p ? p.name : 'Unknown',
-                    Phone: p ? p.phone : '-',
-                    Invoice: a.invoice_id || '-',
-                    Total: a.items.reduce((sum, i) => sum + (i.price * i.qty), 0),
-                    Service: serviceName
-                };
-            });
-
-            if(data.length === 0) {
-                showToast("No data to export.");
-                return;
-            }
-
-            const csvContent = "data:text/csv;charset=utf-8," 
-                + Object.keys(data[0]).join(",") + "\n" 
-                + data.map(e => Object.values(e).join(",")).join("\n");
-            
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `report_${start}_to_${end}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Report Downloaded");
+            // Using the centralized export function
+            exportData('billing');
         }
 
         // --- INVOICE VIEW ---
@@ -3208,6 +3335,7 @@
                 document.getElementById('edit-staff-contact').value = '';
                 document.getElementById('edit-staff-emergency').value = '';
                 document.getElementById('edit-staff-address').value = '';
+                document.getElementById('edit-staff-email').value = ''; // Reset email
                 
                 generateSmartId('klinikazam_staff', 'KPA').then(sid => {
                     document.getElementById('edit-staff-sid').value = sid;
@@ -3230,6 +3358,7 @@
                 document.getElementById('edit-staff-contact').value = s.contact || '';
                 document.getElementById('edit-staff-emergency').value = s.emergency_contact || '';
                 document.getElementById('edit-staff-address').value = s.address || '';
+                document.getElementById('edit-staff-email').value = s.email || ''; // Load email
             }
             showModal('editStaffModal');
         }
@@ -3259,6 +3388,7 @@
             const contact = document.getElementById('edit-staff-contact').value;
             const emergency = document.getElementById('edit-staff-emergency').value;
             const address = document.getElementById('edit-staff-address').value;
+            const emailInput = document.getElementById('edit-staff-email').value;
 
             if(!u) { showToast("Username is required"); return; }
 
@@ -3281,7 +3411,8 @@
                     ic, 
                     contact, 
                     emergency_contact: emergency, 
-                    address 
+                    address,
+                    email: emailInput || `${u}@clinic.azam.internal` // Save email
                 };
                 if(role !== targetStaff.role) updateData.role = role; 
                 
@@ -3312,24 +3443,24 @@
                         return;
                     }
 
-                    // Create dummy email for username-only login
-                    const dummyEmail = `${u}@clinic.azam.internal`;
+                    // Use real email if provided, else dummy
+                    const email = emailInput || `${u}@clinic.azam.internal`;
                     
                     // Create user in Firebase Auth
-                    const userCredential = await auth.createUserWithEmailAndPassword(dummyEmail, p);
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, p);
                     const newUser = userCredential.user;
                     
                     // Update profile to store username
                     await newUser.updateProfile({ displayName: u });
 
-                    const smartId = await generateSmartId('klinikazam_staff', 'KPA');
+                    const smartId = document.getElementById('edit-staff-sid').value || await generateSmartId('klinikazam_staff', 'KPA');
                     const newStaff = { 
                         id: smartId, 
                         name, 
                         job_title: jobTitle, 
                         role, 
                         username: u,
-                        email: dummyEmail,
+                        email: email,
                         uid: newUser.uid,
                         ic, 
                         contact, 
@@ -3346,7 +3477,7 @@
 
                 } catch(e) {
                     console.error(e);
-                    if(e.code === 'auth/email-already-in-use') showToast("Username is already taken.");
+                    if(e.code === 'auth/email-already-in-use') showToast("Email is already taken.");
                     else if(e.code === 'auth/weak-password') showToast("Password is too weak.");
                     else showToast(e.message);
                 } finally {
