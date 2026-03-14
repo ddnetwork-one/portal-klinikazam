@@ -472,8 +472,8 @@
             <p style="margin-bottom: 30px; color: var(--text-light); font-weight: 500;">Cawangan (SP Saujana)</p>
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div style="text-align:left; margin-bottom:15px;">
-                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-light);">Username or Email</label>
-                    <input type="text" id="username" class="form-input" placeholder="staff_username or email@example.com" required>
+                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-light);">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter username" required>
                 </div>
                 <div style="text-align:left; margin-bottom:25px;">
                     <label style="font-size:0.8rem; font-weight:700; color:var(--text-light);">Password</label>
@@ -504,7 +504,6 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item" onclick="navigateTo('dashboard')">
-                <!-- Dashboard Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="4" y="4" width="6" height="6" rx="1.2"/>
                   <rect x="14" y="4" width="6" height="6" rx="1.2"/>
@@ -514,7 +513,6 @@
                 Dashboard
             </li>
             <li class="nav-item" onclick="navigateTo('appointments')">
-                <!-- Appointments Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="4" width="18" height="18" rx="2"/>
                   <line x1="16" y1="2" x2="16" y2="6"/>
@@ -525,7 +523,6 @@
                 Appointments
             </li>
             <li class="nav-item" onclick="navigateTo('booking')">
-                <!-- New Booking Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="4" width="18" height="18" rx="2"/>
                   <line x1="16" y1="2" x2="16" y2="6"/>
@@ -537,7 +534,6 @@
                 New Booking
             </li>
             <li class="nav-item" onclick="navigateTo('cashbill')">
-                <!-- Cash Bill Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="2" y="6" width="20" height="12" rx="2"/>
                   <path d="M6 10h12M6 14h12"/>
@@ -546,7 +542,6 @@
                 Cash Bill
             </li>
             <li class="nav-item" onclick="navigateTo('billing')">
-                <!-- Reports Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                   <polyline points="14 2 14 8 20 8"/>
@@ -557,7 +552,6 @@
                 Reports
             </li>
             <li class="nav-item" id="nav-staff" onclick="navigateTo('staff')" style="display:none;">
-                <!-- Staff Mgmt Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                   <circle cx="8.5" cy="7" r="4"/>
@@ -567,7 +561,6 @@
                 Staff Mgmt
             </li>
             <li class="nav-item" onclick="navigateTo('patients')">
-                <!-- Patients Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
@@ -575,7 +568,6 @@
                 Patients
             </li>
             <li class="nav-item" onclick="navigateTo('services')">
-                <!-- Services Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="3"/>
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -583,7 +575,6 @@
                 Services
             </li>
             <li class="nav-item" onclick="navigateTo('slots')">
-                <!-- Slot Mgmt Icon -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="9"/>
                   <path d="M12 6v6l4 2"/>
@@ -872,11 +863,8 @@
                 </div>
 
                 <div class="invoice-box">
-                    <!-- Top Bar -->
                     <div class="invoice-top-bar"></div>
-
                     <div class="invoice-content">
-                        <!-- HEADER -->
                         <div class="invoice-header">
                             <div class="invoice-brand">
                                 <h2>KLINIK PERGIGIAN AZAM</h2>
@@ -891,8 +879,6 @@
                                 <span>Date: <span id="inv-date">--/--/----</span></span>
                             </div>
                         </div>
-
-                        <!-- INFO GRID -->
                         <div class="invoice-grid">
                             <div>
                                 <h4>BILL TO</h4>
@@ -906,8 +892,6 @@
                                 <p>Attending Doctor: Dr. Amalina</p>
                             </div>
                         </div>
-
-                        <!-- ITEM TABLE -->
                         <table class="item-table">
                             <thead>
                                 <tr>
@@ -919,11 +903,8 @@
                                 </tr>
                             </thead>
                             <tbody id="inv-items-body">
-                                <!-- JS Injected -->
                             </tbody>
                         </table>
-
-                        <!-- TOTALS -->
                         <div class="invoice-summary">
                             <div class="invoice-summary-box">
                                 <div class="summary-row">
@@ -940,8 +921,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- FOOTER -->
                         <div class="invoice-footer">
                             <div>
                                 <strong>Payment Details</strong><br>
@@ -963,7 +942,6 @@
 
             <!-- STAFF MANAGEMENT -->
             <section id="view-staff" class="view-section">
-                <!-- Regular Staff Table -->
                 <div class="section-card" style="position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     <div class="table-header">
@@ -976,17 +954,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username/Email</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-                    <!-- Pagination Container -->
+                    <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                     <div id="pag-staff" class="pagination-bar"></div>
                 </div>
 
-                <!-- SuperAdmin / System Developer Table -->
                 <div class="section-card super-admin-card">
                      <div class="table-header">
                         <h3><i class="fa-solid fa-user-shield" style="color:var(--danger); margin-right:8px;"></i>SuperAdmin / System Developer</h3>
                     </div>
-                    <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username/Email</th></tr></thead><tbody></tbody></table></div>
+                    <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th></tr></thead><tbody></tbody></table></div>
                 </div>
             </section>
 
@@ -1005,7 +981,6 @@
                         </div>
                     </div>
                     <div class="table-responsive"><table id="patients-table"><thead><tr><th>Name</th><th>Phone</th><th>IC No.</th><th>Visits</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-                    <!-- Pagination Container -->
                     <div id="pag-patients" class="pagination-bar"></div>
                 </div>
             </section>
@@ -1039,17 +1014,12 @@
                              </div>
                         </div>
                     </div>
-
                     <div class="slot-status-legend">
                         <div class="legend-item"><div class="legend-dot" style="background: white; border-color: var(--border-light);"></div> Available</div>
                         <div class="legend-item"><div class="legend-dot" style="background: var(--primary-light); border-color: var(--primary);"></div> Booked</div>
                         <div class="legend-item"><div class="legend-dot" style="background: var(--danger-bg); border-color: var(--danger);"></div> Break (Not Available)</div>
                     </div>
-
-                    <div id="slot-management-grid" class="slot-grid">
-                        <!-- Slots rendered here -->
-                    </div>
-                    
+                    <div id="slot-management-grid" class="slot-grid"></div>
                     <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
                          <button class="btn-sm" id="bulk-close-btn" onclick="bulkToggleSlots('close')"><i class="fa-solid fa-lock"></i> Close All Slots</button>
                          <button class="btn-sm" id="bulk-open-btn" onclick="bulkToggleSlots('open')"><i class="fa-solid fa-lock-open"></i> Open All Slots</button>
@@ -1064,10 +1034,8 @@
                         <h3><i class="fa-solid fa-calendar-plus" style="color:var(--primary); margin-right:8px;"></i>New Appointment</h3>
                         <button class="btn-sm" onclick="resetBookingForm()">Reset</button>
                     </div>
-                    
                     <form id="newBookingForm" onsubmit="saveNewBooking(event)" style="margin-top:20px;">
                         <div class="booking-container">
-                            <!-- 1. CALENDAR -->
                             <div class="booking-panel">
                                 <div class="calendar-header">
                                     <button type="button" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1080,7 +1048,6 @@
                                 <div class="calendar-grid" id="calendar-days" style="margin-top:0;"></div>
                             </div>
 
-                            <!-- 2. SLOTS -->
                             <div class="booking-panel">
                                 <div class="slots-header">
                                     <h4 id="slot-date-display">Select a Date</h4>
@@ -1094,7 +1061,6 @@
                                 </div>
                             </div>
 
-                            <!-- 3. FORM -->
                             <div class="booking-panel">
                                 <div class="form-panel">
                                     <div class="live-summary">
@@ -1115,7 +1081,6 @@
                                         </label>
                                     </div>
 
-                                    <!-- Mode: New Patient -->
                                     <div id="new-pat-inputs" style="display:none;">
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-light); margin-bottom:4px; display:block;">Full Name</label>
@@ -1131,12 +1096,9 @@
                                         </div>
                                     </div>
 
-                                    <!-- Mode: Existing Patient (Default) -->
                                     <div id="old-pat-inputs">
                                         <div style="margin-bottom:12px;">
                                             <label style="font-size:0.7rem; font-weight:700; color:var(--text-light); margin-bottom:4px; display:block;">Select Patient</label>
-                                            
-                                            <!-- CUSTOM SEARCHABLE DROPDOWN -->
                                             <div class="custom-select-wrapper">
                                                 <div class="custom-select-header">
                                                     <input type="text" id="bk-pat-search" class="custom-select-input" placeholder="Search Name or Phone..." autocomplete="off">
@@ -1239,8 +1201,13 @@
                     </select>
                 </div>
                 
-                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Email <span style="color:var(--danger)">*</span></label><input type="email" id="edit-staff-email" class="form-input" placeholder="staff@clinic.com"></div>
-                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Username</label><input type="text" id="edit-staff-u" class="form-input"></div>
+                <!-- NEW Fields -->
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">IC Number</label><input type="text" id="edit-staff-ic" class="form-input" placeholder="IC Number"></div>
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Contact No</label><input type="tel" id="edit-staff-contact" class="form-input" placeholder="01x-xxxxxxx"></div>
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Emergency Contact</label><input type="text" id="edit-staff-emergency" class="form-input" placeholder="Name / Phone"></div>
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Home Address</label><textarea id="edit-staff-address" class="form-input" rows="2" placeholder="Address"></textarea></div>
+                
+                <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Username</label><input type="text" id="edit-staff-u" class="form-input" placeholder="Login Username"></div>
                 
                 <div style="margin-bottom:15px;">
                     <label style="font-size:0.8rem; font-weight:700;">Password</label>
@@ -1268,7 +1235,6 @@
                     <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="color:var(--text-light);">ID</span><span style="font-weight:600;" id="hist-p-id">-</span></div>
                     <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-light);">Phone</span><span style="font-weight:600;" id="hist-p-phone">-</span></div>
                 </div>
-
                 <div style="margin-bottom:20px; border-top:1px dashed #e2e8f0; padding-top:15px;">
                     <h4 style="font-size:0.9rem; margin-bottom:10px; color:var(--primary);"><i class="fa-solid fa-clock-rotate-left"></i> Add Past Visit (Manual Entry)</h4>
                     <div style="display:grid; gap:10px;">
@@ -1283,7 +1249,6 @@
                         <button class="btn-sm btn-bill" onclick="saveManualHistory()" style="width:100%; justify-content:center;">Add to History</button>
                     </div>
                 </div>
-
                 <h5 style="margin-bottom:10px;">Visit History</h5>
                 <div class="table-responsive" style="border:none;"><table style="font-size:0.85rem;"><thead><tr><th>Date</th><th>Service</th><th>Amount</th></tr></thead><tbody id="historyListBody"></tbody></table></div>
             </div>
@@ -1310,7 +1275,6 @@
                     <h5 style="margin-bottom: 15px; color: var(--primary);">Account Details</h5>
                     <div style="display: grid; gap: 12px;">
                         <div><label style="font-size: 0.75rem; color: var(--text-light);">Username</label><div style="font-weight: 600; font-size: 1rem;" id="profile-u">amalina</div></div>
-                        <div><label style="font-size: 0.75rem; color: var(--text-light);">Email</label><div style="font-weight: 600; font-size: 1rem;" id="profile-email">admin@azam.com</div></div>
                         <div><label style="font-size: 0.75rem; color: var(--text-light);">Employee ID</label><div style="font-weight: 600; font-size: 1rem;" id="profile-id">EMP001</div></div>
                     </div>
                 </div>
@@ -1434,7 +1398,6 @@
         let appointments = [];
         let slotExceptions = []; 
 
-        const SESSION_KEY = 'clinicUser';
         const todayStr = new Date().toISOString().split('T')[0];
         
         // MIN BOOKING DATE IS TOMORROW
@@ -1476,13 +1439,56 @@
 
         const defaultSlots = ["09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"];
         
+        // --- SESSION MANAGEMENT CONSTANTS ---
+        const SESSION_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
+        const LOCAL_STORAGE_KEY = 'clinicSessionExpiry';
+
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', async () => {
+            // Check session expiry on load
+            const storedExpiry = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (storedExpiry && Date.now() > parseInt(storedExpiry)) {
+                // Session expired, clean up
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                await auth.signOut();
+            }
+
             // Auth State Listener
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
-                    const q = await db.collection('klinikazam_staff').where('email', '==', user.email).get();
+                    // User is signed in.
+                    // Check if session is still valid via our custom logic
+                    const expiry = localStorage.getItem(LOCAL_STORAGE_KEY);
+                    if (!expiry) {
+                        // New login, set expiry
+                        resetSessionExpiry();
+                    } else if (Date.now() > parseInt(expiry)) {
+                        // Expired
+                        await logout();
+                        return;
+                    }
+
+                    // Fetch staff data
+                    // Note: Since we use dummy emails, we query by username stored in displayName or just query collection
+                    // For simplicity, we'll query the email or UID.
+                    // But since we set user.displayName = username during creation, we can use that.
                     
+                    let q;
+                    if(user.email.includes('@clinic.azam.internal')) {
+                         // Internal dummy email, search by username which we might have stored in displayName or need to query
+                         // Ideally, we search staff collection by uid (auth user uid) if we stored it, or username.
+                         // Let's assume we query by uid if available, or email.
+                         q = await db.collection('klinikazam_staff').where('uid', '==', user.uid).limit(1).get();
+                         if(q.empty) {
+                             // Fallback if uid wasn't stored
+                             const username = user.displayName; 
+                             q = await db.collection('klinikazam_staff').where('username', '==', username).limit(1).get();
+                         }
+                    } else {
+                        // Legacy email login
+                        q = await db.collection('klinikazam_staff').where('email', '==', user.email).limit(1).get();
+                    }
+
                     if(!q.empty) {
                         currentUser = { id: q.docs[0].id, ...q.docs[0].data(), uid: user.uid };
                         setupUserUI(currentUser);
@@ -1498,15 +1504,25 @@
                         auth.signOut();
                     }
                 } else {
+                    // User is signed out.
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
                     document.getElementById('login-screen').classList.remove('hidden');
                 }
             });
 
-            window.onmousemove = resetInactivityTimer;
-            window.onkeypress = resetInactivityTimer;
-            window.onclick = resetInactivityTimer;
-            window.onscroll = resetInactivityTimer;
+            // Activity listeners for session reset
+            window.onmousemove = resetSessionExpiry;
+            window.onkeypress = resetSessionExpiry;
+            window.onclick = resetSessionExpiry;
+            window.onscroll = resetSessionExpiry;
         });
+
+        // --- SESSION MANAGEMENT FUNCTIONS ---
+        function resetSessionExpiry() {
+            if(auth.currentUser) {
+                localStorage.setItem(LOCAL_STORAGE_KEY, Date.now() + SESSION_EXPIRY_MS);
+            }
+        }
 
         // --- UI HELPERS ---
         function showLoading(show) {
@@ -1569,27 +1585,21 @@
 
         // --- FIREBASE DATA FETCHING ---
         async function refreshData() {
-            // 1. Fetch Patients
             const pSnap = await db.collection('klinikazam_patients').orderBy('name').get();
             patients = pSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-            // 2. Fetch Services
             const sSnap = await db.collection('klinikazam_services').get();
             services = sSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-            // 3. Fetch Staff
             const stSnap = await db.collection('klinikazam_staff').orderBy('name').get();
             staff = stSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-            // 4. Fetch Appointments
             const aSnap = await db.collection('klinikazam_appointments').orderBy('date', 'desc').get(); 
             appointments = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-            // 5. Fetch Slot Exceptions
             const eSnap = await db.collection('klinikazam_slots').get();
             slotExceptions = eSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-            // Re-render current view
             const currentViewId = document.querySelector('.view-section.active')?.id.replace('view-', '');
             
             if(currentViewId === 'dashboard') renderDashboard();
@@ -1622,32 +1632,49 @@
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
             const loginError = document.getElementById('loginError');
-            let email = u;
-
-            if (!u.includes('@')) {
-                const q = await db.collection('klinikazam_staff').where('username', '==', u).limit(1).get();
-                if (q.empty) {
-                    loginError.innerText = "User not found";
-                    return;
-                }
-                email = q.docs[0].data().email;
-            }
-
+            
+            showLoading(true);
+            
             try {
-                await auth.signInWithEmailAndPassword(email, p);
+                // 1. Check if username exists in DB to get the 'dummy' email
+                const q = await db.collection('klinikazam_staff').where('username', '==', u.toLowerCase()).limit(1).get();
+                
+                if (q.empty) {
+                    // Check legacy email login (if any old accounts exist)
+                    const qEmail = await db.collection('klinikazam_staff').where('email', '==', u).limit(1).get();
+                    if(qEmail.empty) {
+                        loginError.innerText = "Username not found";
+                        showLoading(false);
+                        return;
+                    }
+                    // Found by email
+                    const staffDoc = qEmail.docs[0].data();
+                    await auth.signInWithEmailAndPassword(staffDoc.email, p);
+                } else {
+                    // Found by username
+                    const staffDoc = q.docs[0].data();
+                    const email = staffDoc.email;
+                    await auth.signInWithEmailAndPassword(email, p);
+                }
+
                 loginError.innerText = "";
+                resetSessionExpiry(); // Start session timer
             } catch (error) {
                 console.error(error);
                 if (error.code === 'auth/wrong-password') loginError.innerText = "Invalid password";
-                else if (error.code === 'auth/user-not-found') loginError.innerText = "Email not registered";
-                else loginError.innerText = "Login failed";
+                else if (error.code === 'auth/user-not-found') loginError.innerText = "User not found";
+                else if (error.code === 'auth/invalid-email') loginError.innerText = "Configuration error (Invalid Email)";
+                else loginError.innerText = "Login failed: " + error.message;
+            } finally {
+                showLoading(false);
             }
         }
 
-        function logout() {
-            auth.signOut().then(() => {
-                location.reload();
-            });
+        async function logout() {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            await auth.signOut();
+            // Force reload to reset state completely
+            window.location.reload(); 
         }
 
         // --- NAVIGATION & UI ---
@@ -1722,7 +1749,6 @@
             document.getElementById('profile-name').innerText = user.name;
             document.getElementById('profile-role').innerText = user.role;
             document.getElementById('profile-u').innerText = user.username;
-            document.getElementById('profile-email').innerText = user.email || '-';
             document.getElementById('profile-id').innerText = user.id;
             document.getElementById('profile-avatar').innerText = user.name.substring(0,2).toUpperCase();
         }
@@ -1747,11 +1773,6 @@
                 document.getElementById('liveDate').innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
                 document.getElementById('currentFullDate').innerText = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
             }, 1000);
-        }
-
-        function resetInactivityTimer() {
-            clearTimeout(window.inactivityTimer);
-            window.inactivityTimer = setTimeout(() => logout(), 30 * 60 * 1000);
         }
 
         function getLocalDateStr(date) {
@@ -2175,7 +2196,7 @@
             document.getElementById('cb-pat-search').value = p.name; 
             document.getElementById('cb-pat-id').value = p.id;
             document.getElementById('cb-pat-list').classList.remove('show');
-                        document.getElementById('clear-cb-pat').style.display = 'block';
+            document.getElementById('clear-cb-pat').style.display = 'block';
             
             document.getElementById('cb-pat-details').style.display = 'block';
             document.getElementById('cb-p-name').innerText = p.name;
@@ -2340,7 +2361,6 @@
                 });
             }
 
-            // Pagination for Billing
             const pagedData = getPaginatedData(filteredAppts, 'billing');
             
             let total = 0;
@@ -2524,10 +2544,7 @@
                 el.className = classes;
                 el.innerText = i;
                 
-                // Check slot exceptions for closed days
                 const isClosed = slotExceptions.some(e => e.date === dateStr && e.type === 'closed');
-                
-                // IMPROVED: Count only actual bookings
                 const bookedCount = appointments.filter(a => a.date === dateStr && a.status !== 'Cancelled' && a.status !== 'Completed').length;
                 const blockedCount = slotExceptions.filter(e => e.date === dateStr && e.type === 'blocked').length;
                 const totalUnavailable = bookedCount + blockedCount;
@@ -2591,7 +2608,6 @@
                     className += ' booked';
                     btn.innerHTML = `<span>${time}</span> <span class="slot-status">Booked</span>`;
                 } else if (isBlocked) {
-                    // IMPROVED: Clear text for users
                     className += ' blocked';
                     btn.innerHTML = `<span>${time}</span> <span class="slot-status">Not Available</span>`;
                 } else {
@@ -2719,7 +2735,6 @@
                 return;
             }
             
-            // IMPROVED: Double check blocked status before saving
             const isBlocked = slotExceptions.some(e => e.date === selectedBookingDate && e.time === selectedBookingTime && e.type === 'blocked');
             if(isBlocked) {
                 showToast("This slot is marked as 'Not Available'. Please choose another.");
@@ -2858,7 +2873,6 @@
             
             if(dateVal < minBookingDate) { showToast("Cannot book today or past dates."); return; }
 
-            // Check for blocked slot conflict
             const isBlocked = slotExceptions.some(e => e.date === dateVal && e.time === timeVal && e.type === 'blocked');
             if(isBlocked) { showToast("This slot is blocked/unavailable."); return; }
 
@@ -3190,7 +3204,11 @@
                 document.getElementById('edit-staff-role').value = 'Staff';
                 document.getElementById('edit-staff-u').value = '';
                 document.getElementById('edit-staff-p').value = '';
-                document.getElementById('edit-staff-email').value = '';
+                document.getElementById('edit-staff-ic').value = '';
+                document.getElementById('edit-staff-contact').value = '';
+                document.getElementById('edit-staff-emergency').value = '';
+                document.getElementById('edit-staff-address').value = '';
+                
                 generateSmartId('klinikazam_staff', 'KPA').then(sid => {
                     document.getElementById('edit-staff-sid').value = sid;
                 });
@@ -3208,7 +3226,10 @@
                 document.getElementById('edit-staff-role').value = s.role;
                 document.getElementById('edit-staff-u').value = s.username;
                 document.getElementById('edit-staff-p').value = ''; 
-                document.getElementById('edit-staff-email').value = s.email || '';
+                document.getElementById('edit-staff-ic').value = s.ic || '';
+                document.getElementById('edit-staff-contact').value = s.contact || '';
+                document.getElementById('edit-staff-emergency').value = s.emergency_contact || '';
+                document.getElementById('edit-staff-address').value = s.address || '';
             }
             showModal('editStaffModal');
         }
@@ -3230,11 +3251,16 @@
             const name = document.getElementById('edit-staff-name').value;
             const jobTitle = document.getElementById('edit-staff-jobtitle').value;
             const role = document.getElementById('edit-staff-role').value;
-            const email = document.getElementById('edit-staff-email').value;
-            const u = document.getElementById('edit-staff-u').value;
+            const u = document.getElementById('edit-staff-u').value.toLowerCase();
             const p = document.getElementById('edit-staff-p').value;
+            
+            // New fields
+            const ic = document.getElementById('edit-staff-ic').value;
+            const contact = document.getElementById('edit-staff-contact').value;
+            const emergency = document.getElementById('edit-staff-emergency').value;
+            const address = document.getElementById('edit-staff-address').value;
 
-            if(!email.includes('@')) { showToast("Invalid email address"); return; }
+            if(!u) { showToast("Username is required"); return; }
 
             if(currentUser.role === 'Admin' && role === 'SuperAdmin') {
                 showToast("Admins cannot create SuperAdmin accounts.");
@@ -3247,21 +3273,55 @@
                     showToast("Unauthorized");
                     return;
                 }
-                const updateData = { name, job_title: jobTitle, username: u, email };
+                
+                const updateData = { 
+                    name, 
+                    job_title: jobTitle, 
+                    username: u, 
+                    ic, 
+                    contact, 
+                    emergency_contact: emergency, 
+                    address 
+                };
                 if(role !== targetStaff.role) updateData.role = role; 
+                
                 await db.collection('klinikazam_staff').doc(id).update(updateData);
+                
+                if(p && p.length >= 6) {
+                    try {
+                         // Note: Changing password requires the user to be logged in or use Admin SDK which isn't available in client SDK easily without Cloud Functions.
+                         // As a workaround, we will just update the Firestore record. Auth password update for other users usually requires Admin SDK (backend).
+                         // Since this is a frontend-only solution, we can't securely change another user's password here without a backend.
+                         // We will stick to basic Auth operations.
+                         showToast("Staff details updated. Password changes for existing users require a backend function or the user to do it themselves.");
+                    } catch(e) {
+                        console.error(e);
+                    }
+                }
+
             } else {
                 if(!p || p.length < 6) { showToast("Password must be at least 6 chars"); return; }
                 
                 try {
                     showLoading(true);
-                    const existing = await db.collection('klinikazam_staff').where('email', '==', email).get();
+                    
+                    const existing = await db.collection('klinikazam_staff').where('username', '==', u).get();
                     if(!existing.empty) {
-                        throw new Error("Email already in use by another staff.");
+                        showLoading(false);
+                        showToast("Username already exists.");
+                        return;
                     }
 
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, p);
+                    // Create dummy email for username-only login
+                    const dummyEmail = `${u}@clinic.azam.internal`;
                     
+                    // Create user in Firebase Auth
+                    const userCredential = await auth.createUserWithEmailAndPassword(dummyEmail, p);
+                    const newUser = userCredential.user;
+                    
+                    // Update profile to store username
+                    await newUser.updateProfile({ displayName: u });
+
                     const smartId = await generateSmartId('klinikazam_staff', 'KPA');
                     const newStaff = { 
                         id: smartId, 
@@ -3269,22 +3329,28 @@
                         job_title: jobTitle, 
                         role, 
                         username: u,
-                        email: email
+                        email: dummyEmail,
+                        uid: newUser.uid,
+                        ic, 
+                        contact, 
+                        emergency_contact: emergency, 
+                        address
                     };
+                    
                     await db.collection('klinikazam_staff').doc(smartId).set(newStaff);
                     
-                    await userCredential.user.delete(); 
-                    
-                    showToast("Staff Created. Please log in again to continue.");
-                    setTimeout(() => location.reload(), 2000);
+                    showToast("Staff Created Successfully");
+                    await refreshData(); 
+                    renderStaff();
+                    closeModal('editStaffModal');
 
                 } catch(e) {
                     console.error(e);
-                    if(e.code === 'auth/email-already-in-use') showToast("Email already registered in Auth.");
+                    if(e.code === 'auth/email-already-in-use') showToast("Username is already taken.");
                     else if(e.code === 'auth/weak-password') showToast("Password is too weak.");
                     else showToast(e.message);
+                } finally {
                     showLoading(false);
-                    return;
                 }
                 return; 
             }
@@ -3293,7 +3359,6 @@
             renderStaff();
             closeModal('editStaffModal');
             showToast(id ? "Staff Updated" : "Staff Added");
-            showLoading(false);
         }
 
         // --- SERVICES CRUD ---
@@ -3351,10 +3416,8 @@
 
             if(!dateVal) return;
 
-            // Check if clinic is closed for the day
             const isClosed = slotExceptions.some(e => e.date === dateVal && e.type === 'closed');
             
-            // Update Status Indicator
             if(isClosed) {
                 statusIndicator.className = "status-indicator status-closed";
                 statusIndicator.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Closed`;
@@ -3365,7 +3428,6 @@
 
             grid.innerHTML = '';
 
-            // If closed, show simple message and option to open
             if(isClosed) {
                 grid.innerHTML = `
                     <div style="grid-column: 1/-1; text-align:center; padding: 40px; background: var(--danger-bg); border-radius: 12px; border: 1px dashed var(--danger);">
@@ -3401,14 +3463,14 @@
                         <div class="time">${time}</div>
                         <div class="label">Break</div>
                     `;
-                    card.onclick = () => toggleSlotBlock(dateVal, time, true); // Click to unblock
+                    card.onclick = () => toggleSlotBlock(dateVal, time, true);
                 } else {
                     card.className = 'slot-card available';
                     card.innerHTML = `
                         <div class="time">${time}</div>
                         <div class="label">Available</div>
                     `;
-                    card.onclick = () => toggleSlotBlock(dateVal, time, false); // Click to block
+                    card.onclick = () => toggleSlotBlock(dateVal, time, false);
                 }
 
                 grid.appendChild(card);
@@ -3422,13 +3484,11 @@
                 showLoading(true);
                 try {
                     if (isCurrentlyBlocked) {
-                        // Remove block -> Open slot
                         const blockRef = slotExceptions.find(e => e.date === date && e.time === time && e.type === 'blocked');
                         if (blockRef) {
                             await db.collection('klinikazam_slots').doc(blockRef.id).delete();
                         }
                     } else {
-                        // Add block -> Close slot
                         const newBlock = {
                             id: Date.now().toString(),
                             date: date,
@@ -3452,7 +3512,6 @@
             const isCurrentlyClosed = slotExceptions.some(e => e.date === date && e.type === 'closed');
             
             if (isCurrentlyClosed && forceOpen) {
-                // Logic to open clinic
                 if(confirm("Are you sure you want to OPEN the clinic for this date?")) {
                     showLoading(true);
                     const closedRef = slotExceptions.find(e => e.date === date && e.type === 'closed');
@@ -3464,7 +3523,6 @@
                     showLoading(false);
                 }
             } else if (!isCurrentlyClosed) {
-                // Logic to close clinic
                 if(confirm("Are you sure you want to CLOSE the clinic for this date? This will hide all slots.")) {
                     showLoading(true);
                     const newClose = {
@@ -3495,7 +3553,6 @@
                 const batch = db.batch();
 
                 defaultSlots.forEach(time => {
-                    // Do not touch booked slots
                     const isBooked = appointments.some(a => a.date === date && a.time === time && a.status !== 'Cancelled' && a.status !== 'Completed');
                     if(isBooked) return;
 
