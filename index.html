@@ -189,6 +189,35 @@
         .table-header-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; flex-wrap: wrap; }
         .table-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
 
+        /* NEW: Export Filter Container */
+        .export-filter-container {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .export-filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        .export-filter-row label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+        .export-filter-row input, .export-filter-row select {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+            font-size: 0.85rem;
+        }
+
         .sort-select {
             padding: 8px 12px;
             border: 1px solid var(--border-light);
@@ -404,15 +433,6 @@
         .view-section { display: none; }
         .view-section.active { display: block; }
 
-        /* --- EXPORT MODAL SPECIFIC --- */
-        .export-filter-group { margin-bottom: 20px; }
-        .export-filter-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
-        .export-radio { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px; border: 1px solid var(--border-light); border-radius: 8px; transition: var(--transition); }
-        .export-radio:hover { border-color: var(--primary); background: var(--primary-light); }
-        .export-radio input { accent-color: var(--primary); }
-        .export-date-inputs { display: flex; gap: 10px; flex-wrap: wrap; }
-        .export-date-inputs > div { flex: 1; min-width: 120px; }
-        
         /* --- PRINT STYLES --- */
         @media print {
             body { background: white; height: auto; overflow: visible; display: block; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -468,7 +488,6 @@
             .pagination-bar { flex-direction: column; align-items: stretch; }
             .pagination-controls { width: 100%; justify-content: space-between; }
             .pagination-info { text-align: center; margin-bottom: 5px; }
-            .export-filter-options { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -671,11 +690,11 @@
                                 <option value="desc">Newest First</option>
                                 <option value="asc">Oldest First</option>
                             </select>
+                            <!-- UPDATED: Export button triggers modal -->
                             <button class="btn-sm btn-bill" onclick="openExportModal('appointments')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="today-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Phone</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-                    <!-- Pagination Container -->
                     <div id="pag-appointments-upcoming" class="pagination-bar"></div>
                 </div>
 
@@ -693,11 +712,11 @@
                                 <option value="desc">Newest First</option>
                                 <option value="asc">Oldest First</option>
                             </select>
+                            <!-- UPDATED: Export button triggers modal -->
                             <button class="btn-sm btn-bill" onclick="openExportModal('history')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="history-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-                    <!-- Pagination Container -->
                     <div id="pag-appointments-history" class="pagination-bar"></div>
                 </div>
 
@@ -710,7 +729,6 @@
                     </div>
                     <div id="cancelled-container" style="display:none;">
                         <div class="table-responsive"><table id="cancelled-table"><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Service</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-                        <!-- Pagination Container -->
                         <div id="pag-appointments-cancelled" class="pagination-bar"></div>
                     </div>
                 </div>
@@ -718,7 +736,6 @@
 
             <!-- CASH BILL -->
             <section id="view-cashbill" class="view-section">
-                <!-- Cashbill List View (Default) -->
                 <div id="cashbill-list-view">
                     <div class="section-card">
                         <div class="table-header">
@@ -738,12 +755,10 @@
                         </div>
                         <div class="loading-overlay"><div class="spinner"></div></div>
                         <div class="table-responsive"><table id="cashbill-table"><thead><tr><th>Invoice #</th><th>Date</th><th>Patient</th><th>Total (RM)</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-                        <!-- Pagination Container -->
                         <div id="pag-cashbill" class="pagination-bar"></div>
                     </div>
                 </div>
 
-                <!-- Cashbill Create View (Hidden by default) -->
                 <div id="cashbill-create-view" style="display:none;">
                     <div class="section-card">
                         <div class="table-header">
@@ -752,7 +767,6 @@
                         </div>
 
                         <div class="bill-container">
-                            <!-- Left: Patient & Service Selection -->
                             <div>
                                 <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Patient Selection</h4>
                                 <div class="custom-select-wrapper" style="margin-bottom:20px;">
@@ -785,7 +799,6 @@
                                 </div>
                             </div>
 
-                            <!-- Right: Payment & Actions -->
                             <div class="bill-actions-area">
                                 <div class="section-card" style="padding:20px;">
                                     <h4 style="margin-bottom:10px;">Total Due</h4>
@@ -843,6 +856,7 @@
                                     <input type="date" id="billing-end" class="form-input" style="padding: 10px;" onchange="renderBilling()">
                                 </div>
                             </div>
+                            <!-- UPDATED: Export button triggers modal -->
                             <button class="btn-primary" style="width:auto; white-space:nowrap; padding: 10px 20px;" onclick="openExportModal('billing')"><i class="fa-solid fa-download"></i> Download CSV</button>
                         </div>
                     </div>
@@ -861,11 +875,9 @@
                                 <option value="desc">Newest First</option>
                                 <option value="asc">Oldest First</option>
                             </select>
-                            <button class="btn-sm btn-bill" onclick="openExportModal('billing')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="billing-table"><thead><tr><th>Invoice #</th><th>Date</th><th>Patient</th><th>Phone</th><th>Items</th><th>Total (RM)</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-                    <!-- Pagination Container -->
                     <div id="pag-billing" class="pagination-bar"></div>
                 </div>
             </section>
@@ -1049,7 +1061,7 @@
                     <div class="table-header" style="margin-bottom:0;">
                         <h3><i class="fa-solid fa-calendar-plus" style="color:var(--primary); margin-right:8px;"></i>New Appointment</h3>
                         <div class="table-header-actions">
-                             <button class="btn-sm btn-bill" onclick="openExportModal('booking')"><i class="fa-solid fa-download"></i> Export Data</button>
+                             <button class="btn-sm" onclick="openExportModal('booking')"><i class="fa-solid fa-download"></i> Export Data</button>
                              <button class="btn-sm" onclick="resetBookingForm()">Reset</button>
                         </div>
                     </div>
@@ -1158,83 +1170,6 @@
     </div>
 
     <!-- MODALS -->
-    
-    <!-- 9. EXPORT MODAL -->
-    <div class="modal-overlay" id="exportModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-file-export"></i> Export Data</h3>
-                <button onclick="closeModal('exportModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <p style="margin-bottom: 15px; color: var(--text-light);">Select a date range to filter the data for export.</p>
-                
-                <div class="export-filter-options">
-                    <label class="export-radio">
-                        <input type="radio" name="exportFilter" value="date" checked onchange="toggleExportInputs()">
-                        Specific Date
-                    </label>
-                    <label class="export-radio">
-                        <input type="radio" name="exportFilter" value="month" onchange="toggleExportInputs()">
-                        By Month
-                    </label>
-                    <label class="export-radio">
-                        <input type="radio" name="exportFilter" value="year" onchange="toggleExportInputs()">
-                        By Year
-                    </label>
-                    <label class="export-radio">
-                        <input type="radio" name="exportFilter" value="all" onchange="toggleExportInputs()">
-                        All Data
-                    </label>
-                </div>
-
-                <div id="exportSpecificDate" class="export-date-inputs">
-                    <div>
-                        <label>Date</label>
-                        <input type="date" id="export-date-single" class="form-input">
-                    </div>
-                </div>
-
-                <div id="exportMonthYear" class="export-date-inputs" style="display:none;">
-                    <div>
-                        <label>Month</label>
-                        <select id="export-month" class="form-input">
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Year</label>
-                        <input type="number" id="export-year-month" class="form-input" placeholder="2024">
-                    </div>
-                </div>
-
-                <div id="exportYearOnly" class="export-date-inputs" style="display:none;">
-                    <div>
-                        <label>Year</label>
-                        <input type="number" id="export-year-only" class="form-input" placeholder="2024">
-                    </div>
-                </div>
-
-                <input type="hidden" id="export-type-hidden">
-            </div>
-            <div class="modal-footer">
-                <button class="btn-sm" onclick="closeModal('exportModal')">Cancel</button>
-                <button class="btn-primary" style="width: auto; padding: 10px 20px;" onclick="executeExport()"><i class="fa-solid fa-download"></i> Download CSV</button>
-            </div>
-        </div>
-    </div>
-
     <!-- 1. Edit Appointment Modal -->
     <div class="modal-overlay" id="editApptModal">
         <div class="modal-content">
@@ -1297,7 +1232,6 @@
                     </select>
                 </div>
                 
-                <!-- NEW Fields -->
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Email</label><input type="email" id="edit-staff-email" class="form-input" placeholder="email@example.com"></div>
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">IC Number</label><input type="text" id="edit-staff-ic" class="form-input" placeholder="IC Number"></div>
                 <div style="margin-bottom:15px;"><label style="font-size:0.8rem; font-weight:700;">Contact No</label><input type="tel" id="edit-staff-contact" class="form-input" placeholder="01x-xxxxxxx"></div>
@@ -1453,6 +1387,45 @@
         </div>
     </div>
 
+    <!-- 9. EXPORT MODAL -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-download"></i> Export Data</h3>
+                <button onclick="closeModal('exportModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="export-type">
+                <p style="margin-bottom: 15px; color: var(--text-light);">Select date range for the export data:</p>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size:0.8rem; font-weight:700;">Filter Type</label>
+                    <select id="export-filter-type" class="form-input" onchange="toggleExportDateInputs()">
+                        <option value="all">All Time</option>
+                        <option value="today">Today Only</option>
+                        <option value="month">This Month</option>
+                        <option value="range" selected>Custom Range</option>
+                    </select>
+                </div>
+
+                <div id="export-range-inputs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label style="font-size:0.8rem; font-weight:700;">Start Date</label>
+                        <input type="date" id="export-start" class="form-input">
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem; font-weight:700;">End Date</label>
+                        <input type="date" id="export-end" class="form-input">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" onclick="closeModal('exportModal')">Cancel</button>
+                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="executeExport()"><i class="fa-solid fa-file-csv"></i> Download CSV</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST -->
     <div id="toast">
         <i class="fa-solid fa-circle-check" style="color:#4ade80;"></i> 
@@ -1468,7 +1441,6 @@
       ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[OpenWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.openwidget.com/openwidget.js",t.head.appendChild(n)}};!n.__ow.asyncInit&&e.init(),n.OpenWidget=n.OpenWidget||e}(window,document,[].slice))
     </script>
     <noscript>You need to <a href="https://www.openwidget.com/enable-javascript" rel="noopener nofollow">enable JavaScript</a> to use communication tool powered by <a href="https://www.openwidget.com/" rel="noopener nofollow" target="_blank">OpenWidget</a></noscript>
-    <!-- End of OpenWidget code -->
 
     <script>
         // --- UPDATED FIREBASE CONFIGURATION ---
@@ -1508,6 +1480,7 @@
         let selectedBookingTime = null;
         let currentBillAppt = null;
         let historyPatientId = null;
+        let currentExportType = null; // NEW
 
         // Sort State
         let sortState = {
@@ -1553,36 +1526,22 @@
             // Auth State Listener
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
-                    // User is signed in.
-                    // Check if session is still valid via our custom logic
                     const expiry = localStorage.getItem(LOCAL_STORAGE_KEY);
                     if (!expiry) {
-                        // New login, set expiry
                         resetSessionExpiry();
                     } else if (Date.now() > parseInt(expiry)) {
-                        // Expired
                         await logout();
                         return;
                     }
 
-                    // Fetch staff data
-                    // Note: Since we use dummy emails, we query by username stored in displayName or just query collection
-                    // For simplicity, we'll query the email or UID.
-                    // But since we set user.displayName = username during creation, we can use that.
-                    
                     let q;
                     if(user.email.includes('@clinic.azam.internal')) {
-                         // Internal dummy email, search by username which we might have stored in displayName or need to query
-                         // Ideally, we search staff collection by uid (auth user uid) if we stored it, or username.
-                         // Let's assume we query by uid if available, or email.
                          q = await db.collection('klinikazam_staff').where('uid', '==', user.uid).limit(1).get();
                          if(q.empty) {
-                             // Fallback if uid wasn't stored
                              const username = user.displayName; 
                              q = await db.collection('klinikazam_staff').where('username', '==', username).limit(1).get();
                          }
                     } else {
-                        // Legacy email login
                         q = await db.collection('klinikazam_staff').where('email', '==', user.email).limit(1).get();
                     }
 
@@ -1601,7 +1560,6 @@
                         auth.signOut();
                     }
                 } else {
-                    // User is signed out.
                     localStorage.removeItem(LOCAL_STORAGE_KEY);
                     document.getElementById('login-screen').classList.remove('hidden');
                 }
@@ -1733,29 +1691,25 @@
             showLoading(true);
             
             try {
-                // 1. Check if username exists in DB to get the 'dummy' email
                 const q = await db.collection('klinikazam_staff').where('username', '==', u.toLowerCase()).limit(1).get();
                 
                 if (q.empty) {
-                    // Check legacy email login (if any old accounts exist)
                     const qEmail = await db.collection('klinikazam_staff').where('email', '==', u).limit(1).get();
                     if(qEmail.empty) {
                         loginError.innerText = "Username not found";
                         showLoading(false);
                         return;
                     }
-                    // Found by email
                     const staffDoc = qEmail.docs[0].data();
                     await auth.signInWithEmailAndPassword(staffDoc.email, p);
                 } else {
-                    // Found by username
                     const staffDoc = q.docs[0].data();
                     const email = staffDoc.email;
                     await auth.signInWithEmailAndPassword(email, p);
                 }
 
                 loginError.innerText = "";
-                resetSessionExpiry(); // Start session timer
+                resetSessionExpiry();
             } catch (error) {
                 console.error(error);
                 if (error.code === 'auth/wrong-password') loginError.innerText = "Invalid password";
@@ -1770,7 +1724,6 @@
         async function logout() {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             await auth.signOut();
-            // Force reload to reset state completely
             window.location.reload(); 
         }
 
@@ -1963,63 +1916,81 @@
 
         // --- EXPORT FUNCTIONS ---
         
+        // NEW: Open Export Modal
         function openExportModal(type) {
-            document.getElementById('export-type-hidden').value = type;
+            currentExportType = type;
             
             // Set default dates
             const now = new Date();
-            document.getElementById('export-date-single').value = getLocalDateStr(now);
-            document.getElementById('export-year-month').value = now.getFullYear();
-            document.getElementById('export-year-only').value = now.getFullYear();
-            document.getElementById('export-month').value = String(now.getMonth() + 1).padStart(2, '0');
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
             
-            // Reset radio
-            document.querySelector('input[name="exportFilter"][value="date"]').checked = true;
-            toggleExportInputs();
+            document.getElementById('export-start').value = getLocalDateStr(firstDay);
+            document.getElementById('export-end').value = getLocalDateStr(lastDay);
+            document.getElementById('export-filter-type').value = 'range'; // Default to range
+            
+            // Special case: Billing page already has dates, use them
+            if(type === 'billing') {
+                const bStart = document.getElementById('billing-start').value;
+                const bEnd = document.getElementById('billing-end').value;
+                if(bStart && bEnd) {
+                    document.getElementById('export-start').value = bStart;
+                    document.getElementById('export-end').value = bEnd;
+                }
+            }
 
+            toggleExportDateInputs();
             showModal('exportModal');
         }
 
-        function toggleExportInputs() {
-            const val = document.querySelector('input[name="exportFilter"]:checked').value;
-            document.getElementById('exportSpecificDate').style.display = val === 'date' ? 'flex' : 'none';
-            document.getElementById('exportMonthYear').style.display = val === 'month' ? 'flex' : 'none';
-            document.getElementById('exportYearOnly').style.display = val === 'year' ? 'flex' : 'none';
+        // NEW: Toggle Date Inputs based on selection
+        function toggleExportDateInputs() {
+            const type = document.getElementById('export-filter-type').value;
+            const rangeInputs = document.getElementById('export-range-inputs');
+            
+            if (type === 'range') {
+                rangeInputs.style.display = 'grid';
+            } else {
+                rangeInputs.style.display = 'none';
+            }
         }
 
+        // NEW: Execute Export Logic
         function executeExport() {
-            const type = document.getElementById('export-type-hidden').value;
-            const filterVal = document.querySelector('input[name="exportFilter"]:checked').value;
-            
-            let startDate, endDate;
+            const filterType = document.getElementById('export-filter-type').value;
+            let start, end;
 
-            if (filterVal === 'date') {
-                startDate = document.getElementById('export-date-single').value;
-                endDate = startDate;
-            } else if (filterVal === 'month') {
-                const month = document.getElementById('export-month').value;
-                const year = document.getElementById('export-year-month').value;
-                if (!year) { showToast("Please enter a year."); return; }
-                startDate = `${year}-${month}-01`;
-                // Get last day of month
-                const lastDay = new Date(year, parseInt(month), 0).getDate();
-                endDate = `${year}-${month}-${String(lastDay).padStart(2, '0')}`;
-            } else if (filterVal === 'year') {
-                const year = document.getElementById('export-year-only').value;
-                 if (!year) { showToast("Please enter a year."); return; }
-                startDate = `${year}-01-01`;
-                endDate = `${year}-12-31`;
+            const now = new Date();
+            const today = getLocalDateStr(now);
+
+            if (filterType === 'today') {
+                start = today;
+                end = today;
+            } else if (filterType === 'month') {
+                const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+                const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                start = getLocalDateStr(firstDay);
+                end = getLocalDateStr(lastDay);
+            } else if (filterType === 'range') {
+                start = document.getElementById('export-start').value;
+                end = document.getElementById('export-end').value;
+                if (!start || !end) {
+                    showToast("Please select start and end dates.");
+                    return;
+                }
             } else {
-                // All Data
-                startDate = null;
-                endDate = null;
+                // All Time
+                start = null;
+                end = null;
             }
 
-            exportData(type, startDate, endDate);
+            // Call the original export function with these parameters
+            exportData(currentExportType, start, end);
             closeModal('exportModal');
         }
 
-        function exportData(type, startDate, endDate) {
+        // UPDATED: Accepts start and end dates
+        function exportData(type, start = null, end = null) {
             let data = [];
             let filename = `export_${type}_${new Date().toISOString().split('T')[0]}.csv`;
             let headers = [];
@@ -2027,17 +1998,15 @@
             const sanitize = (str) => String(str || '').replace(/"/g, '""');
 
             try {
-                // Helper to filter by date range
-                const filterByDate = (itemDate) => {
-                    if (!startDate) return true; // No filter
-                    return itemDate >= startDate && itemDate <= endDate;
-                };
-
-                if (type === 'appointments' || type === 'history') {
+                if (type === 'appointments' || type === 'history' || type === 'booking') {
                     const isHistory = type === 'history';
                     let list = appointments.filter(a => isHistory ? a.status === 'Completed' : (a.status !== 'Cancelled' && a.status !== 'Completed'));
-                    list = list.filter(a => filterByDate(a.date));
                     
+                    // Apply Date Filter
+                    if (start && end) {
+                        list = list.filter(a => a.date >= start && a.date <= end);
+                    }
+
                     data = list.map(a => {
                         const p = patients.find(pt => pt.id === a.patient_id);
                         let sName = "Unknown";
@@ -2058,7 +2027,12 @@
                 } 
                 else if (type === 'cashbill') {
                     let list = appointments.filter(a => a.status === 'Completed');
-                    list = list.filter(a => filterByDate(a.date));
+                    
+                    // Apply Date Filter
+                    if (start && end) {
+                        list = list.filter(a => a.date >= start && a.date <= end);
+                    }
+
                     data = list.map(a => {
                         const p = patients.find(pt => pt.id === a.patient_id);
                         let total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
@@ -2073,15 +2047,13 @@
                     headers = ['InvoiceNo', 'Date', 'Patient', 'Total', 'PaymentMethod'];
                 }
                 else if (type === 'billing') {
-                    // Use filtered billing data if startDate is passed, otherwise use UI
-                    let start = startDate || document.getElementById('billing-start').value;
-                    let end = endDate || document.getElementById('billing-end').value;
+                    let list = appointments.filter(a => a.status === 'Completed');
+                    
+                    // Apply Date Filter
+                    if (start && end) {
+                        list = list.filter(a => a.date >= start && a.date <= end);
+                    }
 
-                    let list = appointments.filter(a => 
-                        a.status === 'Completed' && 
-                        a.date >= start && 
-                        a.date <= end
-                    );
                     data = list.map(a => {
                         const p = patients.find(pt => pt.id === a.patient_id);
                         let total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
@@ -2102,7 +2074,7 @@
                     headers = ['InvoiceNo', 'Date', 'Patient', 'Phone', 'Service', 'Total'];
                 }
                 else if (type === 'staff') {
-                    // Staff usually doesn't need date filter, but we can ignore it or add 'joined date' if exists
+                    // Staff usually doesn't need date filter, but leaving logic consistent
                     data = staff.map(s => {
                         return {
                             ID: s.id,
@@ -2116,7 +2088,7 @@
                     headers = ['ID', 'Name', 'JobTitle', 'Role', 'Username', 'Email'];
                 }
                 else if (type === 'patients') {
-                    // Patients also usually don't need date filter for basic info
+                    // Patients usually doesn't need date filter
                     const visitCounts = {};
                     appointments.forEach(a => {
                         if(a.status === 'Completed') {
@@ -2134,31 +2106,9 @@
                     });
                     headers = ['ID', 'Name', 'Phone', 'IC', 'TotalVisits'];
                 }
-                else if (type === 'booking') {
-                    // Export all upcoming appointments
-                    let list = appointments.filter(a => a.status !== 'Cancelled' && a.status !== 'Completed');
-                    list = list.filter(a => filterByDate(a.date));
-                     data = list.map(a => {
-                        const p = patients.find(pt => pt.id === a.patient_id);
-                        let sName = "Unknown";
-                        if(a.items && a.items.length > 0) {
-                            const s = services.find(svc => svc.id == a.items[0].id);
-                            sName = s ? s.name : "Unknown";
-                        }
-                        return {
-                            Date: a.date,
-                            Time: a.time,
-                            Patient: p ? p.name : 'Unknown',
-                            Phone: p ? p.phone : '-',
-                            Service: sName,
-                            Status: a.status
-                        };
-                    });
-                    headers = ['Date', 'Time', 'Patient', 'Phone', 'Service', 'Status'];
-                }
 
                 if (data.length === 0) {
-                    showToast("No data to export for the selected range");
+                    showToast("No data to export for selected range");
                     return;
                 }
 
@@ -2262,7 +2212,6 @@
                         const s = services.find(svc => svc.id == a.items[0].id);
                         sName = s ? s.name.toLowerCase() : "";
                     }
-                    
                     return pName.includes(queryAppt) || sName.includes(queryAppt) || a.date.includes(queryAppt);
                 });
             }
@@ -2294,9 +2243,7 @@
                         <a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${pPhone}')"><i class="fa-brands fa-whatsapp"></i></a>
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
                         <button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>
-                        
                         ${currentUser.role !== 'Staff' ? `<button class="btn-sm btn-delete" onclick="openCancelConfirm('${a.id}')"><i class="fa-solid fa-ban"></i> Cancel</button>` : ''}
-                        
                         ${(currentUser.role === 'SuperAdmin' && a.id !== currentUser.id) ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 </tr>`;
@@ -2733,10 +2680,6 @@
             renderPaginationControls('billing', filteredAppts.length);
         }
 
-        function exportBillingData() {
-            openExportModal('billing');
-        }
-
         // --- INVOICE VIEW ---
         async function viewBillDetail(id) {
             const a = appointments.find(x => x.id === id);
@@ -2769,7 +2712,7 @@
                 a.items.forEach((item, index) => {
                     const s = services.find(s => s.id == item.id);
                     const name = s ? s.name : 'Unknown Service';
-                    const lineTotal = item.price * item.qty 
+                    const lineTotal = item.price * item.qty;
                     total += lineTotal;
 
                     tbody.innerHTML += `
@@ -3491,7 +3434,7 @@
                 document.getElementById('edit-staff-contact').value = '';
                 document.getElementById('edit-staff-emergency').value = '';
                 document.getElementById('edit-staff-address').value = '';
-                document.getElementById('edit-staff-email').value = ''; // Reset email
+                document.getElementById('edit-staff-email').value = '';
                 
                 generateSmartId('klinikazam_staff', 'KPA').then(sid => {
                     document.getElementById('edit-staff-sid').value = sid;
@@ -3514,7 +3457,7 @@
                 document.getElementById('edit-staff-contact').value = s.contact || '';
                 document.getElementById('edit-staff-emergency').value = s.emergency_contact || '';
                 document.getElementById('edit-staff-address').value = s.address || '';
-                document.getElementById('edit-staff-email').value = s.email || ''; // Load email
+                document.getElementById('edit-staff-email').value = s.email || '';
             }
             showModal('editStaffModal');
         }
@@ -3539,7 +3482,6 @@
             const u = document.getElementById('edit-staff-u').value.toLowerCase();
             const p = document.getElementById('edit-staff-p').value;
             
-            // New fields
             const ic = document.getElementById('edit-staff-ic').value;
             const contact = document.getElementById('edit-staff-contact').value;
             const emergency = document.getElementById('edit-staff-emergency').value;
@@ -3568,22 +3510,14 @@
                     contact, 
                     emergency_contact: emergency, 
                     address,
-                    email: emailInput || `${u}@clinic.azam.internal` // Save email
+                    email: emailInput || `${u}@clinic.azam.internal`
                 };
                 if(role !== targetStaff.role) updateData.role = role; 
                 
                 await db.collection('klinikazam_staff').doc(id).update(updateData);
                 
                 if(p && p.length >= 6) {
-                    try {
-                         // Note: Changing password requires the user to be logged in or use Admin SDK which isn't available in client SDK easily without Cloud Functions.
-                         // As a workaround, we will just update the Firestore record. Auth password update for other users usually requires Admin SDK (backend).
-                         // Since this is a frontend-only solution, we can't securely change another user's password here without a backend.
-                         // We will stick to basic Auth operations.
-                         showToast("Staff details updated. Password changes for existing users require a backend function or the user to do it themselves.");
-                    } catch(e) {
-                        console.error(e);
-                    }
+                    showToast("Staff details updated. Password changes for existing users require a backend function or the user to do it themselves.");
                 }
 
             } else {
@@ -3599,14 +3533,9 @@
                         return;
                     }
 
-                    // Use real email if provided, else dummy
                     const email = emailInput || `${u}@clinic.azam.internal`;
-                    
-                    // Create user in Firebase Auth
                     const userCredential = await auth.createUserWithEmailAndPassword(email, p);
                     const newUser = userCredential.user;
-                    
-                    // Update profile to store username
                     await newUser.updateProfile({ displayName: u });
 
                     const smartId = document.getElementById('edit-staff-sid').value || await generateSmartId('klinikazam_staff', 'KPA');
