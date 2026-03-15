@@ -242,6 +242,8 @@
         .badge-completed { background: var(--success-bg); color: #15803d; }
         .badge-cancelled { background: var(--danger-bg); color: #b91c1c; }
         .badge-info { background: var(--info-bg); color: #1e40af; }
+        .badge-active { background: var(--success-bg); color: #15803d; }
+        .badge-inactive { background: var(--danger-bg); color: #b91c1c; }
 
         .btn-sm { padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-light); background: white; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: var(--transition); }
         .btn-sm:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-1px); }
@@ -489,6 +491,28 @@
             .pagination-controls { width: 100%; justify-content: space-between; }
             .pagination-info { text-align: center; margin-bottom: 5px; }
         }
+
+        /* Custom Toggle Switch */
+        .toggle-switch {
+            position: relative; display: inline-block; width: 50px; height: 26px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .4s; border-radius: 26px;
+        }
+        .toggle-slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .toggle-slider { background-color: var(--success); }
+        input:checked + .toggle-slider:before { transform: translateX(24px); }
+        .access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .access-item {
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border-light);
+        }
+        .access-item label { font-size: 0.9rem; font-weight: 500; color: var(--text-main); }
     </style>
 </head>
 <body>
@@ -981,7 +1005,7 @@
                             <button class="btn-sm btn-bill" onclick="openExportModal('staff')"><i class="fa-solid fa-download"></i> Export</button>
                         </div>
                     </div>
-                    <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+                    <div class="table-responsive"><table id="staff-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
                     <div id="pag-staff" class="pagination-bar"></div>
                 </div>
 
@@ -989,7 +1013,7 @@
                      <div class="table-header">
                         <h3><i class="fa-solid fa-user-shield" style="color:var(--danger); margin-right:8px;"></i>SuperAdmin / System Developer</h3>
                     </div>
-                    <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Username</th></tr></thead><tbody></tbody></table></div>
+                    <div class="table-responsive"><table id="superadmin-table"><thead><tr><th>ID</th><th>Name</th><th>Job Title</th><th>Role</th><th>Status</th></tr></thead><tbody></tbody></table></div>
                 </div>
             </section>
 
@@ -1426,6 +1450,87 @@
         </div>
     </div>
 
+    <!-- 10. MANAGE ACCESS MODAL -->
+    <div class="modal-overlay" id="manageAccessModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-lock"></i> Manage Access</h3>
+                <button onclick="closeModal('manageAccessModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="access-staff-id">
+                <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+                    <span>Staff: <strong id="access-staff-name">-</strong></span>
+                    <span class="badge badge-info" id="access-staff-role">-</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px;">Toggle module access for this user. Unchecked modules will be hidden from their sidebar.</p>
+                
+                <div class="access-grid">
+                    <div class="access-item">
+                        <label>Dashboard</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-dashboard" checked disabled>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="access-item">
+                        <label>Appointments</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-appointments">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="access-item">
+                        <label>New Booking</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-booking">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="access-item">
+                        <label>Cashbill</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-cashbill">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="access-item">
+                        <label>Reports</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-billing">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="access-item">
+                        <label>Patients</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-patients">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="access-item">
+                        <label>Services</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-services">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="access-item">
+                        <label>Slot Mgmt</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="acc-slots">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" onclick="closeModal('manageAccessModal')">Cancel</button>
+                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="saveAccessControl()">Save Access</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST -->
     <div id="toast">
         <i class="fa-solid fa-circle-check" style="color:#4ade80;"></i> 
@@ -1729,6 +1834,12 @@
 
         // --- NAVIGATION & UI ---
         function navigateTo(viewId) {
+            // Check Access
+            if(!checkAccess(viewId)) {
+                showToast("Access Denied: You do not have permission to view this page.");
+                return;
+            }
+
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const navItem = document.querySelector(`.nav-item[onclick="navigateTo('${viewId}')"]`);
             if(navItem) navItem.classList.add('active');
@@ -1781,6 +1892,26 @@
             setTimeout(() => showLoading(false), 300);
         }
 
+        // Check if user has access to a module
+        function checkAccess(viewId) {
+            if(!currentUser) return false;
+            // SuperAdmin and Admin have full access
+            if(currentUser.role === 'SuperAdmin' || currentUser.role === 'Admin') return true;
+            
+            const accessMap = currentUser.access || {
+                dashboard: true, // Default
+                appointments: true,
+                booking: true,
+                cashbill: true,
+                billing: true,
+                patients: true,
+                services: true,
+                slots: true
+            };
+
+            return accessMap[viewId] !== false;
+        }
+
         function applyRoleBasedUI() {
             if(!currentUser) return;
             const isSuperAdmin = currentUser.role === 'SuperAdmin';
@@ -1789,6 +1920,28 @@
             if(isSuperAdmin || isAdmin) navStaff.style.display = 'flex';
             else navStaff.style.display = 'none';
             
+            // Apply visibility based on access for Staff role
+            if(currentUser.role === 'Staff' && currentUser.access) {
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    const onclickAttr = item.getAttribute('onclick');
+                    if(onclickAttr) {
+                        const match = onclickAttr.match(/navigateTo\('(.*)'\)/);
+                        if(match && match[1]) {
+                            const viewId = match[1];
+                            if(currentUser.access[viewId] === false) {
+                                item.style.display = 'none';
+                            } else {
+                                item.style.display = 'flex';
+                            }
+                        }
+                    }
+                });
+            } else {
+                // Reset visibility for Admin/SuperAdmin
+                 document.querySelectorAll('.nav-item').forEach(item => item.style.display = 'flex');
+            }
+
             if(document.getElementById('view-staff').classList.contains('active')) renderStaff(); 
         }
 
@@ -2023,7 +2176,7 @@
                             Status: a.status
                         };
                     });
-                    headers = ['Date', 'Time', 'Patient', 'Phone', 'Service', 'Status'];
+                                        headers = ['Date', 'Time', 'Patient', 'Phone', 'Service', 'Status'];
                 } 
                 else if (type === 'cashbill') {
                     let list = appointments.filter(a => a.status === 'Completed');
@@ -3386,30 +3539,40 @@
             const regularStaff = filtered.filter(s => s.role !== 'SuperAdmin');
 
             superAdmins.forEach(s => {
-                saBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}<br><small>${s.email||''}</small></td><td>-</td></tr>`;
+                saBody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td><span class="badge badge-active">Active</span></td></tr>`;
             });
 
             const pagedData = getPaginatedData(regularStaff, 'staff');
             pagedData.data.forEach(s => {
-                let editBtn = '';
-                let deleteBtn = '';
-                let resetBtn = '';
+                let actionBtns = '';
+                
+                // All users can see status (Read Only)
+                const statusBadge = s.status === 'Inactive' 
+                    ? '<span class="badge badge-inactive">Inactive</span>'
+                    : '<span class="badge badge-active">Active</span>';
 
-                if(isSuperAdmin) {
-                    const isSelf = s.id === currentUser.id;
-                    if(!isSelf) {
-                         editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
-                         deleteBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('staff', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
-                    }
-                } else if(isAdmin) {
-                     editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
+                // SuperAdmin Actions
+                if(isSuperAdmin && s.id !== currentUser.id) {
+                    actionBtns = `
+                        <button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-sm btn-bill" onclick="openAccessModal('${s.id}')"><i class="fa-solid fa-lock"></i></button>
+                        <button class="btn-sm btn-delete" onclick="requestDelete('staff', '${s.id}')"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                } else if (isAdmin) {
+                    actionBtns = `
+                        <button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+                    `;
                 }
 
-                if(isSuperAdmin && s.email) {
-                    resetBtn = `<button class="btn-sm btn-reset" onclick="sendPasswordReset('${s.email}')" title="Send Reset Email"><i class="fa-solid fa-key"></i></button>`;
-                }
-
-                tbody.innerHTML += `<tr><td>${s.id}</td><td style="font-weight:600;">${s.name}</td><td>${s.job_title || '-'}</td><td><span class="badge badge-info">${s.role}</span></td><td>${s.username}<br><small>${s.email||''}</small></td><td>${editBtn} ${resetBtn} ${deleteBtn}</td></tr>`;
+                tbody.innerHTML += `
+                <tr>
+                    <td>${s.id}</td>
+                    <td style="font-weight:600;">${s.name}</td>
+                    <td>${s.job_title || '-'}</td>
+                    <td><span class="badge badge-info">${s.role}</span></td>
+                    <td>${statusBadge}</td>
+                    <td>${actionBtns}</td>
+                </tr>`;
             });
 
             renderPaginationControls('staff', regularStaff.length);
@@ -3575,6 +3738,62 @@
             renderStaff();
             closeModal('editStaffModal');
             showToast(id ? "Staff Updated" : "Staff Added");
+        }
+
+        // --- ACCESS CONTROL ---
+        function openAccessModal(staffId) {
+            if(currentUser.role !== 'SuperAdmin') {
+                showToast("Only SuperAdmin can manage access.");
+                return;
+            }
+            const s = staff.find(x => x.id === staffId);
+            if(!s) return;
+
+            document.getElementById('access-staff-id').value = staffId;
+            document.getElementById('access-staff-name').innerText = s.name;
+            document.getElementById('access-staff-role').innerText = s.role;
+
+            const access = s.access || {};
+            
+            // Default to true if undefined
+            document.getElementById('acc-dashboard').checked = true; // Always on
+            document.getElementById('acc-appointments').checked = access.appointments !== false;
+            document.getElementById('acc-booking').checked = access.booking !== false;
+            document.getElementById('acc-cashbill').checked = access.cashbill !== false;
+            document.getElementById('acc-billing').checked = access.billing !== false;
+            document.getElementById('acc-patients').checked = access.patients !== false;
+            document.getElementById('acc-services').checked = access.services !== false;
+            document.getElementById('acc-slots').checked = access.slots !== false;
+
+            showModal('manageAccessModal');
+        }
+
+        async function saveAccessControl() {
+            const staffId = document.getElementById('access-staff-id').value;
+            
+            const newAccess = {
+                dashboard: true, // Always true
+                appointments: document.getElementById('acc-appointments').checked,
+                booking: document.getElementById('acc-booking').checked,
+                cashbill: document.getElementById('acc-cashbill').checked,
+                billing: document.getElementById('acc-billing').checked,
+                patients: document.getElementById('acc-patients').checked,
+                services: document.getElementById('acc-services').checked,
+                slots: document.getElementById('acc-slots').checked
+            };
+
+            try {
+                await db.collection('klinikazam_staff').doc(staffId).update({
+                    access: newAccess,
+                    status: 'Active' // Ensure active if permissions are being managed
+                });
+                showToast("Access permissions updated");
+                await refreshData();
+                closeModal('manageAccessModal');
+            } catch(e) {
+                console.error(e);
+                showToast("Error updating access");
+            }
         }
 
         // --- SERVICES CRUD ---
