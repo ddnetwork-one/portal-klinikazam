@@ -257,6 +257,10 @@
         .btn-wa:hover { background: var(--wa-bg); }
         .btn-reset { color: var(--warning); border-color: #fef3c7; background: #fff; }
         .btn-reset:hover { background: var(--warning-bg); }
+        
+        /* Link Style for Invoice IDs */
+        .invoice-link { color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline; transition: var(--transition); }
+        .invoice-link:hover { color: var(--primary-dark); }
 
         /* --- PAGINATION --- */
         .pagination-bar {
@@ -850,9 +854,13 @@
                                     <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-light);">Phone</span><span style="font-weight:600;" id="cb-p-phone">-</span></div>
                                 </div>
 
-                                <h4 style="margin-bottom:15px; color:var(--primary); font-size:1rem;">Add Services</h4>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                    <h4 style="color:var(--primary); font-size:1rem; margin:0;">Services</h4>
+                                    <button class="btn-sm" onclick="addNewServiceRow()"><i class="fa-solid fa-plus"></i> Add</button>
+                                </div>
+                                
                                 <div style="margin-bottom:15px;">
-                                    <select id="cb-service-select" class="form-input" onchange="addToCashBill()">
+                                    <select id="cb-service-select" class="form-input">
                                         <option value="" disabled selected>-- Select Service to Add --</option>
                                     </select>
                                 </div>
@@ -1327,6 +1335,14 @@
                             <label>Access Reports</label>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="perm-reports">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <!-- NEW: Uncommit Bill Permission -->
+                        <div class="permission-item">
+                            <label>Uncommit Bills</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="perm-uncommit">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -2174,7 +2190,7 @@
 
                     data = list.map(a => {
                         const p = patients.find(pt => pt.id === a.patient_id);
-                        let total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
+                        let total = a.items ? a.items.reduce((sum, i) => sum + (i.price * i.qty), 0) : 0;
                         let sName = "Unknown";
                         if(a.items && a.items.length > 0) {
                             const s = services.find(svc => svc.id == a.items[0].id);
@@ -2286,7 +2302,7 @@
                     <td>
                         ${a.status !== 'Completed' ? `<a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${p ? p.phone : ''}')"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
-                        ${a.status === 'Completed' ? `<button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-file-invoice"></i></button>` : `<button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>`}
+                        ${a.status === 'Completed' ? `<button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-file-invoice"></i></button>` : `<button class="btn-sm btn-bill" onclick="initCreateCashbillFromAppt('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>`}
                         
                         ${hasPermission('delete_entries') && a.id !== currentUser.id ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
@@ -2358,7 +2374,7 @@
                     <td>
                         <a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${pPhone}')"><i class="fa-brands fa-whatsapp"></i></a>
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
-                        <button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>
+                        <button class="btn-sm btn-bill" onclick="initCreateCashbillFromAppt('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Create Cashbill</button>
                         ${hasPermission('delete_entries') ? `<button class="btn-sm btn-delete" onclick="openCancelConfirm('${a.id}')"><i class="fa-solid fa-ban"></i> Cancel</button>` : ''}
                         ${(hasPermission('delete_entries') && a.id !== currentUser.id) ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
@@ -2403,6 +2419,12 @@
                 }
                 
                 const invDisplay = a.invoice_id || `INV-${a.id}`;
+                
+                // Uncommit button logic
+                const uncommitBtn = hasPermission('uncommit_bill') 
+                    ? `<button class="btn-sm btn-reset" onclick="uncommitBill('${a.id}')" title="Uncommit Bill"><i class="fa-solid fa-rotate-left"></i></button>` 
+                    : '';
+
                 hBody.innerHTML += `
                 <tr>
                     <td>${formatDateDisplay(a.date)}</td>
@@ -2412,6 +2434,7 @@
                     <td><span class="badge badge-completed">Completed</span></td>
                     <td>
                         <button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-eye"></i> ${invDisplay}</button>
+                        ${uncommitBtn}
                     </td>
                 </tr>`;
             });
@@ -2471,6 +2494,48 @@
             }
         }
 
+        // NEW: Initialize Cashbill from Appointment
+        async function initCreateCashbillFromAppt(apptId) {
+            const a = appointments.find(x => x.id === apptId);
+            if(!a) return;
+
+            // Switch view
+            isCashbillCreateView = true;
+            document.getElementById('cashbill-list-view').style.display = 'none';
+            document.getElementById('cashbill-create-view').style.display = 'block';
+            document.getElementById('pageTitle').innerText = "Cashbill"; // Update title if needed
+            
+            // Reset first
+            resetCashBill();
+            initCashBillPatientSearch();
+            populateCashBillServices();
+
+            // Populate Data
+            const p = patients.find(pt => pt.id === a.patient_id);
+            if(p) {
+                selectCashBillPatient(p);
+            }
+
+            if(a.items && a.items.length > 0) {
+                // Map items to current bill items
+                currentCashBillItems = a.items.map(item => {
+                    const srv = services.find(s => s.id == item.id);
+                    return {
+                        id: item.id,
+                        qty: item.qty,
+                        price: item.price,
+                        name: srv ? srv.name : 'Unknown'
+                    };
+                });
+                renderCashBillItems();
+            }
+            
+            // Store appt ID to update instead of create new? 
+            // For this flow, usually creating a NEW cashbill entry is safer, or we update the existing one.
+            // Let's assume we treat it as a new bill creation but pre-filled.
+            showToast("Data loaded from appointment. Verify and save.");
+        }
+
         function renderCashbillList() {
             const query = document.querySelector('#view-cashbill .search-input')?.value.toLowerCase() || '';
             const sortVal = sortState.cashbill;
@@ -2500,6 +2565,12 @@
                 pagedData.data.forEach(a => {
                     const p = patients.find(pt => pt.id === a.patient_id);
                     const total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
+                    
+                    // Uncommit button logic
+                    const uncommitBtn = hasPermission('uncommit_bill') 
+                        ? `<button class="btn-sm btn-reset" onclick="uncommitBill('${a.id}')" title="Uncommit Bill"><i class="fa-solid fa-rotate-left"></i></button>` 
+                        : '';
+
                     tbody.innerHTML += `
                     <tr>
                         <td><span class="invoice-link" onclick="viewBillDetail('${a.id}')">${a.invoice_id || 'NO INV'}</span></td>
@@ -2509,11 +2580,37 @@
                         <td>
                             <button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-eye"></i> View</button>
                             <button class="btn-sm btn-wa" onclick="sendWhatsapp('${p?p.name:''}', '${a.date}', '${a.time}', '${p?p.phone:''}')"><i class="fa-brands fa-whatsapp"></i></button>
+                            ${uncommitBtn}
                         </td>
                     </tr>`;
                 });
             }
             renderPaginationControls('cashbill', list.length);
+        }
+
+        // NEW: Uncommit Bill Function
+        async function uncommitBill(id) {
+            if(!hasPermission('uncommit_bill')) {
+                showToast("Permission Denied");
+                return;
+            }
+
+            if(confirm("Are you sure you want to Uncommit this bill? It will revert to 'Pending' status and the Invoice ID will be removed.")) {
+                showLoading(true);
+                try {
+                    await db.collection('klinikazam_appointments').doc(id).update({
+                        status: 'Pending',
+                        invoice_id: firebase.firestore.FieldValue.delete()
+                    });
+                    await refreshData();
+                    showToast("Bill Uncommitted Successfully");
+                } catch(e) {
+                    console.error(e);
+                    showToast("Error uncommitting bill");
+                } finally {
+                    showLoading(false);
+                }
+            }
         }
 
         function resetCashBill() {
@@ -2536,10 +2633,21 @@
             const list = document.getElementById('cb-pat-list');
             const clearBtn = document.getElementById('clear-cb-pat');
 
+            // Remove previous listeners to avoid duplicates
+            const newSearchInput = searchInput.cloneNode(true);
+            searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+            
+            const newList = list.cloneNode(true);
+            list.parentNode.replaceChild(newList, list);
+
+            // Re-select after replacement
+            const currentInput = document.getElementById('cb-pat-search');
+            const currentList = document.getElementById('cb-pat-list');
+            
             const sortedPatients = [...patients].sort((a, b) => a.name.localeCompare(b.name));
 
             function renderList(filterText = '') {
-                list.innerHTML = '';
+                currentList.innerHTML = '';
                 const lowerFilter = filterText.toLowerCase();
                 const filtered = sortedPatients.filter(p => 
                     p.name.toLowerCase().includes(lowerFilter) || 
@@ -2547,43 +2655,45 @@
                 );
                 
                 if (filtered.length === 0) {
-                    list.innerHTML = '<li class="no-option">No patients found</li>';
+                    currentList.innerHTML = '<li class="no-option">No patients found</li>';
                 } else {
                     filtered.forEach(p => {
                         const li = document.createElement('li');
                         li.innerHTML = `<div>${p.name}</div><span class="sub-text">${p.phone || 'No Phone'}</span>`;
                         li.onclick = () => selectCashBillPatient(p);
-                        list.appendChild(li);
+                        currentList.appendChild(li);
                     });
                 }
             }
 
-            searchInput.addEventListener('focus', () => {
-                renderList(searchInput.value);
-                list.classList.add('show');
+            currentInput.addEventListener('focus', () => {
+                renderList(currentInput.value);
+                currentList.classList.add('show');
             });
 
-            searchInput.addEventListener('input', (e) => {
+            currentInput.addEventListener('input', (e) => {
                 renderList(e.target.value);
                 cashBillPatientId = null; 
+                validateCashBillForm();
             });
 
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.custom-select-wrapper')) {
-                    list.classList.remove('show');
+                    currentList.classList.remove('show');
                 }
             });
 
-            clearBtn.addEventListener('click', (e) => {
+            clearBtn.onclick = (e) => {
                 e.stopPropagation(); 
-                resetCashBill();
-                searchInput.focus();
-            });
+                clearCashBillPatient();
+                currentInput.focus();
+            };
         }
 
         function selectCashBillPatient(p) {
             cashBillPatientId = p.id;
-            document.getElementById('cb-pat-search').value = p.name; 
+            const searchInput = document.getElementById('cb-pat-search');
+            searchInput.value = p.name; 
             document.getElementById('cb-pat-id').value = p.id;
             document.getElementById('cb-pat-list').classList.remove('show');
             document.getElementById('clear-cb-pat').style.display = 'block';
@@ -2592,6 +2702,8 @@
             document.getElementById('cb-p-name').innerText = p.name;
             document.getElementById('cb-p-ic').innerText = p.ic || '-';
             document.getElementById('cb-p-phone').innerText = p.phone;
+
+            validateCashBillForm();
         }
 
         function clearCashBillPatient() {
@@ -2600,6 +2712,7 @@
             document.getElementById('cb-pat-details').style.display = 'none';
             document.getElementById('clear-cb-pat').style.display = 'none';
             cashBillPatientId = null;
+            validateCashBillForm();
         }
 
         function populateCashBillServices() {
@@ -2608,18 +2721,33 @@
             services.forEach(s => select.innerHTML += `<option value="${s.id}" data-price="${s.price}">${s.name} - RM ${s.price}</option>`);
         }
 
+        // NEW: Add Service Button handler
+        function addNewServiceRow() {
+            const select = document.getElementById('cb-service-select');
+            // Add currently selected service if any, or just prompt
+            if(select.value) {
+                addToCashBill();
+            } else {
+                showToast("Please select a service from the dropdown first.");
+            }
+        }
+
         function addToCashBill() {
             const select = document.getElementById('cb-service-select');
             const sId = select.value;
-            if(!sId || !cashBillPatientId) {
-                showToast("Select patient first");
+            if(!sId) {
+                showToast("Select a service first");
                 return;
             }
 
             const s = services.find(x => x.id == sId);
-            currentCashBillItems.push({ id: sId, qty: 1, price: s.price, name: s.name });
-            renderCashBillItems();
-            select.value = ""; 
+            if(s) {
+                // Check if already in list, if so increase qty? Or just add new line.
+                // Let's add new line for simplicity.
+                currentCashBillItems.push({ id: sId, qty: 1, price: s.price, name: s.name });
+                renderCashBillItems();
+                select.value = ""; 
+            }
         }
 
         function renderCashBillItems() {
@@ -2638,7 +2766,7 @@
                 `;
             });
             document.getElementById('cb-total-display').innerText = total.toFixed(2);
-            document.getElementById('cb-save-btn').disabled = currentCashBillItems.length === 0;
+            validateCashBillForm();
         }
 
         function removeCashBillItem(idx) {
@@ -2675,6 +2803,15 @@
                 balDisplay.innerText = `Change: RM ${balance.toFixed(2)}`;
             } else {
                 balDisplay.style.display = 'none';
+            }
+        }
+
+        function validateCashBillForm() {
+            const btn = document.getElementById('cb-save-btn');
+            if(cashBillPatientId && currentCashBillItems.length > 0) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
             }
         }
 
@@ -3307,6 +3444,7 @@
         }
 
         async function createCashbill(id) {
+            // This function is now legacy, initCreateCashbillFromAppt is preferred
             const a = appointments.find(x => x.id === id);
             if(a.invoice_id) {
                 showToast("Invoice already exists. Opening details.");
@@ -3551,6 +3689,7 @@
                 document.getElementById('perm-delete').checked = false;
                 document.getElementById('perm-edit-services').checked = false;
                 document.getElementById('perm-reports').checked = true; 
+                document.getElementById('perm-uncommit').checked = false;
 
                 document.getElementById('permissions-section').style.display = isSuper ? 'block' : 'none';
             } else {
@@ -3580,6 +3719,7 @@
                 document.getElementById('perm-delete').checked = perms.delete_entries || false;
                 document.getElementById('perm-edit-services').checked = perms.edit_services || false;
                 document.getElementById('perm-reports').checked = perms.access_reports || true;
+                document.getElementById('perm-uncommit').checked = perms.uncommit_bill || false;
 
                 document.getElementById('permissions-section').style.display = isSuper ? 'block' : 'none';
             }
@@ -3616,6 +3756,7 @@
             const permDelete = document.getElementById('perm-delete').checked;
             const permEditServices = document.getElementById('perm-edit-services').checked;
             const permReports = document.getElementById('perm-reports').checked;
+            const permUncommit = document.getElementById('perm-uncommit').checked;
 
             if(!u) { showToast("Username is required"); return; }
 
@@ -3654,7 +3795,8 @@
                         edit_staff: permEditStaff,
                         delete_entries: permDelete,
                         edit_services: permEditServices,
-                        access_reports: permReports
+                        access_reports: permReports,
+                        uncommit_bill: permUncommit
                     };
                 }
                 
@@ -3704,7 +3846,8 @@
                             edit_staff: permEditStaff,
                             delete_entries: permDelete,
                             edit_services: permEditServices,
-                            access_reports: permReports
+                            access_reports: permReports,
+                            uncommit_bill: permUncommit
                         }
                     };
                     
