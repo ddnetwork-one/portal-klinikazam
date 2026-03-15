@@ -131,7 +131,6 @@
         
         .form-input { width: 100%; padding: 14px 16px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: var(--radius); font-size: 0.95rem; transition: var(--transition); color: var(--text-main); }
         .form-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
-        .form-input:disabled { background: #f1f5f9; cursor: not-allowed; color: var(--text-light); border-style: dashed; }
         
         .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; font-weight: 600; font-size: 1rem; border-radius: var(--radius); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: flex; justify-content: center; align-items: center; gap: 10px; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); }
@@ -190,6 +189,35 @@
         .table-header-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; flex-wrap: wrap; }
         .table-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
 
+        /* NEW: Export Filter Container */
+        .export-filter-container {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .export-filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        .export-filter-row label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+        .export-filter-row input, .export-filter-row select {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+            font-size: 0.85rem;
+        }
+
         .sort-select {
             padding: 8px 12px;
             border: 1px solid var(--border-light);
@@ -218,11 +246,13 @@
         .btn-sm { padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-light); background: white; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: var(--transition); }
         .btn-sm:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-1px); }
         .btn-sm:active { transform: translateY(0); }
-        .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; background: #f1f5f9; }
+        .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; }
+        
         .btn-bill { background: var(--primary); color: white; border: none; }
         .btn-bill:hover { background: var(--primary-dark); }
         .btn-delete { color: var(--danger); border-color: #fee2e2; background: #fff; }
         .btn-delete:hover { background: var(--danger-bg); }
+        .btn-delete:disabled { color: #94a3b8; border-color: #e2e8f0; background: #fff; }
         .btn-wa { color: var(--wa-color); border-color: #dcfce7; background: #fff; }
         .btn-wa:hover { background: var(--wa-bg); }
         .btn-reset { color: var(--warning); border-color: #fef3c7; background: #fff; }
@@ -317,6 +347,7 @@
         .slots-header { padding: 15px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
         .slots-list { padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         
+        /* IMPROVED: Slot Item Styling */
         .slot-item { 
             padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; 
             text-align: center; font-weight: 600; font-size: 0.85rem; cursor: pointer; 
@@ -337,6 +368,7 @@
 
         .form-panel { padding: 20px; overflow-y: auto; }
         
+        /* IMPROVED: Live Summary Panel */
         .live-summary { background: var(--primary-light); border: 1px solid var(--secondary); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
         .live-summary h5 { font-size: 0.75rem; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 8px; letter-spacing: 0.05em; }
         .live-summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
@@ -365,6 +397,7 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-dot { width: 12px; height: 12px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
         
+        /* IMPROVED: Slot Card for Management */
         .slot-card {
             display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;
             border: 2px solid var(--border-light); border-radius: var(--radius); background: white; 
@@ -446,28 +479,6 @@
         }
         input:checked + .toggle-slider:before {
             transform: translateX(20px);
-        }
-        
-        /* Read Only Overlay Styles */
-        .readonly-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.7);
-            z-index: 5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(1px);
-            border-radius: var(--radius);
-        }
-        .readonly-badge {
-            background: var(--info-bg);
-            color: var(--primary-dark);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border: 1px solid var(--primary-light);
         }
 
         /* --- UI ELEMENTS --- */
@@ -1025,11 +1036,6 @@
                 <div class="section-card" style="position:relative;">
                     <div class="loading-overlay"><div class="spinner"></div></div>
                     
-                    <!-- READ ONLY OVERLAY FOR NON-ADMINS -->
-                    <div id="staff-read-only-overlay" class="readonly-overlay" style="display:none;">
-                        <span class="readonly-badge"><i class="fa-solid fa-lock"></i> Read Only Mode</span>
-                    </div>
-
                     <div class="table-header">
                         <h3><i class="fa-solid fa-users-cog" style="color:var(--primary); margin-right:8px;"></i>Staff Management</h3>
                         <div class="table-header-actions">
@@ -1288,12 +1294,12 @@
                     <select id="edit-staff-role" class="form-input">
                         <option value="Staff">Staff</option>
                         <option value="Admin">Admin</option>
-                        <!-- SuperAdmin option removed for security - only DB set -->
+                        <!-- SuperAdmin option removed for security. Only DB can set this. -->
                     </select>
                 </div>
                 
                 <!-- PERMISSIONS SECTION -->
-                <div id="permissions-section" style="margin-bottom:15px; display:none;">
+                <div id="permissions-section" style="margin-bottom:15px;">
                     <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:8px;">Permissions</label>
                     <div class="permissions-grid">
                         <div class="permission-item">
@@ -1403,9 +1409,6 @@
                         <div><label style="font-size: 0.75rem; color: var(--text-light);">Username</label><div style="font-weight: 600; font-size: 1rem;" id="profile-u">amalina</div></div>
                         <div><label style="font-size: 0.75rem; color: var(--text-light);">Employee ID</label><div style="font-weight: 600; font-size: 1rem;" id="profile-id">EMP001</div></div>
                     </div>
-                </div>
-                <div style="text-align: center; font-size: 0.85rem; color: var(--text-light);">
-                    <i class="fa-solid fa-shield-halved"></i> Contact admin to change password or details.
                 </div>
             </div>
             <div class="modal-footer"><button class="btn-sm" onclick="closeModal('profileModal')">Close</button></div>
@@ -1633,26 +1636,18 @@
                     }
 
                     let q;
-                    // Try finding by UID first (standard)
-                    q = await db.collection('klinikazam_staff').where('uid', '==', user.uid).limit(1).get();
-                    
-                    // Fallback: Find by email (for manually created users without UID sync yet)
-                    if(q.empty) {
-                         q = await db.collection('klinikazam_staff').where('email', '==', user.email).limit(1).get();
-                    }
-                    
-                    // Legacy fallback: Internal email convention
-                    if(q.empty && user.email.includes('@clinic.azam.internal')) {
-                         const username = user.displayName; 
-                         q = await db.collection('klinikazam_staff').where('username', '==', username).limit(1).get();
+                    if(user.email.includes('@clinic.azam.internal')) {
+                         q = await db.collection('klinikazam_staff').where('uid', '==', user.uid).limit(1).get();
+                         if(q.empty) {
+                             const username = user.displayName; 
+                             q = await db.collection('klinikazam_staff').where('username', '==', username).limit(1).get();
+                         }
+                    } else {
+                        q = await db.collection('klinikazam_staff').where('email', '==', user.email).limit(1).get();
                     }
 
                     if(!q.empty) {
                         currentUser = { id: q.docs[0].id, ...q.docs[0].data(), uid: user.uid };
-                        // Update UID if missing (migration step)
-                        if(!currentUser.uid) {
-                            await db.collection('klinikazam_staff').doc(currentUser.id).update({ uid: user.uid });
-                        }
                         setupUserUI(currentUser);
                         document.getElementById('login-screen').classList.add('hidden');
                         setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
@@ -1894,6 +1889,8 @@
             if(currentUser.role === 'SuperAdmin') return true;
             // Check specific permission in user object
             if(currentUser.permissions && currentUser.permissions[permKey]) return true;
+            // Default fallback for Admin (legacy support, but ideally false by default)
+            if(currentUser.role === 'Admin' && !currentUser.permissions) return true; 
             return false;
         }
 
@@ -1902,26 +1899,21 @@
             const isSuperAdmin = currentUser.role === 'SuperAdmin';
             
             // 1. Staff Management Access
-            const staffOverlay = document.getElementById('staff-read-only-overlay');
             const btnAddStaff = document.getElementById('btn-add-staff');
             
-            // Logic: Show Overlay if user is NOT SuperAdmin AND does NOT have edit_staff permission
-            if(!isSuperAdmin && !hasPermission('edit_staff')) {
-                staffOverlay.style.display = 'flex';
-                btnAddStaff.style.display = 'none';
-            } else {
-                staffOverlay.style.display = 'none';
+            // Logic: Only show Add Staff button if permission exists
+            if(hasPermission('edit_staff')) {
                 btnAddStaff.style.display = 'inline-flex';
+            } else {
+                btnAddStaff.style.display = 'none';
             }
 
             // 2. Services Management Access
             const btnAddService = document.getElementById('btn-add-service');
-            if(btnAddService) {
-                 if(!isSuperAdmin && !hasPermission('edit_services')) {
-                     btnAddService.style.display = 'none';
-                 } else {
-                     btnAddService.style.display = 'inline-flex';
-                 }
+            if(hasPermission('edit_services')) {
+                btnAddService.style.display = 'inline-flex';
+            } else {
+                btnAddService.style.display = 'none';
             }
 
             // Refresh view if active
@@ -2296,7 +2288,7 @@
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
                         ${a.status === 'Completed' ? `<button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-file-invoice"></i></button>` : `<button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>`}
                         
-                        ${currentUser.role === 'SuperAdmin' && a.id !== currentUser.id ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        ${hasPermission('delete_entries') && a.id !== currentUser.id ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 </tr>`;
             });
@@ -2367,8 +2359,8 @@
                         <a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${pPhone}')"><i class="fa-brands fa-whatsapp"></i></a>
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
                         <button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>
-                        ${currentUser.role !== 'Staff' ? `<button class="btn-sm btn-delete" onclick="openCancelConfirm('${a.id}')"><i class="fa-solid fa-ban"></i> Cancel</button>` : ''}
-                        ${(currentUser.role === 'SuperAdmin' && a.id !== currentUser.id) ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        ${hasPermission('delete_entries') ? `<button class="btn-sm btn-delete" onclick="openCancelConfirm('${a.id}')"><i class="fa-solid fa-ban"></i> Cancel</button>` : ''}
+                        ${(hasPermission('delete_entries') && a.id !== currentUser.id) ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 </tr>`;
             });
@@ -2456,7 +2448,7 @@
                     sName = s ? s.name : "Unknown";
                 }
 
-                const delBtn = (currentUser.role === 'SuperAdmin' && a.id !== currentUser.id) 
+                const delBtn = (hasPermission('delete_entries') && a.id !== currentUser.id) 
                     ? `<button class="btn-sm btn-delete" onclick="requestDelete('appointment', '${a.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
 
                 cBody.innerHTML += `<tr><td>${formatDateDisplay(a.date)}</td><td style="font-weight:600; color:var(--danger);">${a.time}</td><td>${pName}</td><td>${sName}</td><td>${delBtn}</td></tr>`;
@@ -3360,7 +3352,7 @@
             
             pagedData.data.forEach(p => {
                 const count = visitCounts[p.id] || 0;
-                const delBtn = (currentUser.role === 'SuperAdmin') 
+                const delBtn = (hasPermission('delete_entries')) 
                     ? `<button class="btn-sm btn-delete" onclick="requestDelete('patient', '${p.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
 
                 tbody.innerHTML += `
@@ -3496,11 +3488,8 @@
                 s.username.toLowerCase().includes(query)
             );
 
-            const isSuperAdmin = currentUser.role === 'SuperAdmin';
-            const isAdmin = currentUser.role === 'Admin';
-            // Logic: If SuperAdmin, show all buttons. If Admin with permission, show some. If Staff, show none (read-only).
-            const canEdit = isSuperAdmin || (isAdmin && hasPermission('edit_staff'));
-            const canDelete = isSuperAdmin; // Only SuperAdmin can delete staff
+            const canEdit = hasPermission('edit_staff');
+            const canDelete = hasPermission('delete_entries');
 
             const superAdmins = filtered.filter(s => s.role === 'SuperAdmin');
             const regularStaff = filtered.filter(s => s.role !== 'SuperAdmin');
@@ -3515,18 +3504,15 @@
                 let deleteBtn = '';
                 let resetBtn = '';
 
-                // Only SuperAdmin can edit/delete other staff (but not themselves for role change potentially)
-                if(isSuperAdmin) {
-                    const isSelf = s.id === currentUser.id;
-                    editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
-                    if(!isSelf) deleteBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('staff', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
-                } 
-                // Admin with specific permission can edit basic info (handled inside openEditStaff)
-                else if (canEdit && s.role !== 'SuperAdmin') {
+                if(canEdit) {
                      editBtn = `<button class="btn-sm" onclick="openEditStaff('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
                 }
+                if(canDelete && s.id !== currentUser.id) {
+                    deleteBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('staff', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
+                }
 
-                if(isSuperAdmin && s.email) {
+                // Only SuperAdmin can send reset emails for now
+                if(currentUser.role === 'SuperAdmin' && s.email) {
                     resetBtn = `<button class="btn-sm btn-reset" onclick="sendPasswordReset('${s.email}')" title="Send Reset Email"><i class="fa-solid fa-key"></i></button>`;
                 }
 
@@ -3537,12 +3523,10 @@
         }
 
         function openEditStaff(id) {
-            if(currentUser.role === 'Staff') return; // Should not happen due to UI hiding, but safety first
-
             const isSuper = currentUser.role === 'SuperAdmin';
             
             if(!id) {
-                if(!isSuper && currentUser.role !== 'Admin') {
+                if(!hasPermission('edit_staff')) {
                     showToast("Unauthorized");
                     return;
                 }
@@ -3563,21 +3547,18 @@
                     document.getElementById('edit-staff-sid').value = sid;
                 });
 
-                // Default permissions for new user
                 document.getElementById('perm-edit-staff').checked = false;
                 document.getElementById('perm-delete').checked = false;
                 document.getElementById('perm-edit-services').checked = false;
-                document.getElementById('perm-reports').checked = true; // Default safe
+                document.getElementById('perm-reports').checked = true; 
 
-                // Show permissions only for SuperAdmin
                 document.getElementById('permissions-section').style.display = isSuper ? 'block' : 'none';
             } else {
                 const s = staff.find(x => x.id === id);
                 
-                // Security Check: Admin cannot edit SuperAdmin
-                if(currentUser.role === 'Admin' && s.role === 'SuperAdmin') {
-                    showToast("Unauthorized to edit SuperAdmin");
-                    return;
+                if(!isSuper && s.id !== currentUser.id) {
+                    // If not super admin, cannot edit other people's profiles unless specific permission logic applies
+                    // Here we assume edit_staff allows editing basic info, but not permissions
                 }
                 
                 document.getElementById('staff-modal-title').innerText = "Edit Staff";
@@ -3594,14 +3575,12 @@
                 document.getElementById('edit-staff-address').value = s.address || '';
                 document.getElementById('edit-staff-email').value = s.email || '';
                 
-                // Set permissions state
                 const perms = s.permissions || {};
                 document.getElementById('perm-edit-staff').checked = perms.edit_staff || false;
                 document.getElementById('perm-delete').checked = perms.delete_entries || false;
                 document.getElementById('perm-edit-services').checked = perms.edit_services || false;
                 document.getElementById('perm-reports').checked = perms.access_reports || true;
 
-                // Show permissions only for SuperAdmin
                 document.getElementById('permissions-section').style.display = isSuper ? 'block' : 'none';
             }
             showModal('editStaffModal');
@@ -3623,7 +3602,7 @@
             let id = idInput ? idInput : null;
             const name = document.getElementById('edit-staff-name').value;
             const jobTitle = document.getElementById('edit-staff-jobtitle').value;
-            const role = document.getElementById('edit-staff-role').value;
+            let role = document.getElementById('edit-staff-role').value; 
             const u = document.getElementById('edit-staff-u').value.toLowerCase();
             const p = document.getElementById('edit-staff-p').value;
             
@@ -3633,7 +3612,6 @@
             const address = document.getElementById('edit-staff-address').value;
             const emailInput = document.getElementById('edit-staff-email').value;
 
-            // Permissions
             const permEditStaff = document.getElementById('perm-edit-staff').checked;
             const permDelete = document.getElementById('perm-delete').checked;
             const permEditServices = document.getElementById('perm-edit-services').checked;
@@ -3641,16 +3619,19 @@
 
             if(!u) { showToast("Username is required"); return; }
 
-            // Security checks
-            if(currentUser.role === 'Admin' && role === 'SuperAdmin') {
-                showToast("Admins cannot create SuperAdmin accounts.");
-                return;
-            }
-            if(id) {
-                const targetStaff = staff.find(x => x.id === id);
-                if(currentUser.role === 'Admin' && targetStaff.role === 'SuperAdmin') {
-                    showToast("Unauthorized to modify SuperAdmin.");
-                    return;
+            // Security: Only SuperAdmin can create Admins or set permissions
+            if(currentUser.role !== 'SuperAdmin') {
+                // Non-super admins cannot promote users to Admin
+                if(role === 'Admin' || role === 'SuperAdmin') {
+                    if(id) {
+                        const oldData = staff.find(s => s.id === id);
+                        if(oldData.role !== role) { // Trying to change role
+                             showToast("Permission Denied: Cannot change roles.");
+                             return;
+                        }
+                    } else {
+                         role = 'Staff'; // Force staff role for new creation by non-superadmin
+                    }
                 }
             }
 
@@ -3664,11 +3645,10 @@
                     contact, 
                     emergency_contact: emergency, 
                     address,
-                    email: emailInput || `${u}@clinic.azam.internal`
+                    email: emailInput || `${u}@clinic.azam.internal`,
+                    role: role
                 };
-                if(role) updateData.role = role; 
-
-                // Only SuperAdmin can update permissions
+                
                 if(currentUser.role === 'SuperAdmin') {
                     updateData.permissions = {
                         edit_staff: permEditStaff,
@@ -3681,11 +3661,15 @@
                 await db.collection('klinikazam_staff').doc(id).update(updateData);
                 
                 if(p && p.length >= 6) {
-                    showToast("Staff details updated. Password changes for existing users require a backend function or the user to do it themselves.");
+                    showToast("Staff details updated. Password changes require backend function.");
                 }
 
             } else {
                 // CREATE
+                if(!hasPermission('edit_staff')) {
+                    showToast("Unauthorized to create staff.");
+                    return;
+                }
                 if(!p || p.length < 6) { showToast("Password must be at least 6 chars"); return; }
                 
                 try {
@@ -3752,29 +3736,26 @@
         async function renderServices() {
             const tbody = document.querySelector('#services-table tbody');
             tbody.innerHTML = '';
-            const canEdit = hasPermission('edit_services');
-            
             services.forEach(s => {
-                let delBtn = '';
-                let editBtn = '';
+                const canEdit = hasPermission('edit_services');
+                const canDelete = hasPermission('delete_entries');
 
-                if(currentUser.role === 'SuperAdmin' || canEdit) {
-                    editBtn = `<button class="btn-sm" onclick="openEditService('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
-                }
-                if(currentUser.role === 'SuperAdmin' || hasPermission('delete_entries')) {
-                     delBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('service', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
-                }
+                const editBtn = canEdit 
+                    ? `<button class="btn-sm" onclick="openEditService('${s.id}')"><i class="fa-solid fa-pen"></i></button>` 
+                    : '';
+                const delBtn = canDelete 
+                    ? `<button class="btn-sm btn-delete" onclick="requestDelete('service', '${s.id}')"><i class="fa-solid fa-trash"></i></button>` 
+                    : '';
 
                 tbody.innerHTML += `<tr><td>${s.name}</td><td style="font-weight:700;">RM ${s.price}</td><td>${editBtn} ${delBtn}</td></tr>`;
             });
         }
 
         function openEditService(id) {
-            if(!hasPermission('edit_services') && currentUser.role !== 'SuperAdmin') {
+            if(!hasPermission('edit_services')) {
                 showToast("Unauthorized");
                 return;
             }
-
             if(!id) {
                 document.getElementById('service-modal-title').innerText = "Add Service";
                 document.getElementById('edit-service-id').value = '';
@@ -3791,11 +3772,6 @@
         }
 
         async function saveServiceEdit() {
-            if(!hasPermission('edit_services') && currentUser.role !== 'SuperAdmin') {
-                showToast("Unauthorized");
-                return;
-            }
-
             const idInput = document.getElementById('edit-service-id').value;
             const id = idInput ? parseInt(idInput) : null;
             const name = document.getElementById('edit-service-name').value;
@@ -3997,14 +3973,9 @@
         // --- DELETE LOGIC ---
         let deleteTarget = null;
         function requestDelete(type, id) {
-            if(!hasPermission('delete_entries') && type !== 'appointment') { // Allow canceling own appts potentially, but logic restricts to SA
-                 showToast("Unauthorized: SuperAdmin access required");
+            if(!hasPermission('delete_entries')) {
+                 showToast("Unauthorized: Permission required");
                  return;
-            }
-            
-            if(currentUser.role !== 'SuperAdmin' && !(currentUser.permissions && currentUser.permissions.delete_entries)) {
-                showToast("Unauthorized: Permission required");
-                return;
             }
 
             deleteTarget = { type, id };
