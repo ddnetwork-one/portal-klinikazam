@@ -131,6 +131,7 @@
         
         .form-input { width: 100%; padding: 14px 16px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: var(--radius); font-size: 0.95rem; transition: var(--transition); color: var(--text-main); }
         .form-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
+        .form-input:disabled { background: #f1f5f9; cursor: not-allowed; color: var(--text-light); border-style: dashed; }
         
         .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; font-weight: 600; font-size: 1rem; border-radius: var(--radius); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: flex; justify-content: center; align-items: center; gap: 10px; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); }
@@ -189,35 +190,6 @@
         .table-header-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; flex-wrap: wrap; }
         .table-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
 
-        /* NEW: Export Filter Container */
-        .export-filter-container {
-            background: #f8fafc;
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .export-filter-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-        }
-        .export-filter-row label {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-light);
-        }
-        .export-filter-row input, .export-filter-row select {
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid var(--border-light);
-            font-size: 0.85rem;
-        }
-
         .sort-select {
             padding: 8px 12px;
             border: 1px solid var(--border-light);
@@ -246,6 +218,7 @@
         .btn-sm { padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-light); background: white; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: var(--transition); }
         .btn-sm:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-1px); }
         .btn-sm:active { transform: translateY(0); }
+        .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; background: #f1f5f9; }
         .btn-bill { background: var(--primary); color: white; border: none; }
         .btn-bill:hover { background: var(--primary-dark); }
         .btn-delete { color: var(--danger); border-color: #fee2e2; background: #fff; }
@@ -344,7 +317,6 @@
         .slots-header { padding: 15px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
         .slots-list { padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         
-        /* IMPROVED: Slot Item Styling */
         .slot-item { 
             padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; 
             text-align: center; font-weight: 600; font-size: 0.85rem; cursor: pointer; 
@@ -365,7 +337,6 @@
 
         .form-panel { padding: 20px; overflow-y: auto; }
         
-        /* IMPROVED: Live Summary Panel */
         .live-summary { background: var(--primary-light); border: 1px solid var(--secondary); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
         .live-summary h5 { font-size: 0.75rem; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 8px; letter-spacing: 0.05em; }
         .live-summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
@@ -394,7 +365,6 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-dot { width: 12px; height: 12px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
         
-        /* IMPROVED: Slot Card for Management */
         .slot-card {
             display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;
             border: 2px solid var(--border-light); border-radius: var(--radius); background: white; 
@@ -477,6 +447,8 @@
         input:checked + .toggle-slider:before {
             transform: translateX(20px);
         }
+        
+        /* Read Only Overlay Styles */
         .readonly-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -486,6 +458,7 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(1px);
+            border-radius: var(--radius);
         }
         .readonly-badge {
             background: var(--info-bg);
@@ -494,6 +467,7 @@
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
+            border: 1px solid var(--primary-light);
         }
 
         /* --- UI ELEMENTS --- */
@@ -1106,7 +1080,7 @@
                     <div class="table-header">
                         <h3>Clinic Services & Pricing</h3>
                         <div class="table-header-actions">
-                            <button class="btn-sm" onclick="openEditService(null)"><i class="fa-solid fa-plus"></i> Add Service</button>
+                            <button class="btn-sm" id="btn-add-service" onclick="openEditService(null)"><i class="fa-solid fa-plus"></i> Add Service</button>
                         </div>
                     </div>
                     <div class="table-responsive"><table id="services-table"><thead><tr><th>Service</th><th>Price</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
@@ -1314,11 +1288,11 @@
                     <select id="edit-staff-role" class="form-input">
                         <option value="Staff">Staff</option>
                         <option value="Admin">Admin</option>
-                        <option value="SuperAdmin">SuperAdmin</option>
+                        <!-- SuperAdmin option removed for security - only DB set -->
                     </select>
                 </div>
                 
-                <!-- PERMISSIONS SECTION (Visible for SuperAdmins editing others) -->
+                <!-- PERMISSIONS SECTION -->
                 <div id="permissions-section" style="margin-bottom:15px; display:none;">
                     <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:8px;">Permissions</label>
                     <div class="permissions-grid">
@@ -1429,6 +1403,9 @@
                         <div><label style="font-size: 0.75rem; color: var(--text-light);">Username</label><div style="font-weight: 600; font-size: 1rem;" id="profile-u">amalina</div></div>
                         <div><label style="font-size: 0.75rem; color: var(--text-light);">Employee ID</label><div style="font-weight: 600; font-size: 1rem;" id="profile-id">EMP001</div></div>
                     </div>
+                </div>
+                <div style="text-align: center; font-size: 0.85rem; color: var(--text-light);">
+                    <i class="fa-solid fa-shield-halved"></i> Contact admin to change password or details.
                 </div>
             </div>
             <div class="modal-footer"><button class="btn-sm" onclick="closeModal('profileModal')">Close</button></div>
@@ -1656,18 +1633,26 @@
                     }
 
                     let q;
-                    if(user.email.includes('@clinic.azam.internal')) {
-                         q = await db.collection('klinikazam_staff').where('uid', '==', user.uid).limit(1).get();
-                         if(q.empty) {
-                             const username = user.displayName; 
-                             q = await db.collection('klinikazam_staff').where('username', '==', username).limit(1).get();
-                         }
-                    } else {
-                        q = await db.collection('klinikazam_staff').where('email', '==', user.email).limit(1).get();
+                    // Try finding by UID first (standard)
+                    q = await db.collection('klinikazam_staff').where('uid', '==', user.uid).limit(1).get();
+                    
+                    // Fallback: Find by email (for manually created users without UID sync yet)
+                    if(q.empty) {
+                         q = await db.collection('klinikazam_staff').where('email', '==', user.email).limit(1).get();
+                    }
+                    
+                    // Legacy fallback: Internal email convention
+                    if(q.empty && user.email.includes('@clinic.azam.internal')) {
+                         const username = user.displayName; 
+                         q = await db.collection('klinikazam_staff').where('username', '==', username).limit(1).get();
                     }
 
                     if(!q.empty) {
                         currentUser = { id: q.docs[0].id, ...q.docs[0].data(), uid: user.uid };
+                        // Update UID if missing (migration step)
+                        if(!currentUser.uid) {
+                            await db.collection('klinikazam_staff').doc(currentUser.id).update({ uid: user.uid });
+                        }
                         setupUserUI(currentUser);
                         document.getElementById('login-screen').classList.add('hidden');
                         setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
@@ -1909,27 +1894,19 @@
             if(currentUser.role === 'SuperAdmin') return true;
             // Check specific permission in user object
             if(currentUser.permissions && currentUser.permissions[permKey]) return true;
-            // Default fallback for Admin
-            if(currentUser.role === 'Admin') return true; 
             return false;
         }
 
         function applyRoleBasedUI() {
             if(!currentUser) return;
             const isSuperAdmin = currentUser.role === 'SuperAdmin';
-            const isAdmin = currentUser.role === 'Admin';
-            const isStaffOnly = currentUser.role === 'Staff';
             
             // 1. Staff Management Access
-            const navStaff = document.getElementById('nav-staff');
             const staffOverlay = document.getElementById('staff-read-only-overlay');
             const btnAddStaff = document.getElementById('btn-add-staff');
             
-            // Everyone can see the nav item now
-            navStaff.style.display = 'flex';
-            
-            // Logic for "Read Only" overlay
-            if(isStaffOnly || (isAdmin && !hasPermission('edit_staff'))) {
+            // Logic: Show Overlay if user is NOT SuperAdmin AND does NOT have edit_staff permission
+            if(!isSuperAdmin && !hasPermission('edit_staff')) {
                 staffOverlay.style.display = 'flex';
                 btnAddStaff.style.display = 'none';
             } else {
@@ -1937,8 +1914,19 @@
                 btnAddStaff.style.display = 'inline-flex';
             }
 
+            // 2. Services Management Access
+            const btnAddService = document.getElementById('btn-add-service');
+            if(btnAddService) {
+                 if(!isSuperAdmin && !hasPermission('edit_services')) {
+                     btnAddService.style.display = 'none';
+                 } else {
+                     btnAddService.style.display = 'inline-flex';
+                 }
+            }
+
             // Refresh view if active
             if(document.getElementById('view-staff').classList.contains('active')) renderStaff(); 
+            if(document.getElementById('view-services').classList.contains('active')) renderServices(); 
         }
 
         function setupUserUI(user) {
@@ -3764,15 +3752,29 @@
         async function renderServices() {
             const tbody = document.querySelector('#services-table tbody');
             tbody.innerHTML = '';
+            const canEdit = hasPermission('edit_services');
+            
             services.forEach(s => {
-                const delBtn = (currentUser.role === 'SuperAdmin') 
-                    ? `<button class="btn-sm btn-delete" onclick="requestDelete('service', '${s.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
+                let delBtn = '';
+                let editBtn = '';
 
-                tbody.innerHTML += `<tr><td>${s.name}</td><td style="font-weight:700;">RM ${s.price}</td><td><button class="btn-sm" onclick="openEditService('${s.id}')"><i class="fa-solid fa-pen"></i></button> ${delBtn}</td></tr>`;
+                if(currentUser.role === 'SuperAdmin' || canEdit) {
+                    editBtn = `<button class="btn-sm" onclick="openEditService('${s.id}')"><i class="fa-solid fa-pen"></i></button>`;
+                }
+                if(currentUser.role === 'SuperAdmin' || hasPermission('delete_entries')) {
+                     delBtn = `<button class="btn-sm btn-delete" onclick="requestDelete('service', '${s.id}')"><i class="fa-solid fa-trash"></i></button>`;
+                }
+
+                tbody.innerHTML += `<tr><td>${s.name}</td><td style="font-weight:700;">RM ${s.price}</td><td>${editBtn} ${delBtn}</td></tr>`;
             });
         }
 
         function openEditService(id) {
+            if(!hasPermission('edit_services') && currentUser.role !== 'SuperAdmin') {
+                showToast("Unauthorized");
+                return;
+            }
+
             if(!id) {
                 document.getElementById('service-modal-title').innerText = "Add Service";
                 document.getElementById('edit-service-id').value = '';
@@ -3789,6 +3791,11 @@
         }
 
         async function saveServiceEdit() {
+            if(!hasPermission('edit_services') && currentUser.role !== 'SuperAdmin') {
+                showToast("Unauthorized");
+                return;
+            }
+
             const idInput = document.getElementById('edit-service-id').value;
             const id = idInput ? parseInt(idInput) : null;
             const name = document.getElementById('edit-service-name').value;
