@@ -121,7 +121,8 @@
         .no-option { padding: 12px; text-align: center; color: var(--text-light); font-style: italic; font-size: 0.85rem; background: #f8fafc; }
 
         /* --- LOGIN --- */
-        #login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s; }
+        #login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s; opacity: 0; pointer-events: none; }
+        #login-screen.show { opacity: 1; pointer-events: auto; }
         #login-screen.hidden { opacity: 0; pointer-events: none; }
         .login-card { background: rgba(255,255,255, 0.95); backdrop-filter: blur(20px); padding: 40px; border-radius: 24px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); text-align: center; animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); border:1px solid rgba(255,255,255,0.8); }
         @keyframes floatUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -1655,8 +1656,8 @@
                     if(!q.empty) {
                         currentUser = { id: q.docs[0].id, ...q.docs[0].data(), uid: user.uid };
                         setupUserUI(currentUser);
+                        document.getElementById('login-screen').classList.remove('show');
                         document.getElementById('login-screen').classList.add('hidden');
-                        setTimeout(() => document.getElementById('login-screen').style.display = 'none', 500);
                         startLiveClock();
                         showLoading(true);
                         await refreshData(); 
@@ -1669,6 +1670,7 @@
                 } else {
                     localStorage.removeItem(LOCAL_STORAGE_KEY);
                     document.getElementById('login-screen').classList.remove('hidden');
+                    document.getElementById('login-screen').classList.add('show');
                 }
             });
 
