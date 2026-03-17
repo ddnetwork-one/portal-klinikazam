@@ -64,6 +64,81 @@
         button { cursor: pointer; border: none; font-family: inherit; transition: var(--transition); }
         input, select, textarea { font-family: inherit; }
 
+        /* --- PRINT STYLES --- */
+        @media print {
+            body { 
+                background: white; 
+                height: auto; 
+                overflow: visible !important; 
+                display: block;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            
+            /* Hide everything non-essential */
+            .sidebar, header, .no-print, .mobile-menu-btn, #toast, .sidebar-backdrop, #login-screen, #global-loader {
+                display: none !important;
+            }
+            
+            /* Ensure main content takes full width */
+            .main-wrapper {
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            
+            .content-area {
+                padding: 0 !important;
+                overflow: visible !important;
+                height: auto !important;
+            }
+
+            /* Ensure the bill detail section is visible and formatted */
+            #view-bill-detail {
+                display: block !important;
+            }
+            #view-bill-detail.active {
+                display: block !important;
+            }
+
+            .invoice-box {
+                box-shadow: none !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                border: 1px solid #e2e8f0;
+            }
+
+            /* Specific Invoice Styling for Print */
+            .invoice-top-bar { 
+                background: #000 !important; 
+                -webkit-print-color-adjust: exact;
+            }
+            .invoice-content { padding: 20px; }
+            
+            /* Ensure colors print correctly */
+            .full-cal-header, .stat-icon, .btn-primary, .badge {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+                /* --- CALENDAR RANGE SELECTION STYLES --- */
+        .full-cal-cell.in-range {
+            background-color: var(--primary-light);
+            border-left: 1px dashed var(--primary);
+            border-right: 1px dashed var(--primary);
+        }
+        .full-cal-cell.range-edge {
+            background-color: var(--primary);
+            color: white;
+        }
+        .full-cal-cell.range-edge .date-num {
+            color: white;
+        }
+        .full-cal-cell.in-range:hover {
+            background-color: #bae6fd;
+        }
+
         /* --- LOADING OVERLAY --- */
         .loading-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -243,6 +318,8 @@
         .badge-completed { background: var(--success-bg); color: #15803d; }
         .badge-cancelled { background: var(--danger-bg); color: #b91c1c; }
         .badge-info { background: var(--info-bg); color: #1e40af; }
+        .badge-holiday { background: var(--danger-bg); color: #b91c1c; }
+        .badge-offday { background: var(--warning-bg); color: #b45309; }
 
         .btn-sm { padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-light); background: white; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: var(--transition); }
         .btn-sm:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-1px); }
@@ -349,6 +426,11 @@
         .cal-day.today.active { border-color: white; }
         .cal-day.disabled { color: #cbd5e1; cursor: not-allowed; background: #f1f5f9; }
         .cal-day.empty { cursor: default; }
+        
+        /* NEW: Calendar Holiday Styles */
+        .cal-day.holiday { background: var(--danger-bg); color: var(--danger); font-weight: 700; border: 1px dashed var(--danger); cursor: default; }
+        .cal-day.holiday:hover { background: var(--danger-bg); color: var(--danger); } /* Override hover */
+
         .slots-header { padding: 15px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
         .slots-list { padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         
@@ -504,19 +586,23 @@
         .view-section { display: none; }
         .view-section.active { display: block; }
 
-        /* --- PRINT STYLES --- */
-        @media print {
-            body { background: white; height: auto; overflow: visible; display: block; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .sidebar, header, .mobile-menu-btn, .no-print, .view-section:not(#view-bill-detail) { display: none !important; }
-            .main-wrapper, .content-area { overflow: visible; height: auto; display: block; padding: 0; margin: 0; }
-            #view-bill-detail { display: block !important; padding: 0; background: white; width: 100%; position: static; }
-            .invoice-box { border: none; margin: 0; padding: 0; max-width: 100%; width: 100%; page-break-inside: avoid; box-shadow: none; }
-            .invoice-top-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            @page { size: A4 portrait; margin: 10mm; }
-        }
-
-        /* --- RESPONSIVE --- */
+        /* --- CALENDAR VIEW STYLES --- */
+        .calendar-view-container { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+        .full-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; background: #f1f5f9; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+        .full-cal-header { background: var(--primary); color: white; padding: 10px; font-size: 0.8rem; font-weight: 700; text-align: center; }
+        .full-cal-cell { background: white; min-height: 90px; padding: 5px; cursor: pointer; transition: 0.2s; position: relative; }
+        .full-cal-cell:hover { background: #f8fafc; }
+        .full-cal-cell.other-month { background: #f8fafc; color: #cbd5e1; pointer-events: none; }
+        .full-cal-cell.today { border: 2px solid var(--primary); background: var(--primary-light); }
+        .full-cal-cell.holiday { background: var(--danger-bg); }
+        .full-cal-cell .date-num { font-size: 0.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
+        .full-cal-cell.today .date-num { color: var(--primary); }
+        .full-cal-cell .cal-badge { font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; margin-bottom: 1px; display: block; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cal-badge.holiday-badge { background: var(--danger); color: white; }
+        .cal-badge.offday-badge { background: var(--warning); color: white; }
+        
         @media (max-width: 1024px) {
+            .calendar-view-container { grid-template-columns: 1fr; }
             .booking-container { grid-template-columns: 1fr 1fr; }
             .booking-panel:last-child { grid-column: span 2; }
             .bill-container { grid-template-columns: 1fr; }
@@ -549,6 +635,7 @@
             .invoice-summary { justify-content: flex-start; }
             .invoice-summary-box { width: 100%; border: none; background: transparent; padding: 0; }
             .permissions-grid { grid-template-columns: 1fr; }
+            .full-cal-cell { min-height: 60px; }
         }
 
         @media (max-width: 480px) {
@@ -612,6 +699,21 @@
                   <rect x="14" y="14" width="6" height="6" rx="1.2"/>
                 </svg>
                 Dashboard
+            </li>
+            <!-- NEW: Calendar Tab -->
+            <li class="nav-item" onclick="navigateTo('calendar')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                    <path d="M8 14h.01"/>
+                    <path d="M12 14h.01"/>
+                    <path d="M16 14h.01"/>
+                    <path d="M8 18h.01"/>
+                    <path d="M12 18h.01"/>
+                </svg>
+                Calendar
             </li>
             <li class="nav-item" onclick="navigateTo('appointments')">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -744,6 +846,56 @@
                     <div class="loading-overlay" id="dash-loader"><div class="spinner"></div></div>
                     <div class="table-header"><h3><i class="fa-solid fa-clock" style="color:var(--primary); margin-right:8px;"></i>Today's Schedule</h3></div>
                     <div class="table-responsive"><table id="dashboard-table"><thead><tr><th>Time</th><th>Patient</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </section>
+
+            <!-- NEW: CALENDAR VIEW -->
+            <section id="view-calendar" class="view-section">
+                <div class="section-card">
+                    <div class="table-header" style="flex-direction: row; justify-content: space-between;">
+                        <h3><i class="fa-solid fa-calendar-alt" style="color:var(--primary); margin-right:8px;"></i>Clinic Calendar</h3>
+                        <div class="table-header-actions">
+                            <button class="btn-sm" onclick="changeCalendarView(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                            <span id="calendar-view-title" style="font-weight: 700; min-width: 150px; text-align: center;">January 2024</span>
+                            <button class="btn-sm" onclick="changeCalendarView(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                            
+                            <!-- NEW: Range Selection Toggle -->
+                            <button class="btn-sm" id="btn-range-mode" onclick="toggleRangeMode()" style="margin-left: 10px;">
+                                <i class="fa-solid fa-object-group"></i> Choose Range
+                            </button>
+                            
+                            <button class="btn-sm btn-bill" onclick="openHolidayModal()"><i class="fa-solid fa-plus"></i> Add Holiday</button>
+                        </div>
+                    </div>
+                    
+                    <!-- NEW: Range Selection Info Bar -->
+                    <div id="range-info-bar" style="display:none; background: var(--primary-light); border:1px solid var(--primary); padding:10px 15px; border-radius:8px; margin-bottom:15px; justify-content:space-between; align-items:center;">
+                        <div style="font-size:0.9rem; color:var(--primary-dark);">
+                            <strong>Selection Mode:</strong> 
+                            <span id="range-selection-text">Click a start date...</span>
+                        </div>
+                        <div>
+                            <button class="btn-sm btn-bill" id="btn-add-range-holiday" onclick="openHolidayModalForRange()" style="display:none; margin-right:5px;">
+                                <i class="fa-solid fa-calendar-plus"></i> Set as Holiday
+                            </button>
+                            <button class="btn-sm" onclick="resetRangeSelection()"><i class="fa-solid fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+
+                    <div class="calendar-view-container">
+                        <div class="full-calendar-grid" id="full-calendar-grid">
+                            <!-- Days of Week -->
+                            <div class="full-cal-header">Sun</div><div class="full-cal-header">Mon</div><div class="full-cal-header">Tue</div><div class="full-cal-header">Wed</div><div class="full-cal-header">Thu</div><div class="full-cal-header">Fri</div><div class="full-cal-header">Sat</div>
+                            <!-- Cells generated by JS -->
+                        </div>
+                        
+                        <div class="section-card" style="margin-bottom: 0; border: 1px solid #e2e8f0;">
+                            <div class="table-header"><h3>Upcoming Holidays / Off Days</h3></div>
+                            <div style="display: flex; flex-direction: column; gap: 10px;" id="holidays-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -1534,6 +1686,45 @@
         </div>
     </div>
 
+    <!-- 10. HOLIDAY MODAL -->
+    <div class="modal-overlay" id="holidayModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="holiday-modal-title">Add Holiday / Off Day</h3>
+                <button onclick="closeModal('holidayModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-holiday-id">
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:0.8rem; font-weight:700;">Title</label>
+                    <input type="text" id="holiday-title" class="form-input" placeholder="e.g. Hari Raya Aidilfitri">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:0.8rem; font-weight:700;">Type</label>
+                    <select id="holiday-type" class="form-input">
+                        <option value="Public Holiday">Public Holiday</option>
+                        <option value="Company Off Day">Company Off Day</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom:15px;">
+                    <div>
+                        <label style="font-size:0.8rem; font-weight:700;">Start Date</label>
+                        <input type="date" id="holiday-start" class="form-input">
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem; font-weight:700;">End Date</label>
+                        <input type="date" id="holiday-end" class="form-input">
+                    </div>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-light);">* If End Date is different from Start Date, the entire range will be marked as closed.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm" onclick="closeModal('holidayModal')">Cancel</button>
+                <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="saveHoliday()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST -->
     <div id="toast">
         <i class="fa-solid fa-circle-check" style="color:#4ade80;"></i> 
@@ -1574,6 +1765,7 @@
         let staff = [];
         let appointments = [];
         let slotExceptions = []; 
+        let holidays = []; // NEW: Store holidays
 
         const todayStr = new Date().toISOString().split('T')[0];
         
@@ -1589,6 +1781,86 @@
         let currentBillAppt = null;
         let historyPatientId = null;
         let currentExportType = null; 
+        let calendarViewDate = new Date(); // NEW: For main calendar view
+
+                // --- CALENDAR RANGE SELECTION STATE ---
+        let isRangeMode = false;
+        let rangeStartDate = null;
+        let rangeEndDate = null;
+
+        // --- TOGGLE RANGE MODE ---
+        function toggleRangeMode() {
+            isRangeMode = !isRangeMode;
+            const btn = document.getElementById('btn-range-mode');
+            const infoBar = document.getElementById('range-info-bar');
+            
+            if (isRangeMode) {
+                btn.classList.add('btn-bill'); // Highlight button
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Selecting...';
+                infoBar.style.display = 'flex';
+                resetRangeSelection(false); // Reset selection but keep mode on
+            } else {
+                btn.classList.remove('btn-bill');
+                btn.innerHTML = '<i class="fa-solid fa-object-group"></i> Choose Range';
+                infoBar.style.display = 'none';
+                resetRangeSelection(false);
+            }
+            renderCalendarView(); // Re-render to clear/add listeners
+        }
+
+        function resetRangeSelection(resetMode = true) {
+            rangeStartDate = null;
+            rangeEndDate = null;
+            document.getElementById('range-selection-text').innerText = "Click a start date...";
+            document.getElementById('btn-add-range-holiday').style.display = 'none';
+            
+            if (resetMode && isRangeMode) {
+                toggleRangeMode(); // Turn off mode completely
+            } else {
+                renderCalendarView(); // Just update visuals
+            }
+        }
+
+        // --- HANDLE DATE CLICK IN CALENDAR ---
+        function handleCalendarDateClick(dateStr) {
+            if (!isRangeMode) return;
+
+            if (!rangeStartDate) {
+                // First click (Start Date)
+                rangeStartDate = dateStr;
+                document.getElementById('range-selection-text').innerText = `Start: ${formatDateDisplay(dateStr)}. Click end date...`;
+                renderCalendarView();
+            } else {
+                // Second click (End Date)
+                if (dateStr < rangeStartDate) {
+                    // If user clicks a date before start, swap them
+                    rangeEndDate = rangeStartDate;
+                    rangeStartDate = dateStr;
+                } else {
+                    rangeEndDate = dateStr;
+                }
+                
+                const startDisp = formatDateDisplay(rangeStartDate);
+                const endDisp = formatDateDisplay(rangeEndDate);
+                document.getElementById('range-selection-text').innerText = `Selected: ${startDisp} - ${endDisp}`;
+                document.getElementById('btn-add-range-holiday').style.display = 'inline-flex';
+                renderCalendarView();
+            }
+        }
+
+        // --- PRE-FILL HOLIDAY MODAL WITH RANGE ---
+        function openHolidayModalForRange() {
+            if (!rangeStartDate || !rangeEndDate) return;
+            
+            document.getElementById('holiday-modal-title').innerText = "Add Holiday for Range";
+            document.getElementById('edit-holiday-id').value = '';
+            document.getElementById('holiday-title').value = '';
+            document.getElementById('holiday-type').value = 'Public Holiday';
+            document.getElementById('holiday-start').value = rangeStartDate;
+            document.getElementById('holiday-end').value = rangeEndDate;
+            
+            showModal('holidayModal');
+        }
 
         // Sort State
         let sortState = {
@@ -1764,6 +2036,10 @@
             const eSnap = await db.collection('klinikazam_slots').get();
             slotExceptions = eSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
+            // NEW: Fetch Holidays
+            const hSnap = await db.collection('klinikazam_holidays').orderBy('start', 'desc').get();
+            holidays = hSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
             const currentViewId = document.querySelector('.view-section.active')?.id.replace('view-', '');
             
             if(currentViewId === 'dashboard') renderDashboard();
@@ -1785,6 +2061,7 @@
                     populateCashBillServices();
                 }
             }
+            if(currentViewId === 'calendar') renderCalendarView(); // NEW
 
             populateServiceDropdowns();
             applyRoleBasedUI();
@@ -1850,7 +2127,7 @@
                 'dashboard':'Dashboard', 'appointments':'Appointments', 'booking':'New Booking', 
                 'cashbill':'Cashbill', 'billing':'Reports', 'staff':'Staff', 
                 'patients':'Patients', 'services':'Services', 'slots':'Slot Management', 
-                'bill-detail':'Bill Details' 
+                'bill-detail':'Bill Details', 'calendar':'Calendar' // NEW
             };
             document.getElementById('pageTitle').innerText = titles[viewId] || 'Clinic Portal';
 
@@ -1886,6 +2163,7 @@
                 toggleCashbillCreate(false);
                 renderCashbillList();
             }
+            if(viewId === 'calendar') renderCalendarView(); // NEW
 
             setTimeout(() => showLoading(false), 300);
         }
@@ -1971,7 +2249,7 @@
 
         function formatDateDisplay(dateStr) {
             if(!dateStr) return '-';
-            const [y, m, d] = dateStr.split('-');
+            const [y, m, d] =             dateStr.split('-');
             return `${d}/${m}/${y}`;
         }
 
@@ -2181,7 +2459,7 @@
                     }
 
                     data = list.map(a => {
-                        const p = patients.find(pt => ptid === a.patient_id);
+                        const p = patients.find(pt => pt.id === a.patient_id);
                         let total = a.items ? a.items.reduce((sum, i) => sum + (i.price*i.qty), 0) : 0;
                         let sName = "Unknown";
                         if(a.items && a.items.length > 0) {
@@ -2292,7 +2570,7 @@
                     <td>${sName}</td>
                     <td><span class="badge badge-${a.status.toLowerCase()}">${a.status}</span></td>
                     <td>
-                        ${a.status !== 'Completed' ? `<a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${p ? p.phone : ''}')"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                        ${a.status !== 'Completed' ? `<a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${p ? p.phone : ''}', '${a.status}')"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
                         ${a.status === 'Completed' ? `<button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-file-invoice"></i></button>` : `<button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>`}
                         
@@ -2372,7 +2650,7 @@
                     <td>${sName}</td>
                     <td>${statusDropdown}</td>
                     <td>
-                        <a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${pPhone}')"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="btn-sm btn-wa" onclick="sendWhatsapp('${pName}', '${a.date}', '${a.time}', '${pPhone}', '${a.status}')"><i class="fa-brands fa-whatsapp"></i></a>
                         <button class="btn-sm" onclick="openEditAppt('${a.id}')"><i class="fa-solid fa-pen"></i></button> 
                         <button class="btn-sm btn-bill" onclick="createCashbill('${a.id}')"><i class="fa-solid fa-file-invoice-dollar"></i> Bill</button>
                         ${hasPermission('delete_entries') ? `<button class="btn-sm btn-delete" onclick="openCancelConfirm('${a.id}')"><i class="fa-solid fa-ban"></i> Cancel</button>` : ''}
@@ -2480,6 +2758,7 @@
                 // Update local state to avoid full refresh jitter
                 const idx = appointments.findIndex(a => a.id === id);
                 if(idx > -1) appointments[idx].status = status;
+                renderAppointments(); // Re-render to reflect changes
             } catch(e) {
                 showToast("Error updating status");
                 console.error(e);
@@ -2545,7 +2824,7 @@
                         <td style="font-weight:700;">RM ${total.toFixed(2)}</td>
                         <td>
                             <button class="btn-sm btn-bill" onclick="viewBillDetail('${a.id}')"><i class="fa-solid fa-eye"></i> View</button>
-                            <button class="btn-sm btn-wa" onclick="sendWhatsapp('${p?p.name:''}', '${a.date}', '${a.time}', '${p?p.phone:''}')"><i class="fa-brands fa-whatsapp"></i></button>
+                            <button class="btn-sm btn-wa" onclick="sendWhatsapp('${p?p.name:''}', '${a.date}', '${a.time}', '${p?p.phone:''}', 'Completed')"><i class="fa-brands fa-whatsapp"></i></button>
                             ${uncommitBtn}
                         </td>
                     </tr>`;
@@ -2969,6 +3248,9 @@
 
                 if(isPast) classes += ' disabled';
                 
+                // NEW: Check Holidays
+                const isHoliday = checkIfHoliday(dateStr);
+
                 if(dateStr === getLocalDateStr(new Date())) classes += ' today'; 
                 if(selectedBookingDate === dateStr) classes += ' active';
                 el.className = classes;
@@ -2980,9 +3262,15 @@
                 const totalUnavailable = bookedCount + blockedCount;
                 const isFull = totalUnavailable >= defaultSlots.length;
 
-                if(isClosed || isFull || isPast || isSunday) classes += ' disabled';
+                if(isClosed || isFull || isPast || isSunday || isHoliday) classes += ' disabled';
                 el.className = classes;
                 
+                if(isHoliday) {
+                    classes += ' holiday';
+                    el.className = classes;
+                    el.title = "Clinic Holiday";
+                }
+
                 if(!classes.includes('disabled')) {
                     el.onclick = () => selectDate(dateStr);
                 } else if (dateStr === todayStr) {
@@ -2991,6 +3279,8 @@
                 } else if (isSunday) {
                     el.onclick = () => showToast("Clinic is closed on Sundays.");
                     el.title = "Clinic Closed";
+                } else if (isHoliday) {
+                     el.onclick = () => showToast("Clinic is closed for Holiday.");
                 }
 
                 grid.appendChild(el);
@@ -3170,6 +3460,12 @@
                 showToast("This slot is marked as 'Not Available'. Please choose another.");
                 return;
             }
+            
+            // NEW: Check if holiday
+            if(checkIfHoliday(selectedBookingDate)) {
+                showToast("This date is marked as a Holiday. Please choose another.");
+                return;
+            }
 
             const sId = document.getElementById('bk-service').value;
             const srv = services.find(s=>s.id == sId);
@@ -3305,6 +3601,8 @@
 
             const isBlocked = slotExceptions.some(e => e.date === dateVal && e.time === timeVal && e.type === 'blocked');
             if(isBlocked) { showToast("This slot is blocked/unavailable."); return; }
+            
+            if(checkIfHoliday(dateVal)) { showToast("This date is a holiday."); return; }
 
             const conflict = appointments.find(a => a.date === dateVal && a.time === timeVal && a.status !== 'Cancelled' && a.status !== 'Completed' && a.id !== id);
             if(conflict) { showToast("Time slot conflict."); return; }
@@ -3892,6 +4190,20 @@
 
             if(!dateVal) return;
 
+            // Check if holiday first
+            if(checkIfHoliday(dateVal)) {
+                const h = holidays.find(h => dateVal >= h.start && dateVal <= h.end);
+                statusIndicator.className = "status-indicator status-closed";
+                statusIndicator.innerHTML = `<i class="fa-solid fa-gift"></i> ${h.title}`;
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align:center; padding: 40px; background: var(--danger-bg); border-radius: 12px; border: 1px dashed var(--danger);">
+                        <h4 style="color:var(--danger); margin-bottom: 10px;">${h.title}</h4>
+                        <p style="color:var(--text-light); margin-bottom: 20px;">Clinic is closed for this holiday.</p>
+                    </div>
+                `;
+                return; 
+            }
+
             const isClosed = slotExceptions.some(e => e.date === dateVal && e.type === 'closed');
             
             if(isClosed) {
@@ -4018,6 +4330,11 @@
             const date = document.getElementById('slotDate').value;
             if(!date) return;
 
+            if(checkIfHoliday(date)) {
+                showToast("Cannot modify slots on a Holiday.");
+                return;
+            }
+
             const isClosed = slotExceptions.some(e => e.date === date && e.type === 'closed');
             if(isClosed) {
                 showToast("Clinic is currently closed. Open it first.");
@@ -4064,6 +4381,216 @@
             }
         }
 
+        // --- HOLIDAY MANAGEMENT ---
+        function checkIfHoliday(dateStr) {
+            return holidays.some(h => dateStr >= h.start && dateStr <= h.end);
+        }
+
+        function renderCalendarView() {
+            const year = calendarViewDate.getFullYear();
+            const month = calendarViewDate.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startingDay = firstDay.getDay();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            document.getElementById('calendar-view-title').innerText = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('full-calendar-grid');
+            // Keep headers
+            grid.innerHTML = `
+                <div class="full-cal-header">Sun</div><div class="full-cal-header">Mon</div><div class="full-cal-header">Tue</div>
+                <div class="full-cal-header">Wed</div><div class="full-cal-header">Thu</div><div class="full-cal-header">Fri</div><div class="full-cal-header">Sat</div>
+            `;
+
+            // Previous month days
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for(let i = startingDay - 1; i >= 0; i--) {
+                const cell = document.createElement('div');
+                cell.className = 'full-cal-cell other-month';
+                cell.innerHTML = `<span class="date-num" style="opacity:0.3">${prevMonthLastDay - i}</span>`;
+                grid.appendChild(cell);
+            }
+
+            // Current month days
+            for(let i = 1; i <= lastDay.getDate(); i++) {
+                const dateStr = getLocalDateStr(new Date(year, month, i));
+                const cell = document.createElement('div');
+                let classes = 'full-cal-cell';
+                
+                const isHoliday = holidays.find(h => dateStr >= h.start && dateStr <= h.end);
+                const isToday = dateStr === todayStr;
+
+                // Range Highlighting Logic
+                let isInRange = false;
+                let isRangeStart = false;
+                let isRangeEnd = false;
+
+                if (rangeStartDate && rangeEndDate) {
+                    if (dateStr >= rangeStartDate && dateStr <= rangeEndDate) {
+                        isInRange = true;
+                        if (dateStr === rangeStartDate) isRangeStart = true;
+                        if (dateStr === rangeEndDate) isRangeEnd = true;
+                    }
+                } else if (rangeStartDate && dateStr === rangeStartDate) {
+                    // Single day selection visual
+                    isRangeStart = true; 
+                }
+
+                if(isToday) classes += ' today';
+                if(isHoliday) classes += ' holiday';
+                if(isInRange) classes += ' in-range'; // CSS class for range
+                if(isRangeStart || isRangeEnd) classes += ' range-edge'; // CSS class for edges
+
+                cell.className = classes;
+
+                let content = `<span class="date-num">${i}</span>`;
+                
+                if(isHoliday) {
+                    content += `<span class="cal-badge holiday-badge" title="${isHoliday.title}">${isHoliday.title}</span>`;
+                } else if (!isInRange) {
+                    // Show appointments count only if not highlighting range
+                    const dayAppts = appointments.filter(a => a.date === dateStr && a.status !== 'Cancelled').length;
+                    if(dayAppts > 0) {
+                        content += `<span class="cal-badge" style="background:var(--primary-light); color:var(--primary-dark)">${dayAppts} Appt(s)</span>`;
+                    }
+                }
+
+                cell.innerHTML = content;
+
+                // Add click handler for Range Mode
+                if (isRangeMode && !isHoliday) {
+                    cell.style.cursor = 'pointer';
+                    cell.onclick = () => handleCalendarDateClick(dateStr);
+                }
+
+                grid.appendChild(cell);
+            }
+
+            // Next month days
+            const totalCells = startingDay + lastDay.getDate();
+            const remainingCells = (Math.ceil(totalCells / 7) * 7) - totalCells;
+            for(let i = 1; i <= remainingCells; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'full-cal-cell other-month';
+                cell.innerHTML = `<span class="date-num" style="opacity:0.3">${i}</span>`;
+                grid.appendChild(cell);
+            }
+
+            renderHolidaysList();
+        }
+
+        function changeCalendarView(delta) {
+            const year = calendarViewDate.getFullYear();
+            const month = calendarViewDate.getMonth();
+            calendarViewDate = new Date(year, month + delta, 1);
+            renderCalendarView();
+        }
+
+        function renderHolidaysList() {
+            const list = document.getElementById('holidays-list');
+            list.innerHTML = '';
+
+            // Filter future holidays and sort
+            const futureHolidays = holidays.filter(h => h.end >= todayStr).sort((a,b) => a.start.localeCompare(b.start));
+
+            if(futureHolidays.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-light);">No upcoming holidays.</div>';
+                return;
+            }
+
+            futureHolidays.forEach(h => {
+                const isPast = h.end < todayStr;
+                const item = document.createElement('div');
+                item.style.cssText = `display:flex; justify-content:space-between; align-items:center; padding:10px; background:${isPast ? '#f1f5f9' : 'white'}; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:5px; ${isPast ? 'opacity:0.6;' : ''}`;
+                
+                let dateRangeStr = formatDateDisplay(h.start);
+                if(h.start !== h.end) {
+                    dateRangeStr += ` - ${formatDateDisplay(h.end)}`;
+                }
+
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight:700; font-size:0.9rem;">${h.title}</div>
+                        <div style="font-size:0.75rem; color:var(--text-light);">${dateRangeStr}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:5px;">
+                         <span class="badge ${h.type === 'Public Holiday' ? 'badge-holiday' : 'badge-offday'}">${h.type}</span>
+                         ${hasPermission('edit_staff') ? `<button class="btn-sm" style="padding:4px 8px;" onclick="editHoliday('${h.id}')"><i class="fa-solid fa-pen"></i></button>` : ''}
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function openHolidayModal(id = null) {
+            if(!hasPermission('edit_staff')) {
+                showToast("Only authorized staff can manage holidays.");
+                return;
+            }
+
+            if(!id) {
+                document.getElementById('holiday-modal-title').innerText = "Add Holiday";
+                document.getElementById('edit-holiday-id').value = '';
+                document.getElementById('holiday-title').value = '';
+                document.getElementById('holiday-type').value = 'Public Holiday';
+                document.getElementById('holiday-start').value = todayStr;
+                document.getElementById('holiday-end').value = todayStr;
+            } else {
+                const h = holidays.find(x => x.id === id);
+                document.getElementById('holiday-modal-title').innerText = "Edit Holiday";
+                document.getElementById('edit-holiday-id').value = id;
+                document.getElementById('holiday-title').value = h.title;
+                document.getElementById('holiday-type').value = h.type;
+                document.getElementById('holiday-start').value = h.start;
+                document.getElementById('holiday-end').value = h.end;
+            }
+            showModal('holidayModal');
+        }
+
+        function editHoliday(id) {
+            openHolidayModal(id);
+        }
+
+        async function saveHoliday() {
+            const idInput = document.getElementById('edit-holiday-id').value;
+            const title = document.getElementById('holiday-title').value;
+            const type = document.getElementById('holiday-type').value;
+            const start = document.getElementById('holiday-start').value;
+            const end = document.getElementById('holiday-end').value;
+
+            if(!title || !start || !end) {
+                showToast("Please fill in all details");
+                return;
+            }
+
+            if(end < start) {
+                showToast("End date cannot be before start date");
+                return;
+            }
+
+            showLoading(true);
+            try {
+                if(idInput) {
+                    await db.collection('klinikazam_holidays').doc(idInput).update({ title, type, start, end });
+                } else {
+                    const newHoliday = {
+                        id: Date.now().toString(),
+                        title, type, start, end
+                    };
+                    await db.collection('klinikazam_holidays').doc(newHoliday.id).set(newHoliday);
+                }
+                await refreshData();
+                showToast("Holiday Saved");
+                closeModal('holidayModal');
+            } catch(e) {
+                console.error(e);
+                showToast("Error saving holiday");
+            } finally {
+                showLoading(false);
+            }
+        }
+
         // --- DELETE LOGIC ---
         let deleteTarget = null;
         function requestDelete(type, id) {
@@ -4096,23 +4623,55 @@
             else if (deleteTarget.type === 'patient') {
                 await db.collection('klinikazam_patients').doc(deleteTarget.id).delete();
             }
+            else if (deleteTarget.type === 'holiday') {
+                await db.collection('klinikazam_holidays').doc(deleteTarget.id).delete();
+            }
 
             await refreshData(); 
             showToast("Deleted Successfully");
         }
 
         // --- WHATSAPP MESSAGING ---
-        function sendWhatsapp(name, date, time, phone) {
+        function sendWhatsapp(name, date, time, phone, status) {
             let cleanPhone = phone.replace(/[^0-9]/g, '');
             if(cleanPhone.startsWith('0')) cleanPhone = '60' + cleanPhone.substring(1);
             const displayDate = formatDateDisplay(date);
             
             let message = "";
-            const appt = appointments.find(a => a.date === date && a.time === time);
-            const status = appt ? appt.status : 'Pending'; 
+            
+            // Logic based on status
+            if (status === 'Pending') {
+                message = `Assalamualaikum & Salam Sejahtera,
 
-            if (status === 'Completed') {
-                message = `Terima kasih kerana berkunjung ke Azam Dental SP Saujana hari ini.
+Kami ingin mengesahkan temujanji anda bersama Azam Dental SP Saujana:
+
+Tarikh: ${displayDate}
+Masa: ${time}
+
+Mohon sahkan kehadiran dengan membalas “YA” atau maklumkan jika ingin ubah masa 😊
+
+Terima kasih.
+
+> Azam Dental SP Saujana`;
+            } else if (status === 'Confirmed') {
+                message = `Assalamualaikum & Salam Sejahtera,
+
+Ini adalah peringatan temujanji anda bersama Azam Dental SP Saujana:
+
+Tarikh: ${displayDate}
+Masa: ${time}
+
+Sila hadir 5–10 minit lebih awal bagi memastikan rawatan berjalan lancar dan tidak mengganggu pesakit seterusnya.
+
+Jika perlu ubah atau batalkan temujanji, mohon maklumkan sekurang-kurangnya 30 minit lebih awal.
+
+Sila sahkan kehadiran dengan membalas mesej ini.
+
+Terima kasih.
+
+> Azam Dental SP Saujana`;
+            } else if (status === 'Completed') {
+                 message = `Terima kasih kerana berkunjung ke Azam Dental SP Saujana hari ini.
 
 Kami berharap rawatan yang diberikan memuaskan.
 Sekiranya terdapat sebarang ketidakselesaan atau pertanyaan selepas rawatan, sila hubungi kami.
@@ -4120,6 +4679,7 @@ Sekiranya terdapat sebarang ketidakselesaan atau pertanyaan selepas rawatan, sil
 Kami menghargai kepercayaan anda dan berharap dapat berkhidmat kepada anda lagi.
 — Azam Dental SP Saujana`;
             } else {
+                // Default fallback
                 message = `Assalamualaikum & Salam Sejahtera,
 
 Ini adalah peringatan temujanji anda bersama Azam Dental SP Saujana:
